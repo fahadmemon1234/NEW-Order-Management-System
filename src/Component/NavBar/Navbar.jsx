@@ -10,13 +10,276 @@ import "./navbar.css";
 // ---------------------------------------------------
 import ProfilePic from '../../assets/img/img/team/3-thumb.png';
 import WeatherIcon from '../../assets/img/img/icons/weather-icon.png';
+import FavIcn from '../../assets/img/img/icons/spot-illustrations/falcon.png';
 // ---------------------------------------------------
 
 function Navbar() {
+
+
+
+// Navbar Side Btn Toggle    
+const toggleNavbar = () => {
+    const htmlElement = document.documentElement;
+  
+    // Check if the classes are already present, then remove them; otherwise, add them.
+    if (htmlElement.classList.contains('navbar-vertical-collapsed')) {
+      htmlElement.classList.remove('navbar-vertical-collapsed');
+    } else {
+      htmlElement.classList.add('navbar-vertical-collapsed');
+
+    }
+  };
+
+   
+
+
   return (
     <>
       <main className="main" id="top">
         <div className="container" data-layout="container">
+
+
+        <nav className="navbar navbar-light navbar-vertical navbar-expand-xl">
+            <div className="d-flex align-items-center">
+              <div className="toggle-icon-wrapper">
+                <button
+                  className="btn navbar-toggler-humburger-icon navbar-vertical-toggle"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="left"
+                  aria-label="Toggle Navigation"
+                  data-bs-original-title="Toggle Navigation"
+                  onClick={toggleNavbar}
+                >
+                  <span className="navbar-toggle-icon">
+                    <span className="toggle-line"></span>
+                  </span>
+                </button>
+              </div>
+              <a
+                className="navbar-brand"
+                href="#"
+              >
+                <div className="d-flex align-items-center py-3">
+                  <img
+                    className="me-2"
+                    src={FavIcn}
+                    alt=""
+                    width="40"
+                  />
+                  <span className="font-sans-serif text-primary">falcon</span>
+                </div>
+              </a>
+            </div>
+            <div
+              className="collapse navbar-collapse"
+              id="navbarVerticalCollapse"
+            >
+              <div className="navbar-vertical-content scrollbar">
+                <ul
+                  className="navbar-nav flex-column mb-3"
+                  id="navbarVerticalNav"
+                >
+                  <li className="nav-item">
+                    <a
+                      className="nav-link dropdown-indicator"
+                      href="https://prium.github.io/falcon/v3.19.0/index.html#dashboard"
+                      role="button"
+                      data-bs-toggle="collapse"
+                      aria-expanded="true"
+                      aria-controls="dashboard"
+                    >
+                      <div className="d-flex align-items-center">
+                        <span className="nav-link-icon">
+                          <svg
+                            className="svg-inline--fa fa-chart-pie fa-w-17 fa"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="chart-pie"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 544 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M527.79 288H290.5l158.03 158.03c6.04 6.04 15.98 6.53 22.19.68 38.7-36.46 65.32-85.61 73.13-140.86 1.34-9.46-6.51-17.85-16.06-17.85zm-15.83-64.8C503.72 103.74 408.26 8.28 288.8.04 279.68-.59 272 7.1 272 16.24V240h223.77c9.14 0 16.82-7.68 16.19-16.8zM224 288V50.71c0-9.55-8.39-17.4-17.84-16.06C86.99 51.49-4.1 155.6.14 280.37 4.5 408.51 114.83 513.59 243.03 511.98c50.4-.63 96.97-16.87 135.26-44.03 7.9-5.6 8.42-17.23 1.57-24.08L224 288z"
+                            ></path>
+                          </svg>{" "}
+                          <span className="fas fa-chart-pie"></span>{" "}
+                        </span>
+                        <span className="nav-link-text ps-1">Dashboard</span>
+                      </div>
+                    </a>
+                    <ul className="nav collapse show" id="dashboard">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">Default</span>
+                          </div>
+                        </a>{" "}
+                      </li>
+                    </ul>
+                  </li>
+                  <li className="nav-item">
+                    <div className="row navbar-vertical-label-wrapper mt-3 mb-2">
+                      <div className="col-auto navbar-vertical-label">App</div>
+                      <div className="col ps-0">
+                        <hr className="mb-0 navbar-vertical-divider" />
+                      </div>
+                    </div>
+                    <a
+                      className="nav-link"
+                      href="https://prium.github.io/falcon/v3.19.0/app/calendar.html"
+                      role="button"
+                    >
+                      <div className="d-flex align-items-center">
+                        <span className="nav-link-icon">
+                          <svg
+                            className="svg-inline--fa fa-calendar-alt fa-w-14 fa"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="calendar-alt"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 448 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M0 464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V192H0v272zm320-196c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zM192 268c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zM64 268c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12v-40zM400 64h-48V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H160V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H48C21.5 64 0 85.5 0 112v48h448v-48c0-26.5-21.5-48-48-48z"
+                            ></path>
+                          </svg>{" "}
+                          <span className="fas fa-calendar-alt"></span>{" "}
+                        </span>
+                        <span className="nav-link-text ps-1">Calendar</span>
+                      </div>
+                    </a>
+
+                    <a
+                      className="nav-link dropdown-indicator"
+                      href="https://prium.github.io/falcon/v3.19.0/index.html#support-desk"
+                      role="button"
+                      data-bs-toggle="collapse"
+                      aria-expanded="false"
+                      aria-controls="support-desk"
+                    >
+                      <div className="d-flex align-items-center">
+                        <span className="nav-link-icon">
+                          <svg
+                            className="svg-inline--fa fa-ticket-alt fa-w-18 fa"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="ticket-alt"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 576 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M128 160h320v192H128V160zm400 96c0 26.51 21.49 48 48 48v96c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48v-96c26.51 0 48-21.49 48-48s-21.49-48-48-48v-96c0-26.51 21.49-48 48-48h480c26.51 0 48 21.49 48 48v96c-26.51 0-48 21.49-48 48zm-48-104c0-13.255-10.745-24-24-24H120c-13.255 0-24 10.745-24 24v208c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24V152z"
+                            ></path>
+                          </svg>{" "}
+                          <span className="fas fa-ticket-alt"></span>{" "}
+                        </span>
+                        <span className="nav-link-text ps-1">Support desk</span>
+                      </div>
+                    </a>
+                    <ul className="nav collapse" id="support-desk">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/table-view.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                              Table view
+                            </span>
+                          </div>
+                        </a>{" "}
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/card-view.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                              Card view
+                            </span>
+                          </div>
+                        </a>{" "}
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/contacts.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">Contacts</span>
+                          </div>
+                        </a>{" "}
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/contact-details.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                              Contact details
+                            </span>
+                          </div>
+                        </a>{" "}
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/tickets-preview.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                              Tickets preview
+                            </span>
+                          </div>
+                        </a>{" "}
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/quick-links.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                              Quick links
+                            </span>
+                          </div>
+                        </a>{" "}
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/reports.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">Reports</span>
+                          </div>
+                        </a>{" "}
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+                
+              </div>
+            </div>
+          </nav>
+
           <div className="content">
             <nav className="navbar navbar-light navbar-glass navbar-top navbar-expand">
               <button
@@ -3424,6 +3687,10 @@ function Navbar() {
           </div>
         </div>
       </main>
+
+
+
+
     </>
   );
 }

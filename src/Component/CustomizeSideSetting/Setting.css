@@ -1,0 +1,17 @@
+/* Customize the scrollbar style */
+#settings-offcanvas::-webkit-scrollbar {
+    width: 12px; /* Set the width of the scrollbar */
+  }
+  
+  #settings-offcanvas::-webkit-scrollbar-track {
+    background-color: #f0f0f0; /* Set the background color of the scrollbar track */
+  }
+  
+  #settings-offcanvas::-webkit-scrollbar-thumb {
+    background-color: #808080; /* Set the color of the scrollbar thumb (handle) */
+    border-radius: 6px; /* Optional: Set border-radius for a rounded thumb */
+  }
+  
+  #settings-offcanvas::-webkit-scrollbar-thumb:hover {
+    background-color: #606060; /* Set the color of the scrollbar thumb on hover */
+  }

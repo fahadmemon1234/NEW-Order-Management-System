@@ -1,0 +1,3431 @@
+import React from "react";
+
+// Navbar Css
+// ---------------------------------------------------
+import "./navbar.css";
+// ---------------------------------------------------
+
+
+// Images
+// ---------------------------------------------------
+import ProfilePic from '../../assets/img/img/team/3-thumb.png';
+import WeatherIcon from '../../assets/img/img/icons/weather-icon.png';
+// ---------------------------------------------------
+
+function Navbar() {
+  return (
+    <>
+      <main className="main" id="top">
+        <div className="container" data-layout="container">
+          <div className="content">
+            <nav className="navbar navbar-light navbar-glass navbar-top navbar-expand">
+              <button
+                className="btn navbar-toggler-humburger-icon navbar-toggler me-1 me-sm-3"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarVerticalCollapse"
+                aria-controls="navbarVerticalCollapse"
+                aria-expanded="false"
+                aria-label="Toggle Navigation"
+              >
+                <span className="navbar-toggle-icon">
+                  <span className="toggle-line"></span>
+                </span>
+              </button>
+              <a
+                className="navbar-brand me-1 me-sm-3"
+                href="https://prium.github.io/falcon/v3.19.0/index.html"
+              >
+                <div className="d-flex align-items-center">
+                  <img
+                    className="me-2"
+                    src="./Home_files/falcon.png"
+                    alt=""
+                    width="40"
+                  />
+                  <span className="font-sans-serif text-primary">falcon</span>
+                </div>
+              </a>
+              <ul className="navbar-nav align-items-center d-none d-lg-block">
+                <li className="nav-item">
+                  <div
+                    className="search-box"
+                    data-list='{"valueNames":["title"]}'
+                  >
+                    <form
+                      className="position-relative"
+                      data-bs-toggle="search"
+                      data-bs-display="static"
+                      aria-expanded="false"
+                    >
+                      <input
+                        className="form-control search-input fuzzy-search"
+                        type="search"
+                        placeholder="Search..."
+                        aria-label="Search"
+                      />
+                      <svg
+                        className="svg-inline--fa fa-search fa-w-16 search-box-icon"
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fas"
+                        data-icon="search"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        data-fa-i2svg=""
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
+                        ></path>
+                      </svg>
+                      <span className="fas fa-search search-box-icon"></span>
+                    </form>
+                    <div
+                      className="btn-close-falcon-container position-absolute end-0 top-50 translate-middle shadow-none"
+                      data-bs-dismiss="search"
+                    >
+                      <button
+                        className="btn btn-link btn-close-falcon p-0"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div className="dropdown-menu border font-base start-0 mt-2 py-0 overflow-hidden w-100">
+                      <div
+                        className="scrollbar list py-3"
+                        style={{ maxHeight: "24rem" }}
+                      >
+                        <h6 className="dropdown-header fw-medium text-uppercase px-x1 fs-11 pt-0 pb-2">
+                          Recently Browsed
+                        </h6>
+                        <a
+                          className="dropdown-item fs-10 px-x1 py-1 hover-primary"
+                          href="https://prium.github.io/falcon/v3.19.0/app/events/event-detail.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <svg
+                              className="svg-inline--fa fa-circle fa-w-16 me-2 text-300 fs-11"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="circle"
+                              role="img"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 512 512"
+                              data-fa-i2svg=""
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"
+                              ></path>
+                            </svg>
+                            <span className="fas fa-circle me-2 text-300 fs-11"></span>
+                            <div className="fw-normal title">
+                              Pages{" "}
+                              <svg
+                                className="svg-inline--fa fa-chevron-right fa-w-10 mx-1 text-500 fs-11"
+                                data-fa-transform="shrink-2"
+                                aria-hidden="true"
+                                focusable="false"
+                                data-prefix="fas"
+                                data-icon="chevron-right"
+                                role="img"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 320 512"
+                                data-fa-i2svg=""
+                                style={{ transformOrigin: "0.3125em 0.5em" }}
+                              >
+                                <g transform="translate(160 256)">
+                                  <g transform="translate(0, 0)  scale(0.875, 0.875)  rotate(0 0 0)">
+                                    <path
+                                      fill="currentColor"
+                                      d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"
+                                      transform="translate(-160 -256)"
+                                    ></path>
+                                  </g>
+                                </g>
+                              </svg>
+                              <span
+                                className="fas fa-chevron-right mx-1 text-500 fs-11"
+                                data-fa-transform="shrink-2"
+                              ></span>{" "}
+                              Events
+                            </div>
+                          </div>
+                        </a>
+                        <a
+                          className="dropdown-item fs-10 px-x1 py-1 hover-primary"
+                          href="https://prium.github.io/falcon/v3.19.0/app/e-commerce/customers.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <svg
+                              className="svg-inline--fa fa-circle fa-w-16 me-2 text-300 fs-11"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="circle"
+                              role="img"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 512 512"
+                              data-fa-i2svg=""
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"
+                              ></path>
+                            </svg>
+                            <span className="fas fa-circle me-2 text-300 fs-11"></span>
+                            <div className="fw-normal title">
+                              E-commerce{" "}
+                              <svg
+                                className="svg-inline--fa fa-chevron-right fa-w-10 mx-1 text-500 fs-11"
+                                data-fa-transform="shrink-2"
+                                aria-hidden="true"
+                                focusable="false"
+                                data-prefix="fas"
+                                data-icon="chevron-right"
+                                role="img"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 320 512"
+                                data-fa-i2svg=""
+                                style={{ transformOrigin: "0.3125em 0.5em" }}
+                              >
+                                <g transform="translate(160 256)">
+                                  <g transform="translate(0, 0)  scale(0.875, 0.875)  rotate(0 0 0)">
+                                    <path
+                                      fill="currentColor"
+                                      d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"
+                                      transform="translate(-160 -256)"
+                                    ></path>
+                                  </g>
+                                </g>
+                              </svg>
+                              <span
+                                className="fas fa-chevron-right mx-1 text-500 fs-11"
+                                data-fa-transform="shrink-2"
+                              ></span>{" "}
+                              Customers
+                            </div>
+                          </div>
+                        </a>
+                        <hr className="text-200 dark__text-900" />
+                        <h6 className="dropdown-header fw-medium text-uppercase px-x1 fs-11 pt-0 pb-2">
+                          Suggested Filter
+                        </h6>
+                        <a
+                          className="dropdown-item px-x1 py-1 fs-9"
+                          href="https://prium.github.io/falcon/v3.19.0/app/e-commerce/customers.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="badge fw-medium text-decoration-none me-2 badge-subtle-warning">
+                              customers:
+                            </span>
+                            <div className="flex-1 fs-10 title">
+                              All customers list
+                            </div>
+                          </div>
+                        </a>
+                        <a
+                          className="dropdown-item px-x1 py-1 fs-9"
+                          href="https://prium.github.io/falcon/v3.19.0/app/events/event-detail.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="badge fw-medium text-decoration-none me-2 badge-subtle-success">
+                              events:
+                            </span>
+                            <div className="flex-1 fs-10 title">
+                              Latest events in current month
+                            </div>
+                          </div>
+                        </a>
+                        <a
+                          className="dropdown-item px-x1 py-1 fs-9"
+                          href="https://prium.github.io/falcon/v3.19.0/app/e-commerce/product/product-grid.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="badge fw-medium text-decoration-none me-2 badge-subtle-info">
+                              products:
+                            </span>
+                            <div className="flex-1 fs-10 title">
+                              Most popular products
+                            </div>
+                          </div>
+                        </a>
+                        <hr className="text-200 dark__text-900" />
+                        <h6 className="dropdown-header fw-medium text-uppercase px-x1 fs-11 pt-0 pb-2">
+                          Files
+                        </h6>
+                        <a
+                          className="dropdown-item px-x1 py-2"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          <div className="d-flex align-items-center">
+                            <div className="file-thumbnail me-2">
+                              <img
+                                className="border h-100 w-100 object-fit-cover rounded-3"
+                                src="./Home_files/3-thumb.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <h6 className="mb-0 title">iPhone</h6>
+                              <p className="fs-11 mb-0 d-flex">
+                                <span className="fw-semi-bold">Antony</span>
+                                <span className="fw-medium text-600 ms-2">
+                                  27 Sep at 10:30 AM
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </a>
+                        <a
+                          className="dropdown-item px-x1 py-2"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          <div className="d-flex align-items-center">
+                            <div className="file-thumbnail me-2">
+                              <img
+                                className="img-fluid"
+                                src="./Home_files/zip.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <h6 className="mb-0 title">Falcon v1.8.2</h6>
+                              <p className="fs-11 mb-0 d-flex">
+                                <span className="fw-semi-bold">John</span>
+                                <span className="fw-medium text-600 ms-2">
+                                  30 Sep at 12:30 PM
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </a>
+                        <hr className="text-200 dark__text-900" />
+                        <h6 className="dropdown-header fw-medium text-uppercase px-x1 fs-11 pt-0 pb-2">
+                          Members
+                        </h6>
+                        <a
+                          className="dropdown-item px-x1 py-2"
+                          href="https://prium.github.io/falcon/v3.19.0/pages/user/profile.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <div className="avatar avatar-l status-online me-2">
+                              <img
+                                className="rounded-circle"
+                                src="./Home_files/1.jpg"
+                                alt=""
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <h6 className="mb-0 title">Anna Karinina</h6>
+                              <p className="fs-11 mb-0 d-flex">
+                                Technext Limited
+                              </p>
+                            </div>
+                          </div>
+                        </a>
+                        <a
+                          className="dropdown-item px-x1 py-2"
+                          href="https://prium.github.io/falcon/v3.19.0/pages/user/profile.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <div className="avatar avatar-l me-2">
+                              <img
+                                className="rounded-circle"
+                                src="./Home_files/2.jpg"
+                                alt=""
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <h6 className="mb-0 title">Antony Hopkins</h6>
+                              <p className="fs-11 mb-0 d-flex">Brain Trust</p>
+                            </div>
+                          </div>
+                        </a>
+                        <a
+                          className="dropdown-item px-x1 py-2"
+                          href="https://prium.github.io/falcon/v3.19.0/pages/user/profile.html"
+                        >
+                          <div className="d-flex align-items-center">
+                            <div className="avatar avatar-l me-2">
+                              <img
+                                className="rounded-circle"
+                                src="./Home_files/3.jpg"
+                                alt=""
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <h6 className="mb-0 title">Emma Watson</h6>
+                              <p className="fs-11 mb-0 d-flex">Google</p>
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+                      <div className="text-center mt-n3">
+                        <p className="fallback fw-bold fs-8 d-none">
+                          No Result Found.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <ul className="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center">
+                <li className="nav-item ps-2 pe-0">
+                  <div className="dropdown theme-control-dropdown">
+                    <a
+                      className="nav-link d-flex align-items-center dropdown-toggle fa-icon-wait fs-9 pe-1 py-0"
+                      href="https://prium.github.io/falcon/v3.19.0/index.html#"
+                      role="button"
+                      id="themeSwitchDropdown"
+                      data-bs-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      <svg
+                        className="svg-inline--fa fa-sun fa-w-16 fs-7 fa"
+                        data-fa-transform="shrink-2"
+                        data-theme-dropdown-toggle-icon="light"
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fas"
+                        data-icon="sun"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        data-fa-i2svg=""
+                        style={{ transformOrigin: "0.5em 0.5em", display:'none' }}
+                      >
+                        <g transform="translate(256 256)">
+                          <g transform="translate(0, 0)  scale(0.875, 0.875)  rotate(0 0 0)">
+                            <path
+                              fill="currentColor"
+                              d="M256 160c-52.9 0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 80.5l-94.7-47.3 33.5-100.4c4.5-13.6-8.4-26.5-21.9-21.9l-100.4 33.5-47.4-94.8c-6.4-12.8-24.6-12.8-31 0l-47.3 94.7L92.7 70.8c-13.6-4.5-26.5 8.4-21.9 21.9l33.5 100.4-94.7 47.4c-12.8 6.4-12.8 24.6 0 31l94.7 47.3-33.5 100.5c-4.5 13.6 8.4 26.5 21.9 21.9l100.4-33.5 47.3 94.7c6.4 12.8 24.6 12.8 31 0l47.3-94.7 100.4 33.5c13.6 4.5 26.5-8.4 21.9-21.9l-33.5-100.4 94.7-47.3c13-6.5 13-24.7.2-31.1zm-155.9 106c-49.9 49.9-131.1 49.9-181 0-49.9-49.9-49.9-131.1 0-181 49.9-49.9 131.1-49.9 181 0 49.9 49.9 49.9 131.1 0 181z"
+                              transform="translate(-256 -256)"
+                            ></path>
+                          </g>
+                        </g>
+                      </svg>
+                      <span
+                        className="fas fa-sun fs-7"
+                        data-fa-transform="shrink-2"
+                        data-theme-dropdown-toggle-icon="light"
+                      ></span>{" "}
+                      <svg
+                        className="svg-inline--fa fa-moon fa-w-16 fs-7 d-none fa"
+                        data-fa-transform="shrink-3"
+                        data-theme-dropdown-toggle-icon="dark"
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fas"
+                        data-icon="moon"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        data-fa-i2svg=""
+                        style={{ transformOrigin: "0.5em 0.5em", display:'none' }}
+                      >
+                        <g transform="translate(256 256)">
+                          <g transform="translate(0, 0)  scale(0.8125, 0.8125)  rotate(0 0 0)">
+                            <path
+                              fill="currentColor"
+                              d="M283.211 512c78.962 0 151.079-35.925 198.857-94.792 7.068-8.708-.639-21.43-11.562-19.35-124.203 23.654-238.262-71.576-238.262-196.954 0-72.222 38.662-138.635 101.498-174.394 9.686-5.512 7.25-20.197-3.756-22.23A258.156 258.156 0 0 0 283.211 0c-141.309 0-256 114.511-256 256 0 141.309 114.511 256 256 256z"
+                              transform="translate(-256 -256)"
+                            ></path>
+                          </g>
+                        </g>
+                      </svg>
+                      <span
+                        className="fas fa-moon fs-7 d-none"
+                        data-fa-transform="shrink-3"
+                        data-theme-dropdown-toggle-icon="dark"
+                      ></span>{" "}
+                      <svg
+                        className="svg-inline--fa fa-adjust fa-w-16 fs-7 d-none fa"
+                        data-fa-transform="shrink-2"
+                        data-theme-dropdown-toggle-icon="auto"
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fas"
+                        data-icon="adjust"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        data-fa-i2svg=""
+                        style={{ transformOrigin: "0.5em 0.5em", display:'none' }}
+                      >
+                        <g transform="translate(256 256)">
+                          <g transform="translate(0, 0)  scale(0.875, 0.875)  rotate(0 0 0)">
+                            <path
+                              fill="currentColor"
+                              d="M8 256c0 136.966 111.033 248 248 248s248-111.034 248-248S392.966 8 256 8 8 119.033 8 256zm248 184V72c101.705 0 184 82.311 184 184 0 101.705-82.311 184-184 184z"
+                              transform="translate(-256 -256)"
+                            ></path>
+                          </g>
+                        </g>
+                      </svg>
+                      <span
+                        className="fas fa-adjust fs-7 d-none"
+                        data-fa-transform="shrink-2"
+                        data-theme-dropdown-toggle-icon="auto"
+                      ></span>{" "}
+                    </a>
+                    <div
+                      className="dropdown-menu dropdown-menu-end dropdown-caret border py-0 mt-3"
+                      aria-labelledby="themeSwitchDropdown"
+                    >
+                      <div className="bg-white dark__bg-1000 rounded-2 py-2">
+                        <button
+                          className="dropdown-item d-flex align-items-center gap-2 active"
+                          type="button"
+                          value="light"
+                          data-theme-control="theme"
+                        >
+                          <svg
+                            className="svg-inline--fa fa-sun fa-w-16 fa"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="sun"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M256 160c-52.9 0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 80.5l-94.7-47.3 33.5-100.4c4.5-13.6-8.4-26.5-21.9-21.9l-100.4 33.5-47.4-94.8c-6.4-12.8-24.6-12.8-31 0l-47.3 94.7L92.7 70.8c-13.6-4.5-26.5 8.4-21.9 21.9l33.5 100.4-94.7 47.4c-12.8 6.4-12.8 24.6 0 31l94.7 47.3-33.5 100.5c-4.5 13.6 8.4 26.5 21.9 21.9l100.4-33.5 47.3 94.7c6.4 12.8 24.6 12.8 31 0l47.3-94.7 100.4 33.5c13.6 4.5 26.5-8.4 21.9-21.9l-33.5-100.4 94.7-47.3c13-6.5 13-24.7.2-31.1zm-155.9 106c-49.9 49.9-131.1 49.9-181 0-49.9-49.9-49.9-131.1 0-181 49.9-49.9 131.1-49.9 181 0 49.9 49.9 49.9 131.1 0 181z"
+                            ></path>
+                          </svg>
+                          <span className="fas fa-sun"></span> Light
+                          <svg
+                            className="svg-inline--fa fa-check fa-w-16 dropdown-check-icon ms-auto text-600 d-none fa"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="check"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+                            ></path>
+                          </svg>
+                          <span className="fas fa-check dropdown-check-icon ms-auto text-600"></span>{" "}
+                        </button>
+                        <button
+                          className="dropdown-item d-flex align-items-center gap-2"
+                          type="button"
+                          value="dark"
+                          data-theme-control="theme"
+                        >
+                          <svg
+                            className="svg-inline--fa fa-moon fa-w-16 fa"
+                            data-fa-transform=""
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="moon"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M283.211 512c78.962 0 151.079-35.925 198.857-94.792 7.068-8.708-.639-21.43-11.562-19.35-124.203 23.654-238.262-71.576-238.262-196.954 0-72.222 38.662-138.635 101.498-174.394 9.686-5.512 7.25-20.197-3.756-22.23A258.156 258.156 0 0 0 283.211 0c-141.309 0-256 114.511-256 256 0 141.309 114.511 256 256 256z"
+                            ></path>
+                          </svg>
+                          <span
+                            className="fas fa-moon"
+                            data-fa-transform=""
+                          ></span>{" "}
+                          Dark
+                          <svg
+                            className="svg-inline--fa fa-check fa-w-16 dropdown-check-icon ms-auto text-600 fa"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="check"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+                            ></path>
+                          </svg>
+                          <span className="fas fa-check dropdown-check-icon ms-auto text-600"></span>{" "}
+                        </button>
+                        <button
+                          className="dropdown-item d-flex align-items-center gap-2"
+                          type="button"
+                          value="auto"
+                          data-theme-control="theme"
+                        >
+                          <svg
+                            className="svg-inline--fa fa-adjust fa-w-16 fa"
+                            data-fa-transform=""
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="adjust"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M8 256c0 136.966 111.033 248 248 248s248-111.034 248-248S392.966 8 256 8 8 119.033 8 256zm248 184V72c101.705 0 184 82.311 184 184 0 101.705-82.311 184-184 184z"
+                            ></path>
+                          </svg>
+                          <span
+                            className="fas fa-adjust"
+                            data-fa-transform=""
+                          ></span>{" "}
+                          Auto
+                          <svg
+                            className="svg-inline--fa fa-check fa-w-16 dropdown-check-icon ms-auto text-600 fa"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="check"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+                            ></path>
+                          </svg>
+                          <span className="fas fa-check dropdown-check-icon ms-auto text-600"></span>{" "}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li className="nav-item d-none d-sm-block">
+                  <a
+                    className="nav-link px-0 notification-indicator notification-indicator-warning notification-indicator-fill fa-icon-wait"
+                    href="https://prium.github.io/falcon/v3.19.0/app/e-commerce/shopping-cart.html"
+                  >
+                    <svg
+                      className="svg-inline--fa fa-shopping-cart fa-w-18"
+                      data-fa-transform="shrink-7"
+                      style={{
+                        transformOrigin: "0.5625em 0.5em",
+                        fontSize: "33px",
+                        display:'none'
+                      }}
+                      aria-hidden="true"
+                      focusable="false"
+                      data-prefix="fas"
+                      data-icon="shopping-cart"
+                      role="img"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 576 512"
+                      data-fa-i2svg=""
+                    >
+                      <g transform="translate(288 256)">
+                        <g transform="translate(0, 0)  scale(0.5625, 0.5625)  rotate(0 0 0)">
+                          <path
+                            fill="currentColor"
+                            d="M528.12 301.319l47.273-208C578.806 78.301 567.391 64 551.99 64H159.208l-9.166-44.81C147.758 8.021 137.93 0 126.529 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24h69.883l70.248 343.435C147.325 417.1 136 435.222 136 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-15.674-6.447-29.835-16.824-40h209.647C430.447 426.165 424 440.326 424 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-22.172-12.888-41.332-31.579-50.405l5.517-24.276c3.413-15.018-8.002-29.319-23.403-29.319H218.117l-6.545-32h293.145c11.206 0 20.92-7.754 23.403-18.681z"
+                            transform="translate(-288 -256)"
+                          ></path>
+                        </g>
+                      </g>
+                    </svg>
+                    <span
+                      className="fas fa-shopping-cart"
+                      data-fa-transform="shrink-7"
+                      style={{ fontSize: "33px" }}
+                    ></span>{" "}
+                    <span className="notification-indicator-number">1</span>
+                  </a>
+                </li>
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link notification-indicator notification-indicator-primary px-0 fa-icon-wait"
+                    id="navbarDropdownNotification"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    data-hide-on-body-scroll="data-hide-on-body-scroll"
+                  >
+                    <svg
+                      className="svg-inline--fa fa-bell fa-w-14"
+                      data-fa-transform="shrink-6"
+                      style={{
+                        transformOrigin: "0.4375em 0.5em",
+                        display:'none',
+                        fontSize: "33px",
+                      }}
+                      aria-hidden="true"
+                      focusable="false"
+                      data-prefix="fas"
+                      data-icon="bell"
+                      role="img"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
+                      data-fa-i2svg=""
+                    >
+                      <g transform="translate(224 256)">
+                        <g transform="translate(0, 0)  scale(0.625, 0.625)  rotate(0 0 0)">
+                          <path
+                            fill="currentColor"
+                            d="M224 512c35.32 0 63.97-28.65 63.97-64H160.03c0 35.35 28.65 64 63.97 64zm215.39-149.71c-19.32-20.76-55.47-51.99-55.47-154.29 0-77.7-54.48-139.9-127.94-155.16V32c0-17.67-14.32-32-31.98-32s-31.98 14.33-31.98 32v20.84C118.56 68.1 64.08 130.3 64.08 208c0 102.3-36.15 133.53-55.47 154.29-6 6.45-8.66 14.16-8.61 21.71.11 16.4 12.98 32 32.1 32h383.8c19.12 0 32-15.6 32.1-32 .05-7.55-2.61-15.27-8.61-21.71z"
+                            transform="translate(-224 -256)"
+                          ></path>
+                        </g>
+                      </g>
+                    </svg>
+                    <span
+                      className="fas fa-bell"
+                      data-fa-transform="shrink-6"
+                      style={{ fontSize: "33px" }}
+                    ></span>{" "}
+                  </a>
+                  <div
+                    className="dropdown-menu dropdown-caret dropdown-caret dropdown-menu-end dropdown-menu-card dropdown-menu-notification dropdown-caret-bg"
+                    aria-labelledby="navbarDropdownNotification"
+                  >
+                    <div className="card card-notification shadow-none">
+                      <div className="card-header">
+                        <div className="row justify-content-between align-items-center">
+                          <div className="col-auto">
+                            <h6 className="card-header-title mb-0">
+                              Notifications
+                            </h6>
+                          </div>
+                          <div className="col-auto ps-0 ps-sm-3">
+                            <a
+                              className="card-link fw-normal"
+                              href="https://prium.github.io/falcon/v3.19.0/index.html#"
+                            >
+                              Mark all as read
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className="scrollbar-overlay"
+                        style={{ maxHeight: "19rem" }}
+                        data-simplebar="init"
+                      >
+                        <div
+                          className="simplebar-wrapper"
+                          style={{ margin: "0px" }}
+                        >
+                          <div className="simplebar-height-auto-observer-wrapper">
+                            <div className="simplebar-height-auto-observer"></div>
+                          </div>
+                          <div className="simplebar-mask">
+                            <div
+                              className="simplebar-offset"
+                              style={{ right: "0px", bottom: "0px" }}
+                            >
+                              <div
+                                className="simplebar-content-wrapper"
+                                tabindex="0"
+                                role="region"
+                                aria-label="scrollable content"
+                                style={{ height: "auto", overflow: "hidden" }}
+                              >
+                                <div
+                                  className="simplebar-content"
+                                  style={{ padding: "0px" }}
+                                >
+                                  <div className="list-group list-group-flush fw-normal fs-10">
+                                    <div className="list-group-title border-bottom">
+                                      NEW
+                                    </div>
+                                    <div className="list-group-item">
+                                      <a
+                                        className="notification notification-flush notification-unread"
+                                        href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                      >
+                                        <div className="notification-avatar">
+                                          <div className="avatar avatar-2xl me-3">
+                                            <img
+                                              className="rounded-circle"
+                                              src="./Home_files/1-thumb.png"
+                                              alt=""
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="notification-body">
+                                          <p className="mb-1">
+                                            <strong>Emma Watson</strong> replied
+                                            to your comment : "Hello world 😍"
+                                          </p>
+                                          <span className="notification-time">
+                                            <span
+                                              className="me-2"
+                                              role="img"
+                                              aria-label="Emoji"
+                                            >
+                                              💬
+                                            </span>
+                                            Just now
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                    <div className="list-group-item">
+                                      <a
+                                        className="notification notification-flush notification-unread"
+                                        href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                      >
+                                        <div className="notification-avatar">
+                                          <div className="avatar avatar-2xl me-3">
+                                            <div className="avatar-name rounded-circle">
+                                              <span>AB</span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div className="notification-body">
+                                          <p className="mb-1">
+                                            <strong>Albert Brooks</strong>{" "}
+                                            reacted to{" "}
+                                            <strong>Mia Khalifa's</strong>{" "}
+                                            status
+                                          </p>
+                                          <span className="notification-time">
+                                            <svg
+                                              className="svg-inline--fa fa-gratipay fa-w-16 me-2 text-danger"
+                                              aria-hidden="true"
+                                              focusable="false"
+                                              data-prefix="fab"
+                                              data-icon="gratipay"
+                                              role="img"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              viewBox="0 0 496 512"
+                                              data-fa-i2svg=""
+                                            >
+                                              <path
+                                                fill="currentColor"
+                                                d="M248 8C111.1 8 0 119.1 0 256s111.1 248 248 248 248-111.1 248-248S384.9 8 248 8zm114.6 226.4l-113 152.7-112.7-152.7c-8.7-11.9-19.1-50.4 13.6-72 28.1-18.1 54.6-4.2 68.5 11.9 15.9 17.9 46.6 16.9 61.7 0 13.9-16.1 40.4-30 68.1-11.9 32.9 21.6 22.6 60 13.8 72z"
+                                              ></path>
+                                            </svg>
+                                            <span className="me-2 fab fa-gratipay text-danger"></span>{" "}
+                                            9hr
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                    <div className="list-group-title border-bottom">
+                                      EARLIER
+                                    </div>
+                                    <div className="list-group-item">
+                                      <a
+                                        className="notification notification-flush"
+                                        href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                      >
+                                        <div className="notification-avatar">
+                                          <div className="avatar avatar-2xl me-3">
+                                            <img
+                                              className="rounded-circle"
+                                              src="./Home_files/weather-sm.jpg"
+                                              alt=""
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="notification-body">
+                                          <p className="mb-1">
+                                            The forecast today shows a low of
+                                            20℃ in California. See today's
+                                            weather.
+                                          </p>
+                                          <span className="notification-time">
+                                            <span
+                                              className="me-2"
+                                              role="img"
+                                              aria-label="Emoji"
+                                            >
+                                              🌤️
+                                            </span>
+                                            1d
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                    <div className="list-group-item">
+                                      <a
+                                        className="border-bottom-0 notification-unread  notification notification-flush"
+                                        href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                      >
+                                        <div className="notification-avatar">
+                                          <div className="avatar avatar-xl me-3">
+                                            <img
+                                              className="rounded-circle"
+                                              src="./Home_files/oxford.png"
+                                              alt=""
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="notification-body">
+                                          <p className="mb-1">
+                                            <strong>
+                                              University of Oxford
+                                            </strong>{" "}
+                                            created an event : "Causal Inference
+                                            Hilary 2019"
+                                          </p>
+                                          <span className="notification-time">
+                                            <span
+                                              className="me-2"
+                                              role="img"
+                                              aria-label="Emoji"
+                                            >
+                                              ✌️
+                                            </span>
+                                            1w
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                    <div className="list-group-item">
+                                      <a
+                                        className="border-bottom-0 notification notification-flush"
+                                        href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                      >
+                                        <div className="notification-avatar">
+                                          <div className="avatar avatar-xl me-3">
+                                            <img
+                                              className="rounded-circle"
+                                              src="./Home_files/10.jpg"
+                                              alt=""
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="notification-body">
+                                          <p className="mb-1">
+                                            <strong>James Cameron</strong>{" "}
+                                            invited to join the group: United
+                                            Nations International Children's
+                                            Fund
+                                          </p>
+                                          <span className="notification-time">
+                                            <span
+                                              className="me-2"
+                                              role="img"
+                                              aria-label="Emoji"
+                                            >
+                                              🙋‍
+                                            </span>
+                                            2d
+                                          </span>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            className="simplebar-placeholder"
+                            style={{ width: "0px", height: "0px" }}
+                          ></div>
+                        </div>
+                        <div
+                          className="simplebar-track simplebar-horizontal"
+                          style={{ visibility: "hidden" }}
+                        >
+                          <div
+                            className="simplebar-scrollbar"
+                            style={{ width: "0px", display: "none" }}
+                          ></div>
+                        </div>
+                        <div
+                          className="simplebar-track simplebar-vertical"
+                          style={{ visibility: "hidden" }}
+                        >
+                          <div
+                            className="simplebar-scrollbar"
+                            style={{ width: "0px", display: "none" }}
+                          ></div>
+                        </div>
+                      </div>
+                      <div className="card-footer text-center border-top">
+                        <a
+                          className="card-link d-block"
+                          href="https://prium.github.io/falcon/v3.19.0/app/social/notifications.html"
+                        >
+                          View all
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li className="nav-item dropdown px-1">
+                  <a
+                    className="nav-link fa-icon-wait nine-dots p-1"
+                    id="navbarDropdownMenu"
+                    role="button"
+                    data-hide-on-body-scroll="data-hide-on-body-scroll"
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="43"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                    >
+                      <circle cx="2" cy="2" r="2" fill="#6C6E71"></circle>
+                      <circle cx="2" cy="8" r="2" fill="#6C6E71"></circle>
+                      <circle cx="2" cy="14" r="2" fill="#6C6E71"></circle>
+                      <circle cx="8" cy="8" r="2" fill="#6C6E71"></circle>
+                      <circle cx="8" cy="14" r="2" fill="#6C6E71"></circle>
+                      <circle cx="14" cy="8" r="2" fill="#6C6E71"></circle>
+                      <circle cx="14" cy="14" r="2" fill="#6C6E71"></circle>
+                      <circle cx="8" cy="2" r="2" fill="#6C6E71"></circle>
+                      <circle cx="14" cy="2" r="2" fill="#6C6E71"></circle>
+                    </svg>
+                  </a>
+                  <div
+                    className="dropdown-menu dropdown-caret dropdown-caret dropdown-menu-end dropdown-menu-card dropdown-caret-bg"
+                    aria-labelledby="navbarDropdownMenu"
+                  >
+                    <div className="card shadow-none">
+                      <div
+                        className="scrollbar-overlay nine-dots-dropdown"
+                        data-simplebar="init"
+                      >
+                        <div
+                          className="simplebar-wrapper"
+                          style={{ margin: "0px" }}
+                        >
+                          <div className="simplebar-height-auto-observer-wrapper">
+                            <div className="simplebar-height-auto-observer"></div>
+                          </div>
+                          <div className="simplebar-mask">
+                            <div
+                              className="simplebar-offset"
+                              style={{ right: "0px", bottom: "0px" }}
+                            >
+                              <div
+                                className="simplebar-content-wrapper"
+                                tabindex="0"
+                                role="region"
+                                aria-label="scrollable content"
+                                style={{ height: "auto", overflow: "hidden" }}
+                              >
+                                <div
+                                  className="simplebar-content"
+                                  style={{ padding: "0px" }}
+                                >
+                                  <div className="card-body px-3">
+                                    <div className="row text-center gx-0 gy-0">
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/pages/user/profile.html"
+                                          target="_blank"
+                                        >
+                                          <div className="avatar avatar-2xl">
+                                            {" "}
+                                            <img
+                                              className="rounded-circle"
+                                              src="./Home_files/3.jpg"
+                                              alt=""
+                                            />
+                                          </div>
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11">
+                                            Account
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://themewagon.com/"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/themewagon.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Themewagon
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://mailbluster.com/"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/mailbluster.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Mailbluster
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/google.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Google
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/spotify.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Spotify
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/steam.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Steam
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/github-light.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Github
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/discord.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Discord
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/xbox.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            xbox
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/trello.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Kanban
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/hp.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Hp
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-12">
+                                        <hr className="my-3 mx-n3 bg-200" />
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/linkedin.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Linkedin
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/twitter.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Twitter
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/facebook.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Facebook
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/instagram.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Instagram
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/pinterest.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Pinterest
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/slack.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Slack
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                          target="_blank"
+                                        >
+                                          <img
+                                            className="rounded"
+                                            src="./Home_files/deviantart.png"
+                                            alt=""
+                                            width="40"
+                                            height="40"
+                                          />
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11 pt-1">
+                                            Deviantart
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-4">
+                                        <a
+                                          className="d-block hover-bg-200 px-2 py-3 rounded-3 text-center text-decoration-none"
+                                          href="https://prium.github.io/falcon/v3.19.0/app/events/event-detail.html"
+                                          target="_blank"
+                                        >
+                                          <div className="avatar avatar-2xl">
+                                            <div className="avatar-name rounded-circle bg-primary-subtle text-primary">
+                                              <span className="fs-7">E</span>
+                                            </div>
+                                          </div>
+                                          <p className="mb-0 fw-medium text-800 text-truncate fs-11">
+                                            Events
+                                          </p>
+                                        </a>
+                                      </div>
+                                      <div className="col-12">
+                                        <a
+                                          className="btn btn-outline-primary btn-sm mt-4"
+                                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                        >
+                                          Show more
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            className="simplebar-placeholder"
+                            style={{ width: "0px", height: "0px" }}
+                          ></div>
+                        </div>
+                        <div
+                          className="simplebar-track simplebar-horizontal"
+                          style={{ visibility: "hidden" }}
+                        >
+                          <div
+                            className="simplebar-scrollbar"
+                            style={{ width: "0px", display: "none" }}
+                          ></div>
+                        </div>
+                        <div
+                          className="simplebar-track simplebar-vertical"
+                          style={{ visibility: "hidden" }}
+                        >
+                          <div
+                            className="simplebar-scrollbar"
+                            style={{ height: "0px", display: "none" }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link pe-0 ps-2"
+                    id="navbarDropdownUser"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <div className="avatar avatar-xl">
+                      <img
+                        className="rounded-circle"
+                        src={ProfilePic}
+                        alt=""
+                      />
+                    </div>
+                  </a>
+                  <div
+                    className="dropdown-menu dropdown-caret dropdown-caret dropdown-menu-end py-0"
+                    aria-labelledby="navbarDropdownUser"
+                  >
+                    <div className="bg-white dark__bg-1000 rounded-2 py-2">
+                      <a
+                        className="dropdown-item fw-bold text-warning"
+                        href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                      >
+                        <svg
+                          className="svg-inline--fa fa-crown fa-w-20 me-1"
+                          aria-hidden="true"
+                          focusable="false"
+                          style={{display:'none'}}
+                          data-prefix="fas"
+                          data-icon="crown"
+                          role="img"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 640 512"
+                          data-fa-i2svg=""
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M528 448H112c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h416c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm64-320c-26.5 0-48 21.5-48 48 0 7.1 1.6 13.7 4.4 19.8L476 239.2c-15.4 9.2-35.3 4-44.2-11.6L350.3 85C361 76.2 368 63 368 48c0-26.5-21.5-48-48-48s-48 21.5-48 48c0 15 7 28.2 17.7 37l-81.5 142.6c-8.9 15.6-28.9 20.8-44.2 11.6l-72.3-43.4c2.7-6 4.4-12.7 4.4-19.8 0-26.5-21.5-48-48-48S0 149.5 0 176s21.5 48 48 48c2.6 0 5.2-.4 7.7-.8L128 416h384l72.3-192.8c2.5.4 5.1.8 7.7.8 26.5 0 48-21.5 48-48s-21.5-48-48-48z"
+                          ></path>
+                        </svg>
+                        <span className="fas fa-crown me-1"></span>{" "}
+                        <span>Go Pro</span>
+                      </a>
+                      <div className="dropdown-divider"></div>
+                      <a
+                        className="dropdown-item"
+                        href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                      >
+                        Set status
+                      </a>
+                      <a
+                        className="dropdown-item"
+                        href="https://prium.github.io/falcon/v3.19.0/pages/user/profile.html"
+                      >
+                        Profile &amp; account
+                      </a>
+                      <a
+                        className="dropdown-item"
+                        href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                      >
+                        Feedback
+                      </a>
+                      <div className="dropdown-divider"></div>
+                      <a
+                        className="dropdown-item"
+                        href="https://prium.github.io/falcon/v3.19.0/pages/user/settings.html"
+                      >
+                        Settings
+                      </a>
+                      <a
+                        className="dropdown-item"
+                        href="https://prium.github.io/falcon/v3.19.0/pages/authentication/card/logout.html"
+                      >
+                        Logout
+                      </a>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </nav>
+
+            <div className="row g-3 mb-3">
+              <div className="col-md-6 col-xxl-3">
+                <div className="card h-md-100 ecommerce-card-min-width">
+                  <div className="card-header pb-0">
+                    <h6 className="mb-0 mt-2 d-flex align-items-center">
+                      Weekly Sales
+                      <span
+                        className="ms-1 text-400"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        aria-label="Calculated according to last week&#39;s sales"
+                        data-bs-original-title="Calculated according to last week&#39;s sales"
+                      >
+                        <svg
+                          className="svg-inline--fa fa-question-circle fa-w-16 fa"
+                          data-fa-transform="shrink-1"
+                          aria-hidden="true"
+                          focusable="false"
+                          data-prefix="far"
+                          data-icon="question-circle"
+                          role="img"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 512 512"
+                          data-fa-i2svg=""
+                          style={{ transformOrigin: "0.5em 0.5em" }}
+                        >
+                          <g transform="translate(256 256)">
+                            <g transform="translate(0, 0)  scale(0.9375, 0.9375)  rotate(0 0 0)">
+                              <path
+                                fill="currentColor"
+                                d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 448c-110.532 0-200-89.431-200-200 0-110.495 89.472-200 200-200 110.491 0 200 89.471 200 200 0 110.53-89.431 200-200 200zm107.244-255.2c0 67.052-72.421 68.084-72.421 92.863V300c0 6.627-5.373 12-12 12h-45.647c-6.627 0-12-5.373-12-12v-8.659c0-35.745 27.1-50.034 47.579-61.516 17.561-9.845 28.324-16.541 28.324-29.579 0-17.246-21.999-28.693-39.784-28.693-23.189 0-33.894 10.977-48.942 29.969-4.057 5.12-11.46 6.071-16.666 2.124l-27.824-21.098c-5.107-3.872-6.251-11.066-2.644-16.363C184.846 131.491 214.94 112 261.794 112c49.071 0 101.45 38.304 101.45 88.8zM298 368c0 23.159-18.841 42-42 42s-42-18.841-42-42 18.841-42 42-42 42 18.841 42 42z"
+                                transform="translate(-256 -256)"
+                              ></path>
+                            </g>
+                          </g>
+                        </svg>
+                        <span
+                          className="far fa-question-circle"
+                          data-fa-transform="shrink-1"
+                        ></span>{" "}
+                      </span>
+                    </h6>
+                  </div>
+                  <div className="card-body d-flex flex-column justify-content-end">
+                    <div className="row">
+                      <div className="col">
+                        <p className="font-sans-serif lh-1 mb-1 fs-5">$47K</p>
+                        <span className="badge badge-subtle-success rounded-pill fs-11">
+                          +3.5%
+                        </span>
+                      </div>
+                      <div className="col-auto ps-0">
+                        <div
+                          className="echart-bar-weekly-sales h-100"
+                          style={{
+                            userSelect: "none",
+                            WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+                            position: "relative",
+                          }}
+                          _echarts_instance_="ec_1704216650776"
+                        >
+                          <div
+                            style={{
+                              position: "relative",
+                              width: "136px",
+                              height: "61px",
+                              padding: "0px",
+                              margin: "0px",
+                              borderWidth: "0px",
+                            }}
+                          >
+                            <canvas
+                              data-zr-dom-id="zr_0"
+                              width="136"
+                              height="61"
+                              style={{
+                                position: "absolute",
+                                left: "0px",
+                                top: "0px",
+                                width: "136px",
+                                height: "61px",
+                                userSelect: "none",
+                                WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+                                padding: "0px",
+                                margin: "0px",
+                                borderWidth: "0px",
+                              }}
+                            ></canvas>
+                          </div>
+                          <div className=""></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-xxl-3">
+                <div className="card h-md-100">
+                  <div className="card-header pb-0">
+                    <h6 className="mb-0 mt-2">Total Order</h6>
+                  </div>
+                  <div className="card-body d-flex flex-column justify-content-end">
+                    <div className="row justify-content-between">
+                      <div className="col-auto align-self-end">
+                        <div className="fs-5 fw-normal font-sans-serif text-700 lh-1 mb-1">
+                          58.4K
+                        </div>
+                        <span className="badge rounded-pill fs-11 bg-200 text-primary">
+                          <svg
+                            className="svg-inline--fa fa-caret-up fa-w-10 me-1 fa"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="caret-up"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 320 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M288.662 352H31.338c-17.818 0-26.741-21.543-14.142-34.142l128.662-128.662c7.81-7.81 20.474-7.81 28.284 0l128.662 128.662c12.6 12.599 3.676 34.142-14.142 34.142z"
+                            ></path>
+                          </svg>
+                          <span className="fas fa-caret-up me-1"></span> 13.6%
+                        </span>
+                      </div>
+                      <div className="col-auto ps-0 mt-n4">
+                        <div
+                          className="echart-default-total-order"
+                          data-echarts='{"tooltip":{"trigger":"axis","formatter":"{b0} : {c0}"},"xAxis":{"data":["Week 4","Week 5","Week 6","Week 7"]},"series":[{"type":"line","data":[20,40,100,120],"smooth":true,"lineStyle":{"width":3}}],"grid":{"bottom":"2%","top":"2%","right":"10px","left":"10px"}}'
+                          data-echart-responsive="true"
+                          _echarts_instance_="ec_1704216650781"
+                          style={{
+                            userSelect: "none",
+                            WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+                            position: "relative",
+                          }}
+                        >
+                          <div
+                            style={{
+                              position: "relative",
+                              width: "138px",
+                              height: "90px",
+                              padding: "0px",
+                              margin: "0px",
+                              borderWidth: "0px",
+                            }}
+                          >
+                            <canvas
+                              data-zr-dom-id="zr_0"
+                              width="138"
+                              height="90"
+                              style={{
+                                position: "absolute",
+                                left: "0px",
+                                top: "0px",
+                                width: "138px",
+                                height: "90px",
+                                userSelect: "none",
+                                WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+                                padding: "0px",
+                                margin: "0px",
+                                borderWidth: "0px",
+                              }}
+                            ></canvas>
+                          </div>
+                          <div className=""></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-xxl-3">
+                <div className="card h-md-100">
+                  <div className="card-body">
+                    <div className="row h-100 justify-content-between g-0">
+                      <div className="col-5 col-sm-6 col-xxl pe-2">
+                        <h6 className="mt-1">Market Share</h6>
+                        <div className="fs-11 mt-3">
+                          <div className="d-flex flex-between-center mb-1">
+                            <div className="d-flex align-items-center">
+                              <span className="dot bg-primary"></span>
+                              <span className="fw-semi-bold">Samsung</span>
+                            </div>
+                            <div className="d-xxl-none">33%</div>
+                          </div>
+                          <div className="d-flex flex-between-center mb-1">
+                            <div className="d-flex align-items-center">
+                              <span className="dot bg-info"></span>
+                              <span className="fw-semi-bold">Huawei</span>
+                            </div>
+                            <div className="d-xxl-none">29%</div>
+                          </div>
+                          <div className="d-flex flex-between-center mb-1">
+                            <div className="d-flex align-items-center">
+                              <span className="dot bg-300"></span>
+                              <span className="fw-semi-bold">Apple</span>
+                            </div>
+                            <div className="d-xxl-none">20%</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-auto position-relative">
+                        <div
+                          className="echart-market-share"
+                          _echarts_instance_="ec_1704216650777"
+                          style={{
+                            userSelect: "none",
+                            WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+                            position: "relative",
+                          }}
+                        >
+                          <div
+                            style={{
+                              position: "relative",
+                              width: "106px",
+                              height: "106px",
+                              padding: "0px",
+                              margin: "0px",
+                              borderWidth: "0px",
+                            }}
+                          >
+                            <canvas
+                              data-zr-dom-id="zr_0"
+                              width="106"
+                              height="106"
+                              style={{
+                                position: "absolute",
+                                left: "0px",
+                                top: "0px",
+                                width: "106px",
+                                height: "106px",
+                                userSelect: "none",
+                                WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+                                padding: "0px",
+                                margin: "0px",
+                                borderWidth: "0px",
+                              }}
+                            ></canvas>
+                          </div>
+                          <div className=""></div>
+                        </div>
+                        <div className="position-absolute top-50 start-50 translate-middle text-1100 fs-7">
+                          26M
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-xxl-3">
+                <div className="card h-md-100">
+                  <div className="card-header d-flex flex-between-center pb-0">
+                    <h6 className="mb-0">Weather</h6>
+                    <div className="dropdown font-sans-serif btn-reveal-trigger">
+                      <button
+                        className="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
+                        type="button"
+                        id="dropdown-weather-update"
+                        data-bs-toggle="dropdown"
+                        data-boundary="viewport"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        <svg
+                          className="svg-inline--fa fa-ellipsis-h fa-w-16 fs-11 fa"
+                          aria-hidden="true"
+                          focusable="false"
+                          data-prefix="fas"
+                          data-icon="ellipsis-h"
+                          role="img"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 512 512"
+                          data-fa-i2svg=""
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
+                          ></path>
+                        </svg>
+                        <span className="fas fa-ellipsis-h fs-11"></span>{" "}
+                      </button>
+                      <div
+                        className="dropdown-menu dropdown-menu-end border py-2"
+                        aria-labelledby="dropdown-weather-update"
+                      >
+                        <a
+                          className="dropdown-item"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          View
+                        </a>
+                        <a
+                          className="dropdown-item"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          Export
+                        </a>
+                        <div className="dropdown-divider"></div>
+                        <a
+                          className="dropdown-item text-danger"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          Remove
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body pt-2">
+                    <div className="row g-0 h-100 align-items-center">
+                      <div className="col">
+                        <div className="d-flex align-items-center">
+                          <img
+                            className="me-3"
+                            src={WeatherIcon}
+                            alt=""
+                            height="60"
+                          />
+                          <div>
+                            <h6 className="mb-2">New York City</h6>
+                            <div className="fs-11 fw-semi-bold">
+                              <div className="text-warning">Sunny</div>
+                              Precipitation: 50%
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-auto text-center ps-2">
+                        <div className="fs-5 fw-normal font-sans-serif text-primary mb-1 lh-1">
+                          31°
+                        </div>
+                        <div className="fs-10 text-800">32° / 25°</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row g-0">
+              <div className="col-lg-6 pe-lg-2 mb-3">
+                <div className="card h-lg-100 overflow-hidden">
+                  <div className="card-header bg-body-tertiary">
+                    <div className="row align-items-center">
+                      <div className="col">
+                        <h6 className="mb-0">Running Projects</h6>
+                      </div>
+                      <div className="col-auto text-center pe-x1">
+                        <select className="form-select form-select-sm">
+                          <option>Working Time</option>
+                          <option>Estimated Time</option>
+                          <option>Billable Time</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body p-0">
+                    <div className="row g-0 align-items-center py-2 position-relative border-bottom border-200">
+                      <div className="col ps-x1 py-1 position-static">
+                        <div className="d-flex align-items-center">
+                          <div className="avatar avatar-xl me-3">
+                            <div className="avatar-name rounded-circle bg-primary-subtle text-dark">
+                              <span className="fs-9 text-primary">F</span>
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <h6 className="mb-0 d-flex align-items-center">
+                              <a
+                                className="text-800 stretched-link"
+                                href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                              >
+                                Falcon
+                              </a>
+                              <span className="badge rounded-pill ms-2 bg-200 text-primary">
+                                38%
+                              </span>
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col py-1">
+                        <div className="row flex-end-center g-0">
+                          <div className="col-auto pe-2">
+                            <div className="fs-10 fw-semi-bold">12:50:00</div>
+                          </div>
+                          <div className="col-5 pe-x1 ps-2">
+                            <div
+                              className="progress bg-200 me-2"
+                              style={{ height: "5px" }}
+                              role="progressbar"
+                              aria-valuenow="38"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            >
+                              <div
+                                className="progress-bar rounded-pill"
+                                style={{ width: "38%" }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row g-0 align-items-center py-2 position-relative border-bottom border-200">
+                      <div className="col ps-x1 py-1 position-static">
+                        <div className="d-flex align-items-center">
+                          <div className="avatar avatar-xl me-3">
+                            <div className="avatar-name rounded-circle bg-success-subtle text-dark">
+                              <span className="fs-9 text-success">R</span>
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <h6 className="mb-0 d-flex align-items-center">
+                              <a
+                                className="text-800 stretched-link"
+                                href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                              >
+                                Reign
+                              </a>
+                              <span className="badge rounded-pill ms-2 bg-200 text-primary">
+                                79%
+                              </span>
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col py-1">
+                        <div className="row flex-end-center g-0">
+                          <div className="col-auto pe-2">
+                            <div className="fs-10 fw-semi-bold">25:20:00</div>
+                          </div>
+                          <div className="col-5 pe-x1 ps-2">
+                            <div
+                              className="progress bg-200 me-2"
+                              style={{ height: "5px" }}
+                              role="progressbar"
+                              aria-valuenow="79"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            >
+                              <div
+                                className="progress-bar rounded-pill"
+                                style={{ width: "79%" }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row g-0 align-items-center py-2 position-relative border-bottom border-200">
+                      <div className="col ps-x1 py-1 position-static">
+                        <div className="d-flex align-items-center">
+                          <div className="avatar avatar-xl me-3">
+                            <div className="avatar-name rounded-circle bg-info-subtle text-dark">
+                              <span className="fs-9 text-info">B</span>
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <h6 className="mb-0 d-flex align-items-center">
+                              <a
+                                className="text-800 stretched-link"
+                                href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                              >
+                                Boots4
+                              </a>
+                              <span className="badge rounded-pill ms-2 bg-200 text-primary">
+                                90%
+                              </span>
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col py-1">
+                        <div className="row flex-end-center g-0">
+                          <div className="col-auto pe-2">
+                            <div className="fs-10 fw-semi-bold">58:20:00</div>
+                          </div>
+                          <div className="col-5 pe-x1 ps-2">
+                            <div
+                              className="progress bg-200 me-2"
+                              style={{ height: "5px" }}
+                              role="progressbar"
+                              aria-valuenow="90"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            >
+                              <div
+                                className="progress-bar rounded-pill"
+                                style={{ width: "90%" }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row g-0 align-items-center py-2 position-relative border-bottom border-200">
+                      <div className="col ps-x1 py-1 position-static">
+                        <div className="d-flex align-items-center">
+                          <div className="avatar avatar-xl me-3">
+                            <div className="avatar-name rounded-circle bg-warning-subtle text-dark">
+                              <span className="fs-9 text-warning">R</span>
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <h6 className="mb-0 d-flex align-items-center">
+                              <a
+                                className="text-800 stretched-link"
+                                href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                              >
+                                Raven
+                              </a>
+                              <span className="badge rounded-pill ms-2 bg-200 text-primary">
+                                40%
+                              </span>
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col py-1">
+                        <div className="row flex-end-center g-0">
+                          <div className="col-auto pe-2">
+                            <div className="fs-10 fw-semi-bold">21:20:00</div>
+                          </div>
+                          <div className="col-5 pe-x1 ps-2">
+                            <div
+                              className="progress bg-200 me-2"
+                              style={{ height: "5px" }}
+                              role="progressbar"
+                              aria-valuenow="40"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            >
+                              <div
+                                className="progress-bar rounded-pill"
+                                style={{ width: "40%" }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row g-0 align-items-center py-2 position-relative">
+                      <div className="col ps-x1 py-1 position-static">
+                        <div className="d-flex align-items-center">
+                          <div className="avatar avatar-xl me-3">
+                            <div className="avatar-name rounded-circle bg-danger-subtle text-dark">
+                              <span className="fs-9 text-danger">S</span>
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <h6 className="mb-0 d-flex align-items-center">
+                              <a
+                                className="text-800 stretched-link"
+                                href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                              >
+                                Slick
+                              </a>
+                              <span className="badge rounded-pill ms-2 bg-200 text-primary">
+                                70%
+                              </span>
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col py-1">
+                        <div className="row flex-end-center g-0">
+                          <div className="col-auto pe-2">
+                            <div className="fs-10 fw-semi-bold">31:20:00</div>
+                          </div>
+                          <div className="col-5 pe-x1 ps-2">
+                            <div
+                              className="progress bg-200 me-2"
+                              style={{ height: "5px" }}
+                              role="progressbar"
+                              aria-valuenow="70"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            >
+                              <div
+                                className="progress-bar rounded-pill"
+                                style={{ width: "70%" }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-footer bg-body-tertiary p-0">
+                    <a
+                      className="btn btn-sm btn-link d-block w-100 py-2"
+                      href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                    >
+                      Show all projects
+                      <svg
+                        className="svg-inline--fa fa-chevron-right fa-w-10 ms-1 fs-11 fa"
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fas"
+                        data-icon="chevron-right"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512"
+                        data-fa-i2svg=""
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"
+                        ></path>
+                      </svg>
+                      <span className="fas fa-chevron-right ms-1 fs-11"></span>{" "}
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-6 ps-lg-2 mb-3">
+                <div className="card h-lg-100">
+                  <div className="card-header">
+                    <div className="row flex-between-center">
+                      <div className="col-auto">
+                        <h6 className="mb-0">Total Sales</h6>
+                      </div>
+                      <div className="col-auto d-flex">
+                        <select className="form-select form-select-sm select-month me-2">
+                          <option value="0">January</option>
+                          <option value="1">February</option>
+                          <option value="2">March</option>
+                          <option value="3">April</option>
+                          <option value="4">May</option>
+                          <option value="5">Jun</option>
+                          <option value="6">July</option>
+                          <option value="7">August</option>
+                          <option value="8">September</option>
+                          <option value="9">October</option>
+                          <option value="10">November</option>
+                          <option value="11">December</option>
+                        </select>
+                        <div className="dropdown font-sans-serif btn-reveal-trigger">
+                          <button
+                            className="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
+                            type="button"
+                            id="dropdown-total-sales"
+                            data-bs-toggle="dropdown"
+                            data-boundary="viewport"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                          >
+                            <svg
+                              className="svg-inline--fa fa-ellipsis-h fa-w-16 fs-11 fa"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="ellipsis-h"
+                              role="img"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 512 512"
+                              data-fa-i2svg=""
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
+                              ></path>
+                            </svg>
+                            <span className="fas fa-ellipsis-h fs-11"></span>{" "}
+                          </button>
+                          <div
+                            className="dropdown-menu dropdown-menu-end border py-2"
+                            aria-labelledby="dropdown-total-sales"
+                          >
+                            <a
+                              className="dropdown-item"
+                              href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                            >
+                              View
+                            </a>
+                            <a
+                              className="dropdown-item"
+                              href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                            >
+                              Export
+                            </a>
+                            <div className="dropdown-divider"></div>
+                            <a
+                              className="dropdown-item text-danger"
+                              href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                            >
+                              Remove
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body h-100 pe-0">
+                    <div
+                      className="echart-line-total-sales h-100"
+                      data-echart-responsive="true"
+                      _echarts_instance_="ec_1704216650778"
+                      style={{
+                        userSelect: "none",
+                        WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+                        position: "relative",
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "relative",
+                          width: "401px",
+                          height: "283px",
+                          padding: "0px",
+                          margin: "0px",
+                          borderWidth: "0px",
+                        }}
+                      >
+                        <canvas
+                          data-zr-dom-id="zr_0"
+                          width="401"
+                          height="283"
+                          style={{
+                            position: "absolute",
+                            left: "0px",
+                            top: "0px",
+                            width: "401px",
+                            height: "283px",
+                            userSelect: "none",
+                            WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+                            padding: "0px",
+                            margin: "0px",
+                            borderWidth: "0px",
+                          }}
+                        ></canvas>
+                      </div>
+                      <div className=""></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row g-0">
+              <div className="col-lg-6 col-xl-7 col-xxl-8 mb-3 pe-lg-2 mb-3">
+                <div className="card h-lg-100">
+                  <div className="card-body d-flex align-items-center">
+                    <div className="w-100">
+                      <h6 className="mb-3 text-800">
+                        Using Storage{" "}
+                        <strong className="text-1100">1775.06 MB </strong>of 2
+                        GB
+                      </h6>
+                      <div
+                        className="progress-stacked mb-3 rounded-3"
+                        style={{ height: "10px" }}
+                      >
+                        <div
+                          className="progress"
+                          style={{ width: "43.72%" }}
+                          role="progressbar"
+                          aria-valuenow="43.72"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        >
+                          <div className="progress-bar bg-progress-gradient border-end border-100 border-2"></div>
+                        </div>
+                        <div
+                          className="progress"
+                          style={{ width: "18.76%" }}
+                          role="progressbar"
+                          aria-valuenow="18.76"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        >
+                          <div className="progress-bar bg-info border-end border-100 border-2"></div>
+                        </div>
+                        <div
+                          className="progress"
+                          style={{ width: "9.38%" }}
+                          role="progressbar"
+                          aria-valuenow="9.38"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        >
+                          <div className="progress-bar bg-success border-end border-100 border-2"></div>
+                        </div>
+                        <div
+                          className="progress"
+                          style={{ width: "28.14%" }}
+                          role="progressbar"
+                          aria-valuenow="28.14"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        >
+                          <div className="progress-bar bg-200"></div>
+                        </div>
+                      </div>
+                      <div className="row fs-10 fw-semi-bold text-500 g-0">
+                        <div className="col-auto d-flex align-items-center pe-3">
+                          <span className="dot bg-primary"></span>
+                          <span>Regular</span>
+                          <span className="d-none d-md-inline-block d-lg-none d-xxl-inline-block">
+                            (895MB)
+                          </span>
+                        </div>
+                        <div className="col-auto d-flex align-items-center pe-3">
+                          <span className="dot bg-info"></span>
+                          <span>System</span>
+                          <span className="d-none d-md-inline-block d-lg-none d-xxl-inline-block">
+                            (379MB)
+                          </span>
+                        </div>
+                        <div className="col-auto d-flex align-items-center pe-3">
+                          <span className="dot bg-success"></span>
+                          <span>Shared</span>
+                          <span className="d-none d-md-inline-block d-lg-none d-xxl-inline-block">
+                            (192MB)
+                          </span>
+                        </div>
+                        <div className="col-auto d-flex align-items-center">
+                          <span className="dot bg-200"></span>
+                          <span>Free</span>
+                          <span className="d-none d-md-inline-block d-lg-none d-xxl-inline-block">
+                            (576MB)
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-6 col-xl-5 col-xxl-4 mb-3 ps-lg-2">
+                <div className="card h-lg-100">
+                  <div
+                    className="bg-holder bg-card"
+                    style={{
+                      backgroundImage:
+                        "url(assets/img/icons/spot-illustrations/corner-1.png)",
+                    }}
+                  ></div>
+                  <div className="card-body position-relative">
+                    <h5 className="text-warning">Running out of your space?</h5>
+                    <p className="fs-10 mb-0">
+                      Your storage will be running out soon. Get more space and
+                      powerful productivity features.
+                    </p>
+                    <a
+                      className="btn btn-link fs-10 text-warning mt-lg-3 ps-0"
+                      href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                    >
+                      Upgrade storage
+                      <svg
+                        className="svg-inline--fa fa-chevron-right fa-w-10 ms-1"
+                        data-fa-transform="shrink-4 down-1"
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fas"
+                        data-icon="chevron-right"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512"
+                        data-fa-i2svg=""
+                        style={{
+                          transformOrigin: "0.3125em 0.5625em",
+                        }}
+                      >
+                        <g transform="translate(160 256)">
+                          <g transform="translate(0, 32)  scale(0.75, 0.75)  rotate(0 0 0)">
+                            <path
+                              fill="currentColor"
+                              d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"
+                              transform="translate(-160 -256)"
+                            ></path>
+                          </g>
+                        </g>
+                      </svg>
+                      <span
+                        className="fas fa-chevron-right ms-1"
+                        data-fa-transform="shrink-4 down-1"
+                      ></span>{" "}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row g-0">
+              <div className="col-lg-7 col-xl-8 pe-lg-2 mb-3">
+                <div className="card h-lg-100 overflow-hidden">
+                  <div className="card-body p-0">
+                    <div className="table-responsive scrollbar">
+                      <table className="table table-dashboard mb-0 table-borderless fs-10 border-200">
+                        <thead className="bg-body-tertiary">
+                          <tr>
+                            <th className="text-900">Best Selling Products</th>
+                            <th className="text-900 text-end">
+                              Revenue ($3333)
+                            </th>
+                            <th
+                              className="text-900 pe-x1 text-end"
+                              style={{
+                                width: "8rem",
+                              }}
+                            >
+                              Revenue (%)
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="border-bottom border-200">
+                            <td>
+                              <div className="d-flex align-items-center position-relative">
+                                <img
+                                  className="rounded-1 border border-200"
+                                  src="./Home_files/12.png"
+                                  width="60"
+                                  alt=""
+                                />
+                                <div className="flex-1 ms-3">
+                                  <h6 className="mb-1 fw-semi-bold">
+                                    <a
+                                      className="text-1100 stretched-link"
+                                      href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                    >
+                                      Raven Pro
+                                    </a>
+                                  </h6>
+                                  <p className="fw-semi-bold mb-0 text-500">
+                                    Landing
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="align-middle text-end fw-semi-bold">
+                              $1311
+                            </td>
+                            <td className="align-middle pe-x1">
+                              <div className="d-flex align-items-center">
+                                <div
+                                  className="progress me-3 rounded-3 bg-200"
+                                  style={{
+                                    height: "5px",
+                                    width: "80px",
+                                  }}
+                                  role="progressbar"
+                                  aria-valuenow="39"
+                                  aria-valuemin="0"
+                                  aria-valuemax="100"
+                                >
+                                  <div
+                                    className="progress-bar rounded-pill"
+                                    style={{
+                                      width: "39%",
+                                    }}
+                                  ></div>
+                                </div>
+                                <div className="fw-semi-bold ms-2">39%</div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="border-bottom border-200">
+                            <td>
+                              <div className="d-flex align-items-center position-relative">
+                                <img
+                                  className="rounded-1 border border-200"
+                                  src="./Home_files/10.png"
+                                  width="60"
+                                  alt=""
+                                />
+                                <div className="flex-1 ms-3">
+                                  <h6 className="mb-1 fw-semi-bold">
+                                    <a
+                                      className="text-1100 stretched-link"
+                                      href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                    >
+                                      Boots4
+                                    </a>
+                                  </h6>
+                                  <p className="fw-semi-bold mb-0 text-500">
+                                    Portfolio
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="align-middle text-end fw-semi-bold">
+                              $860
+                            </td>
+                            <td className="align-middle pe-x1">
+                              <div className="d-flex align-items-center">
+                                <div
+                                  className="progress me-3 rounded-3 bg-200"
+                                  style={{
+                                    height: "5px",
+                                    width: "80px",
+                                  }}
+                                  role="progressbar"
+                                  aria-valuenow="26"
+                                  aria-valuemin="0"
+                                  aria-valuemax="100"
+                                >
+                                  <div
+                                    className="progress-bar rounded-pill"
+                                    style={{ width: "26%" }}
+                                  ></div>
+                                </div>
+                                <div className="fw-semi-bold ms-2">26%</div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="border-bottom border-200">
+                            <td>
+                              <div className="d-flex align-items-center position-relative">
+                                <img
+                                  className="rounded-1 border border-200"
+                                  src="./Home_files/11.png"
+                                  width="60"
+                                  alt=""
+                                />
+                                <div className="flex-1 ms-3">
+                                  <h6 className="mb-1 fw-semi-bold">
+                                    <a
+                                      className="text-1100 stretched-link"
+                                      href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                    >
+                                      Falcon
+                                    </a>
+                                  </h6>
+                                  <p className="fw-semi-bold mb-0 text-500">
+                                    Admin
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="align-middle text-end fw-semi-bold">
+                              $539
+                            </td>
+                            <td className="align-middle pe-x1">
+                              <div className="d-flex align-items-center">
+                                <div
+                                  className="progress me-3 rounded-3 bg-200"
+                                  style={{ height: "5px", width: "80px" }}
+                                  role="progressbar"
+                                  aria-valuenow="16"
+                                  aria-valuemin="0"
+                                  aria-valuemax="100"
+                                >
+                                  <div
+                                    className="progress-bar rounded-pill"
+                                    style={{ width: "16%" }}
+                                  ></div>
+                                </div>
+                                <div className="fw-semi-bold ms-2">16%</div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="border-bottom border-200">
+                            <td>
+                              <div className="d-flex align-items-center position-relative">
+                                <img
+                                  className="rounded-1 border border-200"
+                                  src="./Home_files/14.png"
+                                  width="60"
+                                  alt=""
+                                />
+                                <div className="flex-1 ms-3">
+                                  <h6 className="mb-1 fw-semi-bold">
+                                    <a
+                                      className="text-1100 stretched-link"
+                                      href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                    >
+                                      Slick
+                                    </a>
+                                  </h6>
+                                  <p className="fw-semi-bold mb-0 text-500">
+                                    Builder
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="align-middle text-end fw-semi-bold">
+                              $343
+                            </td>
+                            <td className="align-middle pe-x1">
+                              <div className="d-flex align-items-center">
+                                <div
+                                  className="progress me-3 rounded-3 bg-200"
+                                  style={{ height: "5px", width: "80px" }}
+                                  role="progressbar"
+                                  aria-valuenow="10"
+                                  aria-valuemin="0"
+                                  aria-valuemax="100"
+                                >
+                                  <div
+                                    className="progress-bar rounded-pill"
+                                    style={{ width: "10%" }}
+                                  ></div>
+                                </div>
+                                <div className="fw-semi-bold ms-2">10%</div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <div className="d-flex align-items-center position-relative">
+                                <img
+                                  className="rounded-1 border border-200"
+                                  src="./Home_files/13.png"
+                                  width="60"
+                                  alt=""
+                                />
+                                <div className="flex-1 ms-3">
+                                  <h6 className="mb-1 fw-semi-bold">
+                                    <a
+                                      className="text-1100 stretched-link"
+                                      href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                                    >
+                                      Reign Pro
+                                    </a>
+                                  </h6>
+                                  <p className="fw-semi-bold mb-0 text-500">
+                                    Agency
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="align-middle text-end fw-semi-bold">
+                              $280
+                            </td>
+                            <td className="align-middle pe-x1">
+                              <div className="d-flex align-items-center">
+                                <div
+                                  className="progress me-3 rounded-3 bg-200"
+                                  style={{ height: "5px", width: "80px" }}
+                                  role="progressbar"
+                                  aria-valuenow="8"
+                                  aria-valuemin="0"
+                                  aria-valuemax="100"
+                                >
+                                  <div
+                                    className="progress-bar rounded-pill"
+                                    style={{ width: "8%" }}
+                                  ></div>
+                                </div>
+                                <div className="fw-semi-bold ms-2">8%</div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div className="card-footer bg-body-tertiary py-2">
+                    <div className="row flex-between-center">
+                      <div className="col-auto">
+                        <select className="form-select form-select-sm">
+                          <option>Last 7 days</option>
+                          <option>Last Month</option>
+                          <option>Last Year</option>
+                        </select>
+                      </div>
+                      <div className="col-auto">
+                        <a
+                          className="btn btn-sm btn-falcon-default"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          View All
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-5 col-xl-4 ps-lg-2 mb-3">
+                <div className="card h-100">
+                  <div className="card-header d-flex flex-between-center bg-body-tertiary py-2">
+                    <h6 className="mb-0">Shared Files</h6>
+                    <a
+                      className="py-1 fs-10 font-sans-serif"
+                      href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                    >
+                      View All
+                    </a>
+                  </div>
+                  <div className="card-body pb-0">
+                    <div className="d-flex mb-3 hover-actions-trigger align-items-center">
+                      <div className="file-thumbnail">
+                        <img
+                          className="border h-100 w-100 object-fit-cover rounded-2"
+                          src="./Home_files/5-thumb.png"
+                          alt=""
+                        />
+                      </div>
+                      <div className="ms-3 flex-shrink-1 flex-grow-1">
+                        <h6 className="mb-1">
+                          <a
+                            className="stretched-link text-900 fw-semi-bold"
+                            href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                          >
+                            apple-smart-watch.png
+                          </a>
+                        </h6>
+                        <div className="fs-10">
+                          <span className="fw-semi-bold">Antony</span>
+                          <span className="fw-medium text-600 ms-2">
+                            Just Now
+                          </span>
+                        </div>
+                        <div className="hover-actions end-0 top-50 translate-middle-y">
+                          <a
+                            className="btn btn-tertiary border-300 btn-sm me-1 text-600"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            href="./Home_files/cloud-download.svg"
+                            download="download"
+                            aria-label="Download"
+                            data-bs-original-title="Download"
+                          >
+                            <img
+                              src="./Home_files/cloud-download.svg"
+                              alt=""
+                              width="15"
+                            />
+                          </a>
+                          <button
+                            className="btn btn-tertiary border-300 btn-sm me-1 text-600 shadow-none"
+                            type="button"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            aria-label="Edit"
+                            data-bs-original-title="Edit"
+                          >
+                            <img
+                              src="./Home_files/edit-alt.svg"
+                              alt=""
+                              width="15"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <hr className="text-200" />
+                    <div className="d-flex mb-3 hover-actions-trigger align-items-center">
+                      <div className="file-thumbnail">
+                        <img
+                          className="border h-100 w-100 object-fit-cover rounded-2"
+                          src="./Home_files/3-thumb.png"
+                          alt=""
+                        />
+                      </div>
+                      <div className="ms-3 flex-shrink-1 flex-grow-1">
+                        <h6 className="mb-1">
+                          <a
+                            className="stretched-link text-900 fw-semi-bold"
+                            href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                          >
+                            iphone.jpg
+                          </a>
+                        </h6>
+                        <div className="fs-10">
+                          <span className="fw-semi-bold">Antony</span>
+                          <span className="fw-medium text-600 ms-2">
+                            Yesterday at 1:30 PM
+                          </span>
+                        </div>
+                        <div className="hover-actions end-0 top-50 translate-middle-y">
+                          <a
+                            className="btn btn-tertiary border-300 btn-sm me-1 text-600"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            href="./Home_files/cloud-download.svg"
+                            download="download"
+                            aria-label="Download"
+                            data-bs-original-title="Download"
+                          >
+                            <img
+                              src="./Home_files/cloud-download.svg"
+                              alt=""
+                              width="15"
+                            />
+                          </a>
+                          <button
+                            className="btn btn-tertiary border-300 btn-sm me-1 text-600 shadow-none"
+                            type="button"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            aria-label="Edit"
+                            data-bs-original-title="Edit"
+                          >
+                            <img
+                              src="./Home_files/edit-alt.svg"
+                              alt=""
+                              width="15"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <hr className="text-200" />
+                    <div className="d-flex mb-3 hover-actions-trigger align-items-center">
+                      <div className="file-thumbnail">
+                        <img
+                          className="img-fluid"
+                          src="./Home_files/zip.png"
+                          alt=""
+                        />
+                      </div>
+                      <div className="ms-3 flex-shrink-1 flex-grow-1">
+                        <h6 className="mb-1">
+                          <a
+                            className="stretched-link text-900 fw-semi-bold"
+                            href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                          >
+                            Falcon v1.8.2
+                          </a>
+                        </h6>
+                        <div className="fs-10">
+                          <span className="fw-semi-bold">Jane</span>
+                          <span className="fw-medium text-600 ms-2">
+                            27 Sep at 10:30 AM
+                          </span>
+                        </div>
+                        <div className="hover-actions end-0 top-50 translate-middle-y">
+                          <a
+                            className="btn btn-tertiary border-300 btn-sm me-1 text-600"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            href="./Home_files/cloud-download.svg"
+                            download="download"
+                            aria-label="Download"
+                            data-bs-original-title="Download"
+                          >
+                            <img
+                              src="./Home_files/cloud-download.svg"
+                              alt=""
+                              width="15"
+                            />
+                          </a>
+                          <button
+                            className="btn btn-tertiary border-300 btn-sm me-1 text-600 shadow-none"
+                            type="button"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            aria-label="Edit"
+                            data-bs-original-title="Edit"
+                          >
+                            <img
+                              src="./Home_files/edit-alt.svg"
+                              alt=""
+                              width="15"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <hr className="text-200" />
+                    <div className="d-flex mb-3 hover-actions-trigger align-items-center">
+                      <div className="file-thumbnail">
+                        <img
+                          className="border h-100 w-100 object-fit-cover rounded-2"
+                          src="./Home_files/2-thumb.png"
+                          alt=""
+                        />
+                      </div>
+                      <div className="ms-3 flex-shrink-1 flex-grow-1">
+                        <h6 className="mb-1">
+                          <a
+                            className="stretched-link text-900 fw-semi-bold"
+                            href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                          >
+                            iMac.jpg
+                          </a>
+                        </h6>
+                        <div className="fs-10">
+                          <span className="fw-semi-bold">Rowen</span>
+                          <span className="fw-medium text-600 ms-2">
+                            23 Sep at 6:10 PM
+                          </span>
+                        </div>
+                        <div className="hover-actions end-0 top-50 translate-middle-y">
+                          <a
+                            className="btn btn-tertiary border-300 btn-sm me-1 text-600"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            href="./Home_files/cloud-download.svg"
+                            download="download"
+                            aria-label="Download"
+                            data-bs-original-title="Download"
+                          >
+                            <img
+                              src="./Home_files/cloud-download.svg"
+                              alt=""
+                              width="15"
+                            />
+                          </a>
+                          <button
+                            className="btn btn-tertiary border-300 btn-sm me-1 text-600 shadow-none"
+                            type="button"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            aria-label="Edit"
+                            data-bs-original-title="Edit"
+                          >
+                            <img
+                              src="./Home_files/edit-alt.svg"
+                              alt=""
+                              width="15"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <hr className="text-200" />
+                    <div className="d-flex mb-3 hover-actions-trigger align-items-center">
+                      <div className="file-thumbnail">
+                        <img
+                          className="img-fluid"
+                          src="./Home_files/docs.png"
+                          alt=""
+                        />
+                      </div>
+                      <div className="ms-3 flex-shrink-1 flex-grow-1">
+                        <h6 className="mb-1">
+                          <a
+                            className="stretched-link text-900 fw-semi-bold"
+                            href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                          >
+                            functions.php
+                          </a>
+                        </h6>
+                        <div className="fs-10">
+                          <span className="fw-semi-bold">John</span>
+                          <span className="fw-medium text-600 ms-2">
+                            1 Oct at 4:30 PM
+                          </span>
+                        </div>
+                        <div className="hover-actions end-0 top-50 translate-middle-y">
+                          <a
+                            className="btn btn-tertiary border-300 btn-sm me-1 text-600"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            href="./Home_files/cloud-download.svg"
+                            download="download"
+                            aria-label="Download"
+                            data-bs-original-title="Download"
+                          >
+                            <img
+                              src="./Home_files/cloud-download.svg"
+                              alt=""
+                              width="15"
+                            />
+                          </a>
+                          <button
+                            className="btn btn-tertiary border-300 btn-sm me-1 text-600 shadow-none"
+                            type="button"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            aria-label="Edit"
+                            data-bs-original-title="Edit"
+                          >
+                            <img
+                              src="./Home_files/edit-alt.svg"
+                              alt=""
+                              width="15"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row g-0">
+              <div className="col-md-6 col-xxl-3 pe-md-2 mb-3 mb-xxl-0">
+                <div className="card">
+                  <div className="card-header d-flex flex-between-center bg-body-tertiary py-2">
+                    <h6 className="mb-0">Active Users</h6>
+                    <div className="dropdown font-sans-serif btn-reveal-trigger">
+                      <button
+                        className="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
+                        type="button"
+                        id="dropdown-active-user"
+                        data-bs-toggle="dropdown"
+                        data-boundary="viewport"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        <svg
+                          className="svg-inline--fa fa-ellipsis-h fa-w-16 fs-11 fa"
+                          aria-hidden="true"
+                          focusable="false"
+                          data-prefix="fas"
+                          data-icon="ellipsis-h"
+                          role="img"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 512 512"
+                          data-fa-i2svg=""
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
+                          ></path>
+                        </svg>
+                        <span className="fas fa-ellipsis-h fs-11"></span>{" "}
+                      </button>
+                      <div
+                        className="dropdown-menu dropdown-menu-end border py-2"
+                        aria-labelledby="dropdown-active-user"
+                      >
+                        <a
+                          className="dropdown-item"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          View
+                        </a>
+                        <a
+                          className="dropdown-item"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          Export
+                        </a>
+                        <div className="dropdown-divider"></div>
+                        <a
+                          className="dropdown-item text-danger"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          Remove
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body py-2">
+                    <div className="d-flex align-items-center position-relative mb-3">
+                      <div className="avatar avatar-2xl status-online">
+                        <img
+                          className="rounded-circle"
+                          src="./Home_files/1.jpg"
+                          alt=""
+                        />
+                      </div>
+                      <div className="flex-1 ms-3">
+                        <h6 className="mb-0 fw-semi-bold">
+                          <a
+                            className="stretched-link text-900"
+                            href="https://prium.github.io/falcon/v3.19.0/pages/user/profile.html"
+                          >
+                            Emma Watson
+                          </a>
+                        </h6>
+                        <p className="text-500 fs-11 mb-0">Admin</p>
+                      </div>
+                    </div>
+                    <div className="d-flex align-items-center position-relative mb-3">
+                      <div className="avatar avatar-2xl status-online">
+                        <img
+                          className="rounded-circle"
+                          src="./Home_files/2.jpg"
+                          alt=""
+                        />
+                      </div>
+                      <div className="flex-1 ms-3">
+                        <h6 className="mb-0 fw-semi-bold">
+                          <a
+                            className="stretched-link text-900"
+                            href="https://prium.github.io/falcon/v3.19.0/pages/user/profile.html"
+                          >
+                            Antony Hopkins
+                          </a>
+                        </h6>
+                        <p className="text-500 fs-11 mb-0">Moderator</p>
+                      </div>
+                    </div>
+                    <div className="d-flex align-items-center position-relative mb-3">
+                      <div className="avatar avatar-2xl status-away">
+                        <img
+                          className="rounded-circle"
+                          src="./Home_files/3.jpg"
+                          alt=""
+                        />
+                      </div>
+                      <div className="flex-1 ms-3">
+                        <h6 className="mb-0 fw-semi-bold">
+                          <a
+                            className="stretched-link text-900"
+                            href="https://prium.github.io/falcon/v3.19.0/pages/user/profile.html"
+                          >
+                            Anna Karinina
+                          </a>
+                        </h6>
+                        <p className="text-500 fs-11 mb-0">Editor</p>
+                      </div>
+                    </div>
+                    <div className="d-flex align-items-center position-relative mb-3">
+                      <div className="avatar avatar-2xl status-offline">
+                        <img
+                          className="rounded-circle"
+                          src="./Home_files/4.jpg"
+                          alt=""
+                        />
+                      </div>
+                      <div className="flex-1 ms-3">
+                        <h6 className="mb-0 fw-semi-bold">
+                          <a
+                            className="stretched-link text-900"
+                            href="https://prium.github.io/falcon/v3.19.0/pages/user/profile.html"
+                          >
+                            John Lee
+                          </a>
+                        </h6>
+                        <p className="text-500 fs-11 mb-0">Admin</p>
+                      </div>
+                    </div>
+                    <div className="d-flex align-items-center position-relative false">
+                      <div className="avatar avatar-2xl status-offline">
+                        <img
+                          className="rounded-circle"
+                          src="./Home_files/5.jpg"
+                          alt=""
+                        />
+                      </div>
+                      <div className="flex-1 ms-3">
+                        <h6 className="mb-0 fw-semi-bold">
+                          <a
+                            className="stretched-link text-900"
+                            href="https://prium.github.io/falcon/v3.19.0/pages/user/profile.html"
+                          >
+                            Rowen Atkinson
+                          </a>
+                        </h6>
+                        <p className="text-500 fs-11 mb-0">Editor</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-footer bg-body-tertiary p-0">
+                    <a
+                      className="btn btn-sm btn-link d-block w-100 py-2"
+                      href="https://prium.github.io/falcon/v3.19.0/app/social/followers.html"
+                    >
+                      All active users
+                      <svg
+                        className="svg-inline--fa fa-chevron-right fa-w-10 ms-1 fs-11 fa"
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fas"
+                        data-icon="chevron-right"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 320 512"
+                        data-fa-i2svg=""
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"
+                        ></path>
+                      </svg>
+                      <span className="fas fa-chevron-right ms-1 fs-11"></span>{" "}
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-xxl-3 ps-md-2 order-xxl-1 mb-3 mb-xxl-0">
+                <div className="card h-100">
+                  <div className="card-header bg-body-tertiary d-flex flex-between-center py-2">
+                    <h6 className="mb-0">Bandwidth Saved</h6>
+                    <div className="dropdown font-sans-serif btn-reveal-trigger">
+                      <button
+                        className="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
+                        type="button"
+                        id="dropdown-bandwidth-saved"
+                        data-bs-toggle="dropdown"
+                        data-boundary="viewport"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        <svg
+                          className="svg-inline--fa fa-ellipsis-h fa-w-16 fs-11 fa"
+                          aria-hidden="true"
+                          focusable="false"
+                          data-prefix="fas"
+                          data-icon="ellipsis-h"
+                          role="img"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 512 512"
+                          data-fa-i2svg=""
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
+                          ></path>
+                        </svg>
+                        <span className="fas fa-ellipsis-h fs-11"></span>{" "}
+                      </button>
+                      <div
+                        className="dropdown-menu dropdown-menu-end border py-2"
+                        aria-labelledby="dropdown-bandwidth-saved"
+                      >
+                        <a
+                          className="dropdown-item"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          View
+                        </a>
+                        <a
+                          className="dropdown-item"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          Export
+                        </a>
+                        <div className="dropdown-divider"></div>
+                        <a
+                          className="dropdown-item text-danger"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          Remove
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body d-flex flex-center flex-column">
+                    <div
+                      className="echart-bandwidth-saved"
+                      data-echart-responsive="true"
+                      _echarts_instance_="ec_1704216650780"
+                      style={{
+                        userSelect: "none",
+                        WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "relative",
+                          width: "165px",
+                          height: "165px",
+                          padding: "0px",
+                          margin: "0px",
+                          borderWidth: "0px",
+                        }}
+                      ></div>
+                    </div>
+                    <div className="text-center mt-3">
+                      <h6 className="fs-9 mb-1">
+                        <svg
+                          className="svg-inline--fa fa-check fa-w-16 text-success me-1"
+                          data-fa-transform="shrink-2"
+                          aria-hidden="true"
+                          focusable="false"
+                          data-prefix="fas"
+                          data-icon="check"
+                          role="img"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 512 512"
+                          data-fa-i2svg=""
+                          style={{ transformOrigin: "0.5em 0.5em" }}
+                        >
+                          <g transform="translate(256 256)">
+                            <g transform="translate(0, 0)  scale(0.875, 0.875)  rotate(0 0 0)">
+                              <path
+                                fill="currentColor"
+                                d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+                                transform="translate(-256 -256)"
+                              ></path>
+                            </g>
+                          </g>
+                        </svg>
+                        <span
+                          className="fas fa-check text-success me-1"
+                          data-fa-transform="shrink-2"
+                        ></span>{" "}
+                        35.75 GB saved
+                      </h6>
+                      <p className="fs-10 mb-0">38.44 GB total bandwidth</p>
+                    </div>
+                  </div>
+                  <div className="card-footer bg-body-tertiary py-2">
+                    <div className="row flex-between-center">
+                      <div className="col-auto">
+                        <select className="form-select form-select-sm">
+                          <option>Last 6 Months</option>
+                          <option>Last Year</option>
+                          <option>Last 2 Year</option>
+                        </select>
+                      </div>
+                      <div className="col-auto">
+                        <a
+                          className="fs-10 font-sans-serif"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          Help
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xxl-6 px-xxl-2">
+                <div className="card h-100">
+                  <div className="card-header bg-body-tertiary py-2">
+                    <div className="row flex-between-center">
+                      <div className="col-auto">
+                        <h6 className="mb-0">Top Products</h6>
+                      </div>
+                      <div className="col-auto d-flex">
+                        <a
+                          className="btn btn-link btn-sm me-2"
+                          href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                        >
+                          View Details
+                        </a>
+                        <div className="dropdown font-sans-serif btn-reveal-trigger">
+                          <button
+                            className="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal"
+                            type="button"
+                            id="dropdown-top-products"
+                            data-bs-toggle="dropdown"
+                            data-boundary="viewport"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                          >
+                            <svg
+                              className="svg-inline--fa fa-ellipsis-h fa-w-16 fs-11 fa"
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="ellipsis-h"
+                              role="img"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 512 512"
+                              data-fa-i2svg=""
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
+                              ></path>
+                            </svg>
+                            <span className="fas fa-ellipsis-h fs-11"></span>{" "}
+                          </button>
+                          <div
+                            className="dropdown-menu dropdown-menu-end border py-2"
+                            aria-labelledby="dropdown-top-products"
+                          >
+                            <a
+                              className="dropdown-item"
+                              href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                            >
+                              View
+                            </a>
+                            <a
+                              className="dropdown-item"
+                              href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                            >
+                              Export
+                            </a>
+                            <div className="dropdown-divider"></div>
+                            <a
+                              className="dropdown-item text-danger"
+                              href="https://prium.github.io/falcon/v3.19.0/index.html#!"
+                            >
+                              Remove
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body h-100">
+                    <div
+                      className="echart-bar-top-products h-100"
+                      data-echart-responsive="true"
+                      _echarts_instance_="ec_1704216650779"
+                      style={{
+                        userSelect: "none",
+                        WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+                        position: "relative",
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "relative",
+                          width: "818px",
+                          height: "295px",
+                          padding: "0px",
+                          margin: "0px",
+                          borderWidth: "0px",
+                        }}
+                      >
+                        <canvas
+                          data-zr-dom-id="zr_0"
+                          width="818"
+                          height="295"
+                          style={{
+                            position: "absolute",
+                            left: "0px",
+                            top: "0px",
+                            width: "818px",
+                            height: "295px",
+                            userSelect: "none",
+                            WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+                            padding: "0px",
+                            margin: "0px",
+                            borderWidth: "0px",
+                          }}
+                        ></canvas>
+                      </div>
+                      <div className=""></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <footer className="footer">
+              <div className="row g-0 justify-content-between fs-10 mt-4 mb-3">
+                <div className="col-12 col-sm-auto text-center">
+                  <p className="mb-0 text-600">
+                    Thank you for creating with Falcon{" "}
+                    <span className="d-none d-sm-inline-block">| </span>
+                    <br className="d-sm-none" /> 2023 ©{" "}
+                    <a href="https://themewagon.com/">Themewagon</a>
+                  </p>
+                </div>
+                <div className="col-12 col-sm-auto text-center">
+                  <p className="mb-0 text-600">v3.19.0</p>
+                </div>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </main>
+    </>
+  );
+}
+
+export default Navbar;

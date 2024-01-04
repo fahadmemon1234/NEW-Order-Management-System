@@ -429,14 +429,8 @@
       rel="stylesheet"
     />
 
-    />
+  
 
-    <link
-      href="%PUBLIC_URL%/./assets/assets/css/theme-rtl.min.css"
-      rel="stylesheet"
-      id="style-rtl"
-      disabled="true"
-    />
 
     <link
       href="%PUBLIC_URL%/./assets/assets/css/theme.min.css"
@@ -444,12 +438,7 @@
       id="style-default"
     />
 
-    <link
-    href="./assets/assets/css/user-rtl.min.css"
-    rel="stylesheet"
-    id="user-style-rtl"
-    disabled="true"
-  />
+
 
     <link
       href="%PUBLIC_URL%/./assets/assets/css/user.min.css"
@@ -526,20 +515,7 @@
     <script src="%PUBLIC_URL%/./assets/assets/js/config.js"></script>
     <script src="%PUBLIC_URL%/./assets/vendors/simplebar/simplebar.min.js"></script>
 
-    <script>
-      var isRTL = JSON.parse(localStorage.getItem("isRTL"));
-      if (isRTL) {
-        var linkDefault = document.getElementById("style-default");
-        var userLinkDefault = document.getElementById("user-style-default");
-        linkDefault.setAttribute("disabled", true);
-        userLinkDefault.setAttribute("disabled", true);
-        document.querySelector("html").setAttribute("dir", "rtl");
-      } else {
-        var linkRTL = document.getElementById("style-rtl");
-        var userLinkRTL = document.getElementById("user-style-rtl");
-        linkRTL.setAttribute("disabled", true);
-        userLinkRTL.setAttribute("disabled", true);
-      }
-    </script>
+   
+  
   </body>
 </html>

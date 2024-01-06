@@ -16,6 +16,7 @@ import Paragraph from "../../assets/img/img/icons/paragraph.svg";
 // Setting Css
 // ---------------------------------------------------
 import "./Setting.css";
+import './custom';
 // ---------------------------------------------------
 
 function CustomizeSetting() {

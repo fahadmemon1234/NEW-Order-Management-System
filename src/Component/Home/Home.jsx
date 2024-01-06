@@ -13,11 +13,18 @@ import Main from "../NavBar/Navbar";
 // ---------------------------------------------------
 
 
+//Page
+// ---------------------------------------------------
+// import CustomizeSetting from "../CustomizeSideSetting/CustomizeSetting";
+// ---------------------------------------------------
+
+
 function Home(){
     return(
         <>
 
         <Main>
+
         
         <div className="row g-3 mb-3">
               <div className="col-md-6">

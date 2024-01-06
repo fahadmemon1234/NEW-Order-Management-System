@@ -2,7 +2,7 @@ import React from "react";
 import BgShape from "../../assets/img/bg-shape.png";
 import Shape1 from "../../assets/img/shape-1.png";
 import HalfCircle from "../../assets/img/half-circle.png";
-import CustomizeSetting from "../CustomizeSideSetting/CustomizeSetting";
+
 
 function Login() {
   return (
@@ -230,7 +230,6 @@ function Login() {
         </div>
       </main>
 
-      <CustomizeSetting />
     </>
   );
 }

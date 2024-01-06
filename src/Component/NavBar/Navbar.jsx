@@ -35,10 +35,10 @@ const toggleNavbar = () => {
   return (
     <>
       <main className="main" id="top">
-        <div className="container" data-layout="container">
+        <div className="container-fluid" data-layout="container">
 
 
-        <nav className="navbar navbar-light navbar-vertical navbar-expand-xl">
+        <nav className="navbar navbar-light navbar-vertical navbar-expand-xl navbar-card">
             <div className="d-flex align-items-center">
               <div className="toggle-icon-wrapper">
                 <button
@@ -69,6 +69,9 @@ const toggleNavbar = () => {
                 </div>
               </a>
             </div>
+
+
+
             <div
               className="collapse navbar-collapse"
               id="navbarVerticalCollapse"
@@ -266,6 +269,8 @@ const toggleNavbar = () => {
                 
               </div>
             </div>
+
+
           </nav>
 
           <div className="content">

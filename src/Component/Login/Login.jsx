@@ -1,12 +1,103 @@
-import React from "react";
+import React, { useState } from "react";
+
+//Image
+// ---------------------------------------------------
 import BgShape from "../../assets/img/bg-shape.png";
 import Shape1 from "../../assets/img/shape-1.png";
 import HalfCircle from "../../assets/img/half-circle.png";
+// ---------------------------------------------------
 
+//DataBase
+// ---------------------------------------------------
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { app } from "../Config/firebase";
+// ---------------------------------------------------
+
+//Notify
+// ---------------------------------------------------
+import { toast, ToastContainer } from "react-toastify";
+import "../../assets/Css/Tostify.css";
+// ---------------------------------------------------
 
 function Login() {
+  const [email, setEmail] = useState("admin@gmail.com");
+  const [password, setPassword] = useState("admins");
+  const [, setError] = useState(null);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const auth = getAuth(app);
+
+    try {
+      if (email && password) {
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        localStorage.setItem("email", email);
+        localStorage.setItem("password", password);
+        localStorage.setItem("userlogin", true);
+
+        console.log("User logged in:", userCredential.user);
+        if (localStorage.getItem("userlogin", true)) {
+          toast.success("You login was successful", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
+        setTimeout(() => {
+          window.location.replace("/Home");
+        }, 2000);
+      } else {
+        toast.error("Please fill in both Email and Password", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    } catch (error) {
+      setError(error.message);
+      console.log("Error logging in:", error.message);
+
+      toast.error("Network Error", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  };
+
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <main className="main" id="top">
         <div className="container-fluid">
           <div className="row min-vh-100 flex-center g-0">
@@ -99,6 +190,8 @@ function Login() {
                               className="form-control"
                               id="card-email"
                               type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
                             />
                           </div>
                           <div className="mb-3">
@@ -114,6 +207,8 @@ function Login() {
                               className="form-control"
                               id="card-password"
                               type="password"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
                             />
                           </div>
                           <div className="row flex-between-center">
@@ -144,6 +239,7 @@ function Login() {
                               className="btn btn-primary d-block w-100 mt-3"
                               type="submit"
                               name="submit"
+                              onClick={handleLogin}
                             >
                               Log in
                             </button>
@@ -229,7 +325,6 @@ function Login() {
           </div>
         </div>
       </main>
-
     </>
   );
 }

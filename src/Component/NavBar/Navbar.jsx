@@ -1742,13 +1742,13 @@ const toggleNavbar = () => {
                       <div className="dropdown-divider"></div>
                       <a
                         className="dropdown-item"
-                        href="https://prium.github.io/falcon/v3.19.0/pages/user/settings.html"
+                        href="#"
                       >
                         Settings
                       </a>
                       <a
                         className="dropdown-item"
-                        href="https://prium.github.io/falcon/v3.19.0/pages/authentication/card/logout.html"
+                        href="/"
                       >
                         Logout
                       </a>

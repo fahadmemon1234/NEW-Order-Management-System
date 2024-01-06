@@ -995,7 +995,7 @@ const toggleNavbar = () => {
                             >
                               <div
                                 className="simplebar-content-wrapper"
-                                tabindex="0"
+                                tabIndex="0"
                                 role="region"
                                 aria-label="scrollable content"
                                 style={{ height: "auto", overflow: "hidden" }}
@@ -1278,7 +1278,7 @@ const toggleNavbar = () => {
                             >
                               <div
                                 className="simplebar-content-wrapper"
-                                tabindex="0"
+                                tabIndex="0"
                                 role="region"
                                 aria-label="scrollable content"
                                 style={{ height: "auto", overflow: "hidden" }}

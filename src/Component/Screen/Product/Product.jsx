@@ -5,6 +5,11 @@ import React from "react";
 import Main from "../../NavBar/Navbar";
 // ---------------------------------------------------
 
+// Add Modal
+// ---------------------------------------------------
+import AddProduct from "./AddProduct";
+// ---------------------------------------------------
+
 function Product() {
   return (
     <>
@@ -12,13 +17,14 @@ function Product() {
         <div className="card">
           <div className="card-body">
 
-<div className="row" style={{paddingTop:'30px'}}>
+<div className="row" style={{paddingTop:'30px', alignItems:'center'}}>
 <div className="col-md-6 col-sm-6 col-lg-6">
-<h1>Product</h1>
+<h1>Product List</h1>
 </div>
 
-<div className="col-md-6 col-sm-6 col-lg-6"></div>
-
+<div className="col-md-6 col-sm-6 col-lg-6">
+<AddProduct/>
+</div>
 </div>
             
 

@@ -1,0 +1,54 @@
+/* YourComponent.css or inline styles */
+.custom-modal {
+    max-width: 800px !important; /* Adjust the width as needed */
+    width: 100%;
+    height: 10px !important;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+  
+  .custom-modalSetting {
+    max-width: 500px !important; /* Adjust the width as needed */
+    width: 100%;
+    height: 10px !important;
+    margin: 5% auto !important;
+  }
+  
+  /* .modal-header{
+      background-color: darkblue !important;
+    }
+  
+    .modal-title{
+      color: white !important;
+    } */
+  
+  tbody {
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  thead {
+    background-color: darkblue !important;
+    color: white !important;
+  }
+  
+  .table > thead {
+    background-color: darkblue !important;
+    color: white !important;
+  }
+  
+  .table-striped > tbody > tr:nth-of-type(2n) > * {
+    --falcon-table-accent-bg: 0px !important;
+    color: var(--falcon-table-striped-color);
+  }
+  
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  /*/ Firefox /*/
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }

@@ -47,14 +47,9 @@ function Product() {
   }, []);
 
   const sortedTableData = tableData.sort((a, b) => b.id - a.id);
-  const sortedDataDescending = [...sortedTableData].sort((a, b) => b.id.localeCompare(a.id));
-
-
-
-
-
-
-
+  const sortedDataDescending = [...sortedTableData].sort((a, b) =>
+    b.id.localeCompare(a.id)
+  );
 
   //   RowDropDown Selection
 
@@ -64,37 +59,36 @@ function Product() {
     setRowsToShow(parseInt(event.target.value, 10));
   };
 
-// Rows count and show 
+  // Rows count and show
   const totalItems = 8; // Replace with the actual total number of items
-const startIndexs = 1;
-const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
-const rowCount = sortedDataDescending.length; // Add this line to get the row count
-const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
+  const startIndexs = 1;
+  const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
+  const rowCount = sortedDataDescending.length; // Add this line to get the row count
+  const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
 
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const handlePrevClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
-const [currentPage, setCurrentPage] = useState(1);
+  const handleNextClick = () => {
+    const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
-const handlePrevClick = () => {
-  if (currentPage > 1) {
-    setCurrentPage(currentPage - 1);
-  }
-};
+  const startIndex = (currentPage - 1) * rowsToShow;
+  const endIndex = Math.min(
+    startIndex + rowsToShow,
+    sortedDataDescending.length
+  );
+  const visibleItems = sortedDataDescending.slice(startIndex, endIndex);
 
-const handleNextClick = () => {
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
-  if (currentPage < totalPages) {
-    setCurrentPage(currentPage + 1);
-  }
-};
-
-const startIndex = (currentPage - 1) * rowsToShow;
-const endIndex = Math.min(startIndex + rowsToShow, sortedDataDescending.length);
-const visibleItems = sortedDataDescending.slice(startIndex, endIndex);
-
-const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
-
-
 
   return (
     <>
@@ -161,7 +155,7 @@ const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
                         </tr>
                       </thead>
                       <tbody className="list">
-                      {visibleItems .slice(0, rowsToShow).map((item) => (
+                        {visibleItems.slice(0, rowsToShow).map((item) => (
                           <tr key={item.id}>
                             <td>
                               <div style={{ display: "flex" }}>
@@ -197,10 +191,10 @@ const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
                   <div className="row align-items-center mt-3">
                     <div className="pagination d-none"></div>
                     <div className="col">
-                      <div className="d-flex align-items-center fs--1">
+                      <div className="d-flex align-items-center fs--1" style={{fontSize:'14px'}}>
                         <p className="mb-0">
                           <span className="d-none d-sm-inline-block me-2">
-                          {paginationText}
+                            {paginationText}
                           </span>
                         </p>
                         <p className="mb-0 mx-2">Rows per page:</p>
@@ -230,7 +224,7 @@ const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
                       <button
                         className="btn btn-sm btn-primary px-4 ms-2"
                         type="button"
-                        style={{backgroundColor:'#2c7be5'}}
+                        style={{ backgroundColor: "#2c7be5", color: "white" }}
                         data-list-pagination="next"
                         onClick={handleNextClick}
                         disabled={currentPage === totalPages}

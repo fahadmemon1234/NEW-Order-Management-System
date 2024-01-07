@@ -73,9 +73,9 @@ function Product() {
   };
 
   // Rows count and show
-  const totalItems = 8; // Replace with the actual total number of items
+  // const totalItems = 8; // Replace with the actual total number of items
   const startIndexs = 1;
-  const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
+  // const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
   const rowCount = sortedDataDescending.length; // Add this line to get the row count
   const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
 

@@ -11,6 +11,7 @@
     "jquery": "^3.7.1",
     "jquery.inputmask": "^3.3.4",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.9.2",
     "react-datepicker": "^4.25.0",
     "react-dom": "^18.2.0",
     "react-phone-number-input": "^3.3.8",

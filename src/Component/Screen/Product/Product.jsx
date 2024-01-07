@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 // ---------------------------------------------------
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import SweetAlert from "react-bootstrap-sweetalert";
 // ---------------------------------------------------
 
 // Main Page Connect
@@ -18,7 +19,7 @@ import AddProduct from "./AddProduct";
 
 //DataBase
 // ---------------------------------------------------
-import { ref, onValue,update } from "firebase/database";
+import { ref, onValue, update, remove } from "firebase/database";
 import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
@@ -26,7 +27,6 @@ import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 import "../../../assets/Css/Model.css";
 // ----------------------------------------------------
-
 
 //Notify
 // ---------------------------------------------------
@@ -103,25 +103,22 @@ function Product() {
 
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
 
+  // Multiply
+  const [itemCost, setItemCost] = useState("");
+  const [itemQty, setItemQty] = useState("");
+  const [totalAmount, setTotalAmount] = useState("");
 
-  
-   // Multiply
-   const [itemCost, setItemCost] = useState("");
-   const [itemQty, setItemQty] = useState("");
-   const [totalAmount, setTotalAmount] = useState("");
- 
-   useEffect(() => {
-     const cost = parseFloat(itemCost);
-     const quantity = parseFloat(itemQty);
- 
-     if (!isNaN(cost) && !isNaN(quantity)) {
-       const total = cost * quantity;
-       setTotalAmount(total);
-     } else {
-       setTotalAmount("");
-     }
-   }, [itemCost, itemQty]);
+  useEffect(() => {
+    const cost = parseFloat(itemCost);
+    const quantity = parseFloat(itemQty);
 
+    if (!isNaN(cost) && !isNaN(quantity)) {
+      const total = cost * quantity;
+      setTotalAmount(total);
+    } else {
+      setTotalAmount("");
+    }
+  }, [itemCost, itemQty]);
 
   //   ---------------------------------Edit Modal and Populate----------------------------------
 
@@ -138,7 +135,7 @@ function Product() {
 
   const handleShow = (item) => {
     debugger;
-    setEditedItem(item);
+    setEditedItem(item.id);
     setItemName(item.itemName);
     setBrandCode(item.brandCode);
     setMeasurement(item.measurement);
@@ -151,19 +148,17 @@ function Product() {
     setShow(true);
   };
 
-
-
   const handleSaveChanges = async () => {
     debugger;
     console.log(editedItem);
-    handleInputBlur('ItemName', itemName);
-    handleInputBlur('BrandCode', brandCode);
-    handleInputBlur('itemCost', itemCost);
-    handleInputBlur('SellPrice', sellPrice);
-    handleInputBlur('itemQty', itemQty);
+    handleInputBlur("ItemName", itemName);
+    handleInputBlur("BrandCode", brandCode);
+    handleInputBlur("itemCost", itemCost);
+    handleInputBlur("SellPrice", sellPrice);
+    handleInputBlur("itemQty", itemQty);
     if (itemName && brandCode && itemCost && sellPrice && itemQty) {
       // Implement your save logic here
-      console.log('Changes saved!');
+      console.log("Changes saved!");
       try {
         // Construct the updated product object
         const updatedProduct = {
@@ -174,7 +169,7 @@ function Product() {
           sellPrice: sellPrice,
           itemQty: itemQty,
           total: totalAmount,
-          description: description
+          description: description,
           // Add other properties as needed
         };
 
@@ -183,15 +178,15 @@ function Product() {
         await update(productRef, updatedProduct);
 
         // Show a success toast if the product is successfully added
-        toast.success('Product Edit Successfully', {
-          position: 'top-right',
+        toast.success("Product Edit Successfully", {
+          position: "top-right",
           autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: false,
           draggable: true,
           progress: undefined,
-          theme: 'colored'
+          theme: "colored",
         });
 
         // Close the modal
@@ -199,16 +194,16 @@ function Product() {
           handleClose();
         }, 2000);
       } catch (error) {
-        console.log('Error updating data:', error);
-        toast.error('Error adding product: ' + error.message, {
-          position: 'top-right',
+        console.log("Error updating data:", error);
+        toast.error("Error adding product: " + error.message, {
+          position: "top-right",
           autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: false,
           draggable: true,
           progress: undefined,
-          theme: 'colored'
+          theme: "colored",
         });
       }
     }
@@ -315,25 +310,56 @@ function Product() {
     }
   };
 
+  // -------------------------Delete-----------------------------
 
+  const [showAlert, setShowAlert] = useState(false);
+  const [showOK, setShowOK] = useState(false);
+  const [id, setId] = useState(null);
 
+  const handleDelete = (id) => {
+    setId(id);
+    setShowAlert(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      const dataRef = ref(db, `Product/${id}`);
+      await remove(dataRef);
+
+      // Update the data state after deletion
+      const updatedData = tableData.filter((item) => item.id !== id);
+      setTableData(updatedData);
+
+      setShowAlert(false);
+      setShowOK(true);
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowAlert(false);
+  };
+
+  const handleOK = () => {
+    setShowOK(false);
+  };
 
   return (
     <>
       <Main>
-
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
 
         <div className="card">
           <div className="card-body">
@@ -412,6 +438,7 @@ function Product() {
                                 <button
                                   type="button"
                                   className="btn btn-danger"
+                                  onClick={() => handleDelete(item.id)}
                                 >
                                   Delete
                                 </button>
@@ -446,12 +473,10 @@ function Product() {
                         <p className="mb-0 mx-2">Rows per page:</p>
                         <select
                           className="w-auto form-select form-select-sm"
-                          value={rowsToShow}
+                          defaultValue={rowsToShow}
                           onChange={handleSelectChange}
                         >
-                          <option value="5" selected="">
-                            5
-                          </option>
+                          <option value="5">5</option>
                           <option value="10">10</option>
                           <option value="15">15</option>
                         </select>
@@ -694,9 +719,32 @@ function Product() {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={() => handleSaveChanges(editedItem)}>Save Changes</Button>
+            <Button
+              variant="primary"
+              onClick={() => handleSaveChanges(editedItem)}
+            >
+              Save Changes
+            </Button>
           </Modal.Footer>
         </Modal>
+
+        <SweetAlert
+          warning
+          show={showAlert}
+          title="Confirm Deletion"
+          showCancel
+          confirmBtnText="Yes, delete it!"
+          confirmBtnBsStyle="danger"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+          focusCancelBtn
+        >
+          Are you sure you want to delete this item?
+        </SweetAlert>
+
+        <SweetAlert show={showOK} success title="Deleted!" onConfirm={handleOK}>
+          Your item has been deleted.
+        </SweetAlert>
       </Main>
     </>
   );

@@ -52,3 +52,15 @@
   input[type='number'] {
     -moz-appearance: textfield;
   }
+
+
+
+
+.tdchild{
+  font-weight: 600;
+  color: black !important;
+}
+
+  th.text-900.sort{
+   color: white !important; 
+  }

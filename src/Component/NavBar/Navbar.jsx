@@ -1763,12 +1763,6 @@ const toggleNavbar = () => {
             {children}
             
 
-
-          </div>
-           
-
-           
-
             <footer className="footer">
               <div className="row g-0 justify-content-between fs-10 mt-4 mb-3">
                 <div className="col-12 col-sm-auto text-center">
@@ -1785,6 +1779,12 @@ const toggleNavbar = () => {
               </div>
             </footer> 
           
+          </div>
+           
+
+           
+
+           
         </div>
       </main>
 

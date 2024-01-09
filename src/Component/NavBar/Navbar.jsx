@@ -16,10 +16,10 @@ const Main = ({ children }) =>{
 
 
 
-// Navbar Side Btn Toggle    
+// Navbar Side Btn Toggle
 const toggleNavbar = () => {
     const htmlElement = document.documentElement;
-  
+
     // Check if the classes are already present, then remove them; otherwise, add them.
     if (htmlElement.classList.contains('navbar-vertical-collapsed')) {
       htmlElement.classList.remove('navbar-vertical-collapsed');
@@ -29,7 +29,7 @@ const toggleNavbar = () => {
     }
   };
 
-   
+
 
   return (
     <>
@@ -83,11 +83,8 @@ const toggleNavbar = () => {
                   <li className="nav-item">
                     <a
                       className="nav-link"
-                      href="https://prium.github.io/falcon/v3.19.0/index.html#dashboard"
+                      href="/Home"
                       role="button"
-                      data-bs-toggle="collapse"
-                      aria-expanded="true"
-                      aria-controls="dashboard"
                     >
                       <div className="d-flex align-items-center">
                         <span className="nav-link-icon">
@@ -112,7 +109,7 @@ const toggleNavbar = () => {
                         <span className="nav-link-text ps-1">Dashboard</span>
                       </div>
                     </a>
-                   
+
                   </li>
                   <li className="nav-item">
                     <div className="row navbar-vertical-label-wrapper mt-3 mb-2">
@@ -121,7 +118,7 @@ const toggleNavbar = () => {
                         <hr className="mb-0 navbar-vertical-divider" />
                       </div>
                     </div>
-                    <a
+                    {/* <a
                       className="nav-link"
                       href="/Product"
                       role="button"
@@ -148,7 +145,55 @@ const toggleNavbar = () => {
                         </span>
                         <span className="nav-link-text ps-1">Product</span>
                       </div>
+                    </a> */}
+
+                    <a
+                      className="nav-link dropdown-indicator"
+                      href="https://prium.github.io/falcon/v3.19.0/index.html#Items"
+                      role="button"
+                      data-bs-toggle="collapse"
+                      aria-expanded="false"
+                      aria-controls="Items"
+                    >
+                      <div className="d-flex align-items-center">
+                        <span className="nav-link-icon">
+                          <svg
+                            className="svg-inline--fa fa-ticket-alt fa-w-18 fa"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="ticket-alt"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 576 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M128 160h320v192H128V160zm400 96c0 26.51 21.49 48 48 48v96c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48v-96c26.51 0 48-21.49 48-48s-21.49-48-48-48v-96c0-26.51 21.49-48 48-48h480c26.51 0 48 21.49 48 48v96c-26.51 0-48 21.49-48 48zm-48-104c0-13.255-10.745-24-24-24H120c-13.255 0-24 10.745-24 24v208c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24V152z"
+                            ></path>
+                          </svg>{" "}
+                          <span className="fa-brands fa-product-hunt"></span>{" "}
+                        </span>
+                        <span className="nav-link-text ps-1">Items</span>
+                      </div>
                     </a>
+
+                    <ul className="nav collapse" id="Items">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="/Product"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                              Product
+                            </span>
+                          </div>
+                        </a>{" "}
+                      </li>
+
+                    </ul>
 
                     <a
                       className="nav-link dropdown-indicator"
@@ -265,7 +310,7 @@ const toggleNavbar = () => {
                     </ul>
                   </li>
                 </ul>
-                
+
               </div>
             </div>
 
@@ -1760,7 +1805,7 @@ const toggleNavbar = () => {
 
 
             {children}
-            
+
 
             <footer className="footer">
               <div className="row g-0 justify-content-between fs-10 mt-4 mb-3">
@@ -1776,14 +1821,14 @@ const toggleNavbar = () => {
                   <p className="mb-0 text-600">v3.19.0</p>
                 </div>
               </div>
-            </footer> 
-          
+            </footer>
+
           </div>
-           
 
-           
 
-           
+
+
+
         </div>
       </main>
 

@@ -73,10 +73,13 @@ function AddProduct() {
     if (itemName && brandCode && itemCost && sellPrice && itemQty) {
       // Implement your save logic here
       console.log("Changes saved!");
+     
 
       try {
+        const loggedInUID = localStorage.getItem("uid");
         const productsRef = ref(db, "Product");
         const newProduct = {
+          uid:loggedInUID,
           itemName: itemName,
           brandCode: brandCode,
           measurement: measurement,

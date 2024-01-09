@@ -35,6 +35,12 @@ function Login() {
           email,
           password
         );
+
+        const uid = userCredential.user.uid;
+        console.log("User UID:", uid);
+    
+        // Store user information in local storage
+        localStorage.setItem("uid", uid);
         localStorage.setItem("email", email);
         localStorage.setItem("password", password);
         localStorage.setItem("userlogin", true);

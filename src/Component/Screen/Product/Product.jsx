@@ -37,28 +37,63 @@ import "../../../assets/Css/Tostify.css";
 function Product() {
   const [tableData, setTableData] = useState([]);
 
+  // useEffect(() => {
+  //   // Reference to the 'Posting' node in Firebase Realtime Database
+  //   const tasksRef = ref(db, "Product");
+
+  //   // Attach an event listener for data changes
+  //   const fetchData = () => {
+  //     onValue(tasksRef, (snapshot) => {
+  //       const data = snapshot.val();
+  //       if (data) {
+  //         // Convert the object of tasks into an array
+  //         const dataArray = Object.keys(data).map((key) => ({
+  //           id: key,
+  //           ...data[key],
+  //         }));
+  //         setTableData(dataArray);
+  //       }
+  //     });
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+
+
+  const loggedInUID = localStorage.getItem('uid');
+
   useEffect(() => {
-    // Reference to the 'Posting' node in Firebase Realtime Database
-    const tasksRef = ref(db, "Product");
+    if (loggedInUID) {
+      // Reference to the 'Product' node in Firebase Realtime Database
+      const productRef = ref(db, 'Product');
 
-    // Attach an event listener for data changes
-    const fetchData = () => {
-      onValue(tasksRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          // Convert the object of tasks into an array
-          const dataArray = Object.keys(data).map((key) => ({
-            id: key,
-            ...data[key],
-          }));
-          setTableData(dataArray);
-        }
-      });
-    };
+      // Attach an event listener for data changes
+      const fetchData = () => {
+        onValue(productRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            // Convert the object of products into an array
+            const dataArray = Object.keys(data)
+              .filter((key) => data[key].uid === loggedInUID) // Filter data based on UID
+              .map((key) => ({
+                id: key,
+                ...data[key],
+              }));
 
-    fetchData();
-  }, []);
+            setTableData(dataArray);
+          }
+        });
+      };
 
+      fetchData();
+    } else {
+      console.error('No user is currently logged in.');
+      // Handle the case where no user is logged in, perhaps by redirecting to the login page.
+    }
+  }, [loggedInUID]);
+
+  
   const sortedTableData = tableData.sort((a, b) => b.id - a.id);
   const sortedDataDescending = [...sortedTableData].sort((a, b) =>
     b.id.localeCompare(a.id)

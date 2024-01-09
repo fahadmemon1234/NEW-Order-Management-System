@@ -31,7 +31,6 @@ const toggleNavbar = () => {
 
    
 
-
   return (
     <>
       <main className="main" id="top">

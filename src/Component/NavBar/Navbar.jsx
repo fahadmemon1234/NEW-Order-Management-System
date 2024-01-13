@@ -149,7 +149,7 @@ const toggleNavbar = () => {
 
                     <a
                       className="nav-link dropdown-indicator"
-                      href="https://prium.github.io/falcon/v3.19.0/index.html#Items"
+                      href="#Items"
                       role="button"
                       data-bs-toggle="collapse"
                       aria-expanded="false"
@@ -197,20 +197,20 @@ const toggleNavbar = () => {
 
                     <a
                       className="nav-link dropdown-indicator"
-                      href="https://prium.github.io/falcon/v3.19.0/index.html#support-desk"
+                      href="#Banking"
                       role="button"
                       data-bs-toggle="collapse"
                       aria-expanded="false"
-                      aria-controls="support-desk"
+                      aria-controls="Banking"
                     >
                       <div className="d-flex align-items-center">
                         <span className="nav-link-icon">
                           <svg
-                            className="svg-inline--fa fa-ticket-alt fa-w-18 fa"
+                            className="svg-inline--fa fa-university fa-w-18 fa"
                             aria-hidden="true"
                             focusable="false"
                             data-prefix="fas"
-                            data-icon="ticket-alt"
+                            data-icon="fa-university"
                             role="img"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 576 512"
@@ -221,20 +221,20 @@ const toggleNavbar = () => {
                               d="M128 160h320v192H128V160zm400 96c0 26.51 21.49 48 48 48v96c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48v-96c26.51 0 48-21.49 48-48s-21.49-48-48-48v-96c0-26.51 21.49-48 48-48h480c26.51 0 48 21.49 48 48v96c-26.51 0-48 21.49-48 48zm-48-104c0-13.255-10.745-24-24-24H120c-13.255 0-24 10.745-24 24v208c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24V152z"
                             ></path>
                           </svg>{" "}
-                          <span className="fas fa-ticket-alt"></span>{" "}
+                          <span className="fas fa-university"></span>{" "}
                         </span>
-                        <span className="nav-link-text ps-1">Support desk</span>
+                        <span className="nav-link-text ps-1">Banking</span>
                       </div>
                     </a>
-                    <ul className="nav collapse" id="support-desk">
+                    <ul className="nav collapse" id="Banking">
                       <li className="nav-item">
                         <a
                           className="nav-link"
-                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/table-view.html"
+                          href="/Banks"
                         >
                           <div className="d-flex align-items-center">
                             <span className="nav-link-text ps-1">
-                              Table view
+                              Banks
                             </span>
                           </div>
                         </a>{" "}

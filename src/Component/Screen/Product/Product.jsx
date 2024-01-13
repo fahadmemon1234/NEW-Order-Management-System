@@ -37,6 +37,10 @@ import "../../../assets/Css/Tostify.css";
 function Product() {
   const [tableData, setTableData] = useState([]);
 
+
+
+
+
   // useEffect(() => {
   //   // Reference to the 'Posting' node in Firebase Realtime Database
   //   const tasksRef = ref(db, "Product");
@@ -59,14 +63,12 @@ function Product() {
   //   fetchData();
   // }, []);
 
-
-
-  const loggedInUID = localStorage.getItem('uid');
+  const loggedInUID = localStorage.getItem("uid");
 
   useEffect(() => {
     if (loggedInUID) {
       // Reference to the 'Product' node in Firebase Realtime Database
-      const productRef = ref(db, 'Product');
+      const productRef = ref(db, "Product");
 
       // Attach an event listener for data changes
       const fetchData = () => {
@@ -81,19 +83,22 @@ function Product() {
                 ...data[key],
               }));
 
+              
+
             setTableData(dataArray);
+
+            
           }
         });
       };
 
       fetchData();
     } else {
-      console.error('No user is currently logged in.');
+      console.error("No user is currently logged in.");
       // Handle the case where no user is logged in, perhaps by redirecting to the login page.
     }
   }, [loggedInUID]);
 
-  
   const sortedTableData = tableData.sort((a, b) => b.id - a.id);
   const sortedDataDescending = [...sortedTableData].sort((a, b) =>
     b.id.localeCompare(a.id)
@@ -380,6 +385,7 @@ function Product() {
     setShowOK(false);
   };
 
+
   return (
     <>
       <Main>
@@ -408,7 +414,32 @@ function Product() {
               </div>
 
               <div className="col-md-6 col-sm-6 col-lg-6">
-                <AddProduct />
+                <div style={{ float: "right" }}>
+                  <AddProduct />
+
+                  <br />
+                  <br />
+
+                  <div className="input-group rounded">
+                    <label
+                      style={{
+                        fontSize: 15,
+                        textAlign: "center",
+                        margin: "auto",
+                        marginRight: 5 + "px",
+                      }}
+                    >
+                      Search:{" "}
+                    </label>
+                    <input
+                      type="search"
+                      className="form-control rounded"
+                      placeholder="Search"
+                      aria-label="Search"
+                      aria-describedby="search-addon"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 

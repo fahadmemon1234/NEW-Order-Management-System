@@ -1,19 +1,20 @@
 import React from "react";
 
-
 // Main Page Connect
 // ---------------------------------------------------
 import Main from "../../NavBar/Navbar";
 // ---------------------------------------------------
 
+// Add Modal
+// ---------------------------------------------------
+import AddDeposit from "./AddDeposit";
+// --------------------------------------------------
 
-function Deposit(){
-    return(
-        <>
-         <Main>
-
-
-         <div className="card">
+function Deposit() {
+  return (
+    <>
+      <Main>
+        <div className="card">
           <div className="card-body">
             {/* Headng and btn */}
             <div
@@ -26,7 +27,7 @@ function Deposit(){
 
               <div className="col-md-6 col-sm-6 col-lg-6">
                 <div style={{ float: "right" }}>
-                  {/* <AddBank /> */}
+                  <AddDeposit />
 
                   <br />
                   <br />
@@ -53,14 +54,11 @@ function Deposit(){
                 </div>
               </div>
             </div>
-
-
-            </div>
-            </div>
-
-         </Main>
-        </>
-    )
+          </div>
+        </div>
+      </Main>
+    </>
+  );
 }
 
 export default Deposit;

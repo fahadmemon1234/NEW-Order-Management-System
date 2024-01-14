@@ -242,11 +242,11 @@ const toggleNavbar = () => {
                       <li className="nav-item">
                         <a
                           className="nav-link"
-                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/card-view.html"
+                          href="/Deposit"
                         >
                           <div className="d-flex align-items-center">
                             <span className="nav-link-text ps-1">
-                              Card view
+                              Deposit
                             </span>
                           </div>
                         </a>{" "}

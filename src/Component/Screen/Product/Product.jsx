@@ -191,17 +191,16 @@ function Product() {
   const handleSaveChanges = async () => {
     debugger;
     console.log(editedItem);
-    handleInputBlur("ItemName", itemName);
-    handleInputBlur("BrandCode", brandCode);
-    handleInputBlur("itemCost", itemCost);
-    handleInputBlur("SellPrice", sellPrice);
-    handleInputBlur("itemQty", itemQty);
+  
     if (itemName && brandCode && itemCost && sellPrice && itemQty) {
       // Implement your save logic here
       console.log("Changes saved!");
       try {
+
+        const loggedInUID = localStorage.getItem("uid");
         // Construct the updated product object
         const updatedProduct = {
+          uid:loggedInUID,
           itemName: itemName,
           brandCode: brandCode,
           measurement: measurement,
@@ -214,7 +213,7 @@ function Product() {
         };
 
         // Update the product data in Firebase
-        const productRef = ref(db, `Product/${editedItem.id}`);
+        const productRef = ref(db, `Product/${editedItem}`);
         await update(productRef, updatedProduct);
 
         // Show a success toast if the product is successfully added
@@ -246,6 +245,14 @@ function Product() {
           theme: "colored",
         });
       }
+    }
+
+    else{
+      handleInputBlur("ItemName", itemName);
+      handleInputBlur("BrandCode", brandCode);
+      handleInputBlur("itemCost", itemCost);
+      handleInputBlur("SellPrice", sellPrice);
+      handleInputBlur("itemQty", itemQty);
     }
   };
 

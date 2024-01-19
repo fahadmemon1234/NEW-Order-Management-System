@@ -48,31 +48,26 @@ function AddDeposit() {
 
     // CashonHand
 
-    const dataRef = ref(db, "CashOnHand");
     try {
+      const dataRef = ref(db, "CashOnHand");
       const snapshot = await get(dataRef);
 
       if (snapshot.exists()) {
         const data = snapshot.val();
+        let totalAmount = 0;
 
-        // Initialize an empty array to store options
-        const options = [];
-
-        // Loop through the keys in the data object and add options
+        // Loop through the keys in the data object and add amounts where uid matches
         for (const key in data) {
-          if (Object.prototype.hasOwnProperty.call(data, key)) {
-            const option = {
-              value: data[key].Amount, // Assuming your data structure has keys and Amount values
-            };
-            options.push(option);
+          if (
+            Object.prototype.hasOwnProperty.call(data, key) &&
+            data[key].uid === loggedInUID
+          ) {
+            totalAmount += parseFloat(data[key].Amount);
           }
         }
 
-        // Add the "Select Bank" option to the beginning of the array if needed
-        // options.unshift({ value: "Select Bank" });
-
-        // Set the options array to the 'amount' state
-        setCashOnHand(options);
+        // Set the total amount to the 'CashOnHand' state
+        setCashOnHand(totalAmount);
       } else {
         console.error("Data doesn't exist in the 'CashOnHand' node.");
       }
@@ -132,6 +127,7 @@ function AddDeposit() {
       // console.log('Changes saved!');
 
       try {
+        debugger;
         const loggedInUID = localStorage.getItem("uid");
         const DepositRef = ref(db, "Deposit");
         const newDeposit = {
@@ -147,19 +143,26 @@ function AddDeposit() {
 
         // ----------------Edit Cash On Hand----------------
         if (selectedPaymentType == "Cash") {
-          var ID = "-NfqYJMNFeYTGjIJ6Crc";
-          var TotaCashGet = CashOnHand[0]["value"];
+          // var ID = "-NfqYJMNFeYTGjIJ6Crc";
+
+          const CashID = '-NoSkv0ysgg_X2lPpq-X';
+          
+
+          var TotaCashGet = CashOnHand;
 
           var Total = parseInt(TotaCashGet) + parseInt(Amount);
 
           // console.log(Total);
 
           const updatedTotalAmount = {
+            uid: loggedInUID,
             Amount: Total,
           };
           // Update the product data in Firebase
-          const TotalAmountRef = ref(db, `CashOnHand/${ID}`);
+          const TotalAmountRef = ref(db, `CashOnHand/${CashID}`);
           await update(TotalAmountRef, updatedTotalAmount);
+
+        
         } else {
           // ----------------Edit Bank Cash----------------
 
@@ -201,28 +204,26 @@ function AddDeposit() {
           handleClose();
         }, 2000);
 
+        debugger;
         const dataRef = ref(db, "CashOnHand");
         const snapshot = await get(dataRef);
+
         if (snapshot.exists()) {
           const data = snapshot.val();
-          // Initialize an empty array to store options
-          const options = [];
-          // Loop through the keys in the data object and add options
+          let totalAmount = 0;
+
           for (const key in data) {
-            if (Object.prototype.hasOwnProperty.call(data, key)) {
-              const option = {
-                value: data[key].Amount, // Assuming your data structure has keys and Amount values
-              };
-              options.push(option);
+            if (
+              Object.prototype.hasOwnProperty.call(data, key) &&
+              data[key].uid === loggedInUID
+            ) {
+              totalAmount += parseFloat(data[key].Amount);
             }
           }
-          // Add the "Select Bank" option to the beginning of the array if needed
-          // options.unshift({ value: "Select Bank" });
-          // Set the options array to the 'amount' state
-          setCashOnHand(options);
-          // console.log(options);
+
+          setCashOnHand(totalAmount);
         } else {
-          console.log("Data doesn't exist in the 'Bank' node.");
+          console.log("Data doesn't exist in the 'CashOnHand' node.");
         }
 
         // -----------------------------------------------------------------------
@@ -283,7 +284,7 @@ function AddDeposit() {
   const handleInputBlur = (field, value) => {
     switch (field) {
       case "transactionDate":
-        if (value.trim() === "") {
+        if (typeof value === "string" && value.trim() === "") {
           setTransactionDateError("Transaction Date is required");
           // toast.error('Item Name is required', {
           //   position: 'top-right',
@@ -300,7 +301,7 @@ function AddDeposit() {
         }
         break;
       case "amount":
-        if (value.trim() === "") {
+        if (typeof value === "string" && value.trim() === "") {
           setAmountError("Amount is required");
           // toast.error('Item Name is required', {
           //   position: 'top-right',
@@ -317,7 +318,7 @@ function AddDeposit() {
         }
         break;
       case "note":
-        if (value.trim() === "") {
+        if (typeof value === "string" && value.trim() === "") {
           setNoteError("Note is required");
           // toast.error('Item Name is required', {
           //   position: 'top-right',
@@ -334,7 +335,7 @@ function AddDeposit() {
         }
         break;
       case "checkOnline":
-        if (value.trim() === "") {
+        if (typeof value === "string" && value.trim() === "") {
           setCheckOnlineError("Check & Online is required");
           // toast.error('Item Name is required', {
           //   position: 'top-right',
@@ -351,7 +352,7 @@ function AddDeposit() {
         }
         break;
       case "selectedBank":
-        if (value.trim() === "") {
+        if (typeof value === "string" && value.trim() === "") {
           setSelectedBankError("Bank is required");
           // toast.error('Item Name is required', {
           //   position: 'top-right',
@@ -374,6 +375,9 @@ function AddDeposit() {
 
   //  Show DropDown Bank DB
   const [bankAmount, setBankAmount] = useState("Rs: 0"); // Initialize bankAmount state
+  const loggedInUID = localStorage.getItem("uid");
+
+  const [bank, setbank] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -382,23 +386,39 @@ function AddDeposit() {
         const snapshot = await get(dataRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
+          debugger;
           // Convert the data object into an array of options
           const options = Object.keys(data).map((key) => ({
             Id: key,
             value: data[key].bankName,
-            label: data[key].bankName, // Assuming your data structure has keys and bankName values
+            label: data[key].bankName,
             Balance: data[key].openingBalance,
+            uid: data[key].uid,
           }));
-          // Add the "Select Bank" option to the beginning of the array
-          setBankOptions([
-            {
-              value: "0",
-              label: "Select Bank",
-              disabled: true,
-              selected: true,
-            },
-            ...options,
-          ]);
+
+          // console.log("All Banks:", options); // Log all banks before filtering
+
+          // Filter options based on loggedInUID
+          const userBanks = options.filter((bank) => bank.uid === loggedInUID);
+          setbank(userBanks);
+
+          // console.log("User Banks:", userBanks); // Log filtered banks
+
+          if (userBanks.length > 0) {
+            // Add the "Select Bank" option to the beginning of the array
+            setBankOptions([
+              {
+                value: "0",
+                label: "Select Bank",
+                disabled: true,
+                selected: true,
+              },
+              ...userBanks,
+            ]);
+          } else {
+            console.error("No matching banks for loggedInUID:", loggedInUID);
+            // Handle the case where no matching banks are found
+          }
         } else {
           console.error("Data doesn't exist in the 'Bank' node.");
         }
@@ -408,7 +428,7 @@ function AddDeposit() {
     };
 
     fetchData();
-  }, [db]);
+  }, [db, loggedInUID]);
 
   const customStyles = {
     control: (provided) => ({
@@ -436,48 +456,6 @@ function AddDeposit() {
       setBankAmount("Rs: 0");
     }
   };
-
-  // CashOnHand
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const dataRef = ref(db, "CashOnHand");
-        const snapshot = await get(dataRef);
-
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-
-          // Initialize an empty array to store options
-          const options = [];
-
-          // Loop through the keys in the data object and add options
-          for (const key in data) {
-            if (Object.prototype.hasOwnProperty.call(data, key)) {
-              const option = {
-                value: data[key].Amount, // Assuming your data structure has keys and Amount values
-              };
-              options.push(option);
-            }
-          }
-
-          // Add the "Select Bank" option to the beginning of the array if needed
-          // options.unshift({ value: "Select Bank" });
-
-          // Set the options array to the 'amount' state
-
-          setCashOnHand(options);
-          // console.log(options[0]['value']);
-        } else {
-          console.error("Data doesn't exist in the 'Bank' node.");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [db]);
 
   return (
     <>
@@ -694,7 +672,7 @@ function AddDeposit() {
 
                         <Select
                           id="BankName"
-                          options={bankOptions}
+                          options={bank}
                           styles={{
                             ...customStyles,
                             menu: (provided) => ({
@@ -743,13 +721,12 @@ function AddDeposit() {
                       className="form-label"
                       style={{ color: "black", fontSize: "20px" }}
                     >
-                      {CashOnHand.map((item, index) => (
-                        <div key={index}>
-                          {item.value !== null
-                            ? `Rs: ${item.value.toLocaleString()}`
-                            : "Rs: 0"}
-                        </div>
-                      ))}
+                      <div>
+                        RS:{" "}
+                        {CashOnHand && CashOnHand > 0
+                          ? CashOnHand.toLocaleString()
+                          : "0"}
+                      </div>
 
                       {/* {Array.isArray(CashOnHand) ? (
                         CashOnHand.map((item, index) => (

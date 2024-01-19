@@ -511,7 +511,7 @@ function Banks() {
           style={{ paddingTop: "3%" }}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Add Bank</Modal.Title>
+            <Modal.Title>Edit Bank</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="container">

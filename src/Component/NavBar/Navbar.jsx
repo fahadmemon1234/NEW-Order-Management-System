@@ -251,62 +251,10 @@ const toggleNavbar = () => {
                           </div>
                         </a>{" "}
                       </li>
-                      <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/contacts.html"
-                        >
-                          <div className="d-flex align-items-center">
-                            <span className="nav-link-text ps-1">Contacts</span>
-                          </div>
-                        </a>{" "}
-                      </li>
-                      <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/contact-details.html"
-                        >
-                          <div className="d-flex align-items-center">
-                            <span className="nav-link-text ps-1">
-                              Contact details
-                            </span>
-                          </div>
-                        </a>{" "}
-                      </li>
-                      <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/tickets-preview.html"
-                        >
-                          <div className="d-flex align-items-center">
-                            <span className="nav-link-text ps-1">
-                              Tickets preview
-                            </span>
-                          </div>
-                        </a>{" "}
-                      </li>
-                      <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/quick-links.html"
-                        >
-                          <div className="d-flex align-items-center">
-                            <span className="nav-link-text ps-1">
-                              Quick links
-                            </span>
-                          </div>
-                        </a>{" "}
-                      </li>
-                      <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="https://prium.github.io/falcon/v3.19.0/app/support-desk/reports.html"
-                        >
-                          <div className="d-flex align-items-center">
-                            <span className="nav-link-text ps-1">Reports</span>
-                          </div>
-                        </a>{" "}
-                      </li>
+                     
+                     
+                   
+                     
                     </ul>
                   </li>
                 </ul>

@@ -33,17 +33,13 @@ import "../../../assets/Css/Tostify.css";
 function Deposit() {
   const [tableData, setTableData] = useState([]);
 
-  const [CashData, setCashData] = useState([]);
-
-  const [CashID, setCashID] = useState([]);
-
   const loggedInUID = localStorage.getItem("uid");
 
   useEffect(() => {
     if (loggedInUID) {
       // Reference to the 'Product' node in Firebase Realtime Database
       const DepositRef = ref(db, "Deposit");
-     
+
       // Attach an event listener for data changes
       const fetchData = async () => {
         onValue(DepositRef, (snapshot) => {
@@ -137,8 +133,6 @@ function Deposit() {
   const [editedItem, setEditedItem] = useState(null);
   const [oldAmount, setoldAmount] = useState("");
 
-  const [SpecialNUM, SetSpecialNUM] = useState("");
-
   const handleClose = () => setShow(false);
 
   const handleShow = async (item) => {
@@ -149,7 +143,6 @@ function Deposit() {
     setNote(item.note);
     setSelectedPaymentType(item.paymentType);
     setSelectedBank(item.selectedBank);
-    SetSpecialNUM(item.SpecialNum);
 
     setTransactionDate(item.transactionDate);
 
@@ -235,11 +228,10 @@ function Deposit() {
 
         // ----------------Edit Cash On Hand----------------
 
-        if (selectedPaymentType == "Cash") {
+        if (selectedPaymentType === "Cash") {
           debugger;
-          // var ID = '-NfqYJMNFeYTGjIJ6Crc';
 
-          const CashID = '-NoSkv0ysgg_X2lPpq-X';
+          const CashID = "-NoSkv0ysgg_X2lPpq-X";
 
           var TotaCashGet = CashOnHand;
           // console.log(TotaCashGet);
@@ -545,7 +537,7 @@ function Deposit() {
     };
 
     fetchData();
-  }, [db, loggedInUID]);
+  }, [loggedInUID]);
 
   const customStyles = {
     control: (provided) => ({
@@ -561,7 +553,7 @@ function Deposit() {
     const selectedBankData = bankOptions.find(
       (option) => option.value === selectedOption?.value
     );
-    if (selectedBankData.Balance != undefined) {
+    if (selectedBankData.Balance !== undefined) {
       var balanceString = selectedBankData.Balance;
 
       // Extract the numeric part using parseInt
@@ -569,53 +561,45 @@ function Deposit() {
 
       setBankAmount(balanceNumeric);
       setBankID(`${selectedBankData.Id}`);
-    } else if (selectedBankData.Balance == undefined) {
+    } else if (selectedBankData.Balance === undefined) {
       setBankAmount("Rs: 0");
     }
   };
 
+  // -------------------------Delete-----------------------------
 
+  const [showAlert, setShowAlert] = useState(false);
+  const [showOK, setShowOK] = useState(false);
+  const [id, setId] = useState(null);
 
+  const handleDelete = (id) => {
+    setId(id);
+    setShowAlert(true);
+  };
 
+  const handleConfirmDelete = async () => {
+    try {
+      const dataRef = ref(db, `Deposit/${id}`);
+      await remove(dataRef);
 
+      // Update the data state after deletion
+      const updatedData = tableData.filter((item) => item.id !== id);
+      setTableData(updatedData);
 
- // -------------------------Delete-----------------------------
+      setShowAlert(false);
+      setShowOK(true);
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  };
 
- const [showAlert, setShowAlert] = useState(false);
- const [showOK, setShowOK] = useState(false);
- const [id, setId] = useState(null);
+  const handleCancelDelete = () => {
+    setShowAlert(false);
+  };
 
- const handleDelete = (id) => {
-   setId(id);
-   setShowAlert(true);
- };
-
- const handleConfirmDelete = async () => {
-   try {
-     const dataRef = ref(db, `Deposit/${id}`);
-     await remove(dataRef);
-
-     // Update the data state after deletion
-     const updatedData = tableData.filter((item) => item.id !== id);
-     setTableData(updatedData);
-
-     setShowAlert(false);
-     setShowOK(true);
-   } catch (error) {
-     console.error("Error deleting data:", error);
-   }
- };
-
- const handleCancelDelete = () => {
-   setShowAlert(false);
- };
-
- const handleOK = () => {
-   setShowOK(false);
- };
-
-
-
+  const handleOK = () => {
+    setShowOK(false);
+  };
 
   return (
     <>
@@ -744,7 +728,7 @@ function Deposit() {
                                 </button>
                               </div>
                             </td>
-                           
+
                             <td className="tdchild">{item.transactionDate}</td>
                             <td className="tdchild">{item.paymentType}</td>
                             <td className="tdchild">{item.selectedBank}</td>

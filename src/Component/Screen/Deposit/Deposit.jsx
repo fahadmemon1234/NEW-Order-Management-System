@@ -136,6 +136,7 @@ function Deposit() {
   const handleClose = () => setShow(false);
 
   const handleShow = async (item) => {
+    debugger;
     setEditedItem(item.id);
     setAmount(item.amount);
     setoldAmount(item.amount);
@@ -185,8 +186,17 @@ function Deposit() {
         Id: key,
         value: data[key].bankName,
         label: data[key].bankName, // Assuming your data structure has keys and bankName values
-        Balance: data[key].openingBalance,
+        Balance: data[key].openingBalance
+        
       }));
+
+      const selectedBankData = options.find(
+        option => option.value === item.selectedBank
+      );
+      console.log(selectedBankData)
+      setBankAmount(selectedBankData.Balance);
+      setBankID(selectedBankData.Id);
+
       // Add the "Select Bank" option to the beginning of the array
       setBankOptions([
         {
@@ -990,6 +1000,9 @@ function Deposit() {
                           <Select
                             id="BankName"
                             options={bank}
+                            value={bank.find(
+                              (option) => option.value === SelectedBank
+                            )}
                             styles={{
                               ...customStyles,
                               menu: (provided) => ({
@@ -1039,11 +1052,16 @@ function Deposit() {
                         style={{ color: "black", fontSize: "20px" }}
                       >
                         <div>
+                          {typeof CashOnHand === "number" && !isNaN(CashOnHand)
+                            ? "Rs: " + CashOnHand.toLocaleString()
+                            : "Rs: 0"}
+                        </div>
+                        {/* <div>
                           RS:{" "}
                           {CashOnHand && CashOnHand > 0
                             ? CashOnHand.toLocaleString()
                             : "0"}
-                        </div>
+                        </div> */}
 
                         {/* {Array.isArray(CashOnHand) ? (
                         CashOnHand.map((item, index) => (

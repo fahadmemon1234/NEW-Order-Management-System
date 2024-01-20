@@ -3,41 +3,38 @@ import React from "react";
 // Navbar Css
 // ---------------------------------------------------
 import "./navbar.css";
+import { Link, useLocation  } from 'react-router-dom';
 // ---------------------------------------------------
-
 
 // Images
 // ---------------------------------------------------
-import ProfilePic from '../../assets/img/img/team/3-thumb.png';
-import FavIcn from '../../assets/img/img/icons/spot-illustrations/falcon.png';
+import ProfilePic from "../../assets/img/img/team/3-thumb.png";
+import FavIcn from "../../assets/img/img/icons/spot-illustrations/falcon.png";
 // ---------------------------------------------------
 
-const Main = ({ children }) =>{
+const Main = ({ children }) => {
 
+  
 
+  const location = useLocation();
 
-// Navbar Side Btn Toggle
-const toggleNavbar = () => {
+  // Navbar Side Btn Toggle
+  const toggleNavbar = () => {
     const htmlElement = document.documentElement;
 
     // Check if the classes are already present, then remove them; otherwise, add them.
-    if (htmlElement.classList.contains('navbar-vertical-collapsed')) {
-      htmlElement.classList.remove('navbar-vertical-collapsed');
+    if (htmlElement.classList.contains("navbar-vertical-collapsed")) {
+      htmlElement.classList.remove("navbar-vertical-collapsed");
     } else {
-      htmlElement.classList.add('navbar-vertical-collapsed');
-
+      htmlElement.classList.add("navbar-vertical-collapsed");
     }
   };
-
-
 
   return (
     <>
       <main className="main" id="top">
         <div className="container-fluid" data-layout="container">
-
-
-        <nav className="navbar navbar-light navbar-vertical navbar-expand-xl navbar-card">
+          <nav className="navbar navbar-light navbar-vertical navbar-expand-xl navbar-card">
             <div className="d-flex align-items-center">
               <div className="toggle-icon-wrapper">
                 <button
@@ -53,23 +50,13 @@ const toggleNavbar = () => {
                   </span>
                 </button>
               </div>
-              <a
-                className="navbar-brand"
-                href="#"
-              >
+              <a className="navbar-brand" href="#">
                 <div className="d-flex align-items-center py-3">
-                  <img
-                    className="me-2"
-                    src={FavIcn}
-                    alt=""
-                    width="40"
-                  />
+                  <img className="me-2" src={FavIcn} alt="" width="40" />
                   <span className="font-sans-serif text-primary">falcon</span>
                 </div>
               </a>
             </div>
-
-
 
             <div
               className="collapse navbar-collapse"
@@ -81,11 +68,7 @@ const toggleNavbar = () => {
                   id="navbarVerticalNav"
                 >
                   <li className="nav-item">
-                    <a
-                      className="nav-link"
-                      href="/Home"
-                      role="button"
-                    >
+                    <Link className={`nav-link ${location.pathname === "/Home" ? "active" : ""}`} to="/Home" role="button">
                       <div className="d-flex align-items-center">
                         <span className="nav-link-icon">
                           <svg
@@ -108,8 +91,7 @@ const toggleNavbar = () => {
                         </span>
                         <span className="nav-link-text ps-1">Dashboard</span>
                       </div>
-                    </a>
-
+                    </Link>
                   </li>
                   <li className="nav-item">
                     <div className="row navbar-vertical-label-wrapper mt-3 mb-2">
@@ -179,20 +161,14 @@ const toggleNavbar = () => {
                       </div>
                     </a>
 
-                    <ul className="nav collapse" id="Items">
+                    <ul className={`nav ${location.pathname === "/Product" ? "" : "collapse"}`} id="Items">
                       <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="/Product"
-                        >
+                        <Link className={`nav-link ${location.pathname === "/Product" ? "active" : ""}`} to="/Product" >
                           <div className="d-flex align-items-center">
-                            <span className="nav-link-text ps-1">
-                              Product
-                            </span>
+                            <span className="nav-link-text ps-1">Product</span>
                           </div>
-                        </a>{" "}
+                        </Link>{" "}
                       </li>
-
                     </ul>
 
                     <a
@@ -226,48 +202,40 @@ const toggleNavbar = () => {
                         <span className="nav-link-text ps-1">Banking</span>
                       </div>
                     </a>
-                    <ul className="nav collapse" id="Banking">
+                    <ul className={`nav ${location.pathname === "/Banks" || location.pathname === "/Deposit" || location.pathname === "/WithDraw" ? "" : "collapse"}`} id="Banking">
                       <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="/Banks"
-                        >
+                        <Link className={`nav-link ${location.pathname === "/Banks" ? "active" : ""}`} to="/Banks">
                           <div className="d-flex align-items-center">
-                            <span className="nav-link-text ps-1">
-                              Banks
-                            </span>
+                            <span className="nav-link-text ps-1">Banks</span>
                           </div>
-                        </a>{" "}
+                        </Link>{" "}
                       </li>
                       <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="/Deposit"
-                        >
+                        <Link className={`nav-link ${location.pathname === "/Deposit" ? "active" : ""}`} to="/Deposit">
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">Deposit</span>
+                          </div>
+                        </Link>{" "}
+                      </li>
+
+                      <li className="nav-item">
+                        <Link className={`nav-link ${location.pathname === "/WithDraw" ? "active" : ""}`} to="/WithDraw">
                           <div className="d-flex align-items-center">
                             <span className="nav-link-text ps-1">
-                              Deposit
+                              With Draw
                             </span>
                           </div>
-                        </a>{" "}
+                        </Link>{" "}
                       </li>
-                     
-                     
-                   
-                     
                     </ul>
                   </li>
                 </ul>
-
               </div>
             </div>
-
-
           </nav>
 
           <div className="content">
-
-          <nav className="navbar navbar-light navbar-glass navbar-top navbar-expand">
+            <nav className="navbar navbar-light navbar-glass navbar-top navbar-expand">
               <button
                 className="btn navbar-toggler-humburger-icon navbar-toggler me-1 me-sm-3"
                 type="button"
@@ -645,7 +613,10 @@ const toggleNavbar = () => {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512 512"
                         data-fa-i2svg=""
-                        style={{ transformOrigin: "0.5em 0.5em", display:'none' }}
+                        style={{
+                          transformOrigin: "0.5em 0.5em",
+                          display: "none",
+                        }}
                       >
                         <g transform="translate(256 256)">
                           <g transform="translate(0, 0)  scale(0.875, 0.875)  rotate(0 0 0)">
@@ -674,7 +645,10 @@ const toggleNavbar = () => {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512 512"
                         data-fa-i2svg=""
-                        style={{ transformOrigin: "0.5em 0.5em", display:'none' }}
+                        style={{
+                          transformOrigin: "0.5em 0.5em",
+                          display: "none",
+                        }}
                       >
                         <g transform="translate(256 256)">
                           <g transform="translate(0, 0)  scale(0.8125, 0.8125)  rotate(0 0 0)">
@@ -703,7 +677,10 @@ const toggleNavbar = () => {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512 512"
                         data-fa-i2svg=""
-                        style={{ transformOrigin: "0.5em 0.5em", display:'none' }}
+                        style={{
+                          transformOrigin: "0.5em 0.5em",
+                          display: "none",
+                        }}
                       >
                         <g transform="translate(256 256)">
                           <g transform="translate(0, 0)  scale(0.875, 0.875)  rotate(0 0 0)">
@@ -874,7 +851,7 @@ const toggleNavbar = () => {
                       style={{
                         transformOrigin: "0.5625em 0.5em",
                         fontSize: "33px",
-                        display:'none'
+                        display: "none",
                       }}
                       aria-hidden="true"
                       focusable="false"
@@ -918,7 +895,7 @@ const toggleNavbar = () => {
                       data-fa-transform="shrink-6"
                       style={{
                         transformOrigin: "0.4375em 0.5em",
-                        display:'none',
+                        display: "none",
                         fontSize: "33px",
                       }}
                       aria-hidden="true"
@@ -1676,11 +1653,7 @@ const toggleNavbar = () => {
                     aria-expanded="false"
                   >
                     <div className="avatar avatar-xl">
-                      <img
-                        className="rounded-circle"
-                        src={ProfilePic}
-                        alt=""
-                      />
+                      <img className="rounded-circle" src={ProfilePic} alt="" />
                     </div>
                   </a>
                   <div
@@ -1696,7 +1669,7 @@ const toggleNavbar = () => {
                           className="svg-inline--fa fa-crown fa-w-20 me-1"
                           aria-hidden="true"
                           focusable="false"
-                          style={{display:'none'}}
+                          style={{ display: "none" }}
                           data-prefix="fas"
                           data-icon="crown"
                           role="img"
@@ -1732,16 +1705,10 @@ const toggleNavbar = () => {
                         Feedback
                       </a>
                       <div className="dropdown-divider"></div>
-                      <a
-                        className="dropdown-item"
-                        href="#"
-                      >
+                      <a className="dropdown-item" href="#">
                         Settings
                       </a>
-                      <a
-                        className="dropdown-item"
-                        href="/"
-                      >
+                      <a className="dropdown-item" href="/">
                         Logout
                       </a>
                     </div>
@@ -1750,10 +1717,7 @@ const toggleNavbar = () => {
               </ul>
             </nav>
 
-
-
             {children}
-
 
             <footer className="footer">
               <div className="row g-0 justify-content-between fs-10 mt-4 mb-3">
@@ -1770,21 +1734,15 @@ const toggleNavbar = () => {
                 </div>
               </div>
             </footer>
-
           </div>
-
-
-
-
-
         </div>
       </main>
-
-
-
-
     </>
   );
-}
+};
 
 export default Main;
+
+
+
+

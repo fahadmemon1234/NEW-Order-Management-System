@@ -4,6 +4,7 @@ import Product from "./Component/Screen/Product/Product";
 import Home from "./Component/Home/Home";
 import Banks from "./Component/Screen/Bank/Bank";
 import Deposit from "./Component/Screen/Deposit/Deposit";
+import WithDraw from "./Component/Screen/WithDraw/WithDraw";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="/Product" element={<Product />}></Route>
           <Route path="/Banks" element={<Banks />}></Route>
           <Route path="/Deposit" element={<Deposit />}></Route>
+          <Route path="/WithDraw" element={<WithDraw />}></Route>
         </Routes>
     </>
   );

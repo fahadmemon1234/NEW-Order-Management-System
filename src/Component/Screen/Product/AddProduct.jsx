@@ -64,22 +64,15 @@ function AddProduct() {
   const [description, setDescription] = useState("");
 
   const handleSaveChanges = () => {
-    handleInputBlur("ItemName", itemName);
-    handleInputBlur("BrandCode", brandCode);
-    handleInputBlur("itemCost", itemCost);
-    handleInputBlur("SellPrice", sellPrice);
-    handleInputBlur("itemQty", itemQty);
-
     if (itemName && brandCode && itemCost && sellPrice && itemQty) {
       // Implement your save logic here
       console.log("Changes saved!");
-     
 
       try {
         const loggedInUID = localStorage.getItem("uid");
         const productsRef = ref(db, "Product");
         const newProduct = {
-          uid:loggedInUID,
+          uid: loggedInUID,
           itemName: itemName,
           brandCode: brandCode,
           measurement: measurement,
@@ -130,6 +123,12 @@ function AddProduct() {
 
         console.log("Error adding product:", error);
       }
+    } else {
+      handleInputBlur("ItemName", itemName);
+      handleInputBlur("BrandCode", brandCode);
+      handleInputBlur("itemCost", itemCost);
+      handleInputBlur("SellPrice", sellPrice);
+      handleInputBlur("itemQty", itemQty);
     }
   };
 

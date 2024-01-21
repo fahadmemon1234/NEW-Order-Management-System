@@ -1,16 +1,19 @@
 import React from "react";
 
-
 // Main Page Connect
 // ---------------------------------------------------
 import Main from "../../NavBar/Navbar";
 // ---------------------------------------------------
 
-function Customers() {
-    return(
-        <>
-        <Main>
+// Add Modal
+// ---------------------------------------------------
+import AddCustomers from "./AddCustomers";
+// --------------------------------------------------
 
+function Customers() {
+  return (
+    <>
+      <Main>
         <div className="card">
           <div className="card-body">
             {/* Headng and btn */}
@@ -24,7 +27,7 @@ function Customers() {
 
               <div className="col-md-6 col-sm-6 col-lg-6">
                 <div style={{ float: "right" }}>
-                  {/* <AddDeposit /> */}
+                  <AddCustomers />
 
                   <br />
                   <br />
@@ -51,29 +54,11 @@ function Customers() {
                 </div>
               </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-            </div>
-            </div>
-
-
-
-        </Main>
-        
-        </>
-    )
+          </div>
+        </div>
+      </Main>
+    </>
+  );
 }
-
 
 export default Customers;

@@ -3,7 +3,7 @@ import React from "react";
 // Navbar Css
 // ---------------------------------------------------
 import "./navbar.css";
-import { Link, useLocation  } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
 // ---------------------------------------------------
 
 // Images
@@ -13,9 +13,6 @@ import FavIcn from "../../assets/img/img/icons/spot-illustrations/falcon.png";
 // ---------------------------------------------------
 
 const Main = ({ children }) => {
-
-  
-
   const location = useLocation();
 
   // Navbar Side Btn Toggle
@@ -68,7 +65,13 @@ const Main = ({ children }) => {
                   id="navbarVerticalNav"
                 >
                   <li className="nav-item">
-                    <Link className={`nav-link ${location.pathname === "/Home" ? "active" : ""}`} to="/Home" role="button">
+                    <Link
+                      className={`nav-link ${
+                        location.pathname === "/Home" ? "active" : ""
+                      }`}
+                      to="/Home"
+                      role="button"
+                    >
                       <div className="d-flex align-items-center">
                         <span className="nav-link-icon">
                           <svg
@@ -161,9 +164,19 @@ const Main = ({ children }) => {
                       </div>
                     </a>
 
-                    <ul className={`nav ${location.pathname === "/Product" ? "" : "collapse"}`} id="Items">
+                    <ul
+                      className={`nav ${
+                        location.pathname === "/Product" ? "" : "collapse"
+                      }`}
+                      id="Items"
+                    >
                       <li className="nav-item">
-                        <Link className={`nav-link ${location.pathname === "/Product" ? "active" : ""}`} to="/Product" >
+                        <Link
+                          className={`nav-link ${
+                            location.pathname === "/Product" ? "active" : ""
+                          }`}
+                          to="/Product"
+                        >
                           <div className="d-flex align-items-center">
                             <span className="nav-link-text ps-1">Product</span>
                           </div>
@@ -202,16 +215,35 @@ const Main = ({ children }) => {
                         <span className="nav-link-text ps-1">Banking</span>
                       </div>
                     </a>
-                    <ul className={`nav ${location.pathname === "/Banks" || location.pathname === "/Deposit" || location.pathname === "/WithDraw" ? "" : "collapse"}`} id="Banking">
+                    <ul
+                      className={`nav ${
+                        location.pathname === "/Banks" ||
+                        location.pathname === "/Deposit" ||
+                        location.pathname === "/WithDraw"
+                          ? ""
+                          : "collapse"
+                      }`}
+                      id="Banking"
+                    >
                       <li className="nav-item">
-                        <Link className={`nav-link ${location.pathname === "/Banks" ? "active" : ""}`} to="/Banks">
+                        <Link
+                          className={`nav-link ${
+                            location.pathname === "/Banks" ? "active" : ""
+                          }`}
+                          to="/Banks"
+                        >
                           <div className="d-flex align-items-center">
                             <span className="nav-link-text ps-1">Banks</span>
                           </div>
                         </Link>{" "}
                       </li>
                       <li className="nav-item">
-                        <Link className={`nav-link ${location.pathname === "/Deposit" ? "active" : ""}`} to="/Deposit">
+                        <Link
+                          className={`nav-link ${
+                            location.pathname === "/Deposit" ? "active" : ""
+                          }`}
+                          to="/Deposit"
+                        >
                           <div className="d-flex align-items-center">
                             <span className="nav-link-text ps-1">Deposit</span>
                           </div>
@@ -219,7 +251,12 @@ const Main = ({ children }) => {
                       </li>
 
                       <li className="nav-item">
-                        <Link className={`nav-link ${location.pathname === "/WithDraw" ? "active" : ""}`} to="/WithDraw">
+                        <Link
+                          className={`nav-link ${
+                            location.pathname === "/WithDraw" ? "active" : ""
+                          }`}
+                          to="/WithDraw"
+                        >
                           <div className="d-flex align-items-center">
                             <span className="nav-link-text ps-1">
                               With Draw
@@ -227,6 +264,62 @@ const Main = ({ children }) => {
                           </div>
                         </Link>{" "}
                       </li>
+                    </ul>
+
+                    <a
+                      className="nav-link dropdown-indicator"
+                      href="#Sales"
+                      role="button"
+                      data-bs-toggle="collapse"
+                      aria-expanded="false"
+                      aria-controls="Sales"
+                    >
+                      <div className="d-flex align-items-center">
+                        <span className="nav-link-icon">
+                          <svg
+                            className="svg-inline--fa fa-brands fa-salesforce fa-w-18 fa"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="fa-brands fa-salesforce"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 576 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M128 160h320v192H128V160zm400 96c0 26.51 21.49 48 48 48v96c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48v-96c26.51 0 48-21.49 48-48s-21.49-48-48-48v-96c0-26.51 21.49-48 48-48h480c26.51 0 48 21.49 48 48v96c-26.51 0-48 21.49-48 48zm-48-104c0-13.255-10.745-24-24-24H120c-13.255 0-24 10.745-24 24v208c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24V152z"
+                            ></path>
+                          </svg>{" "}
+                          <span className="fa-brands fa-salesforce"></span>{" "}
+                        </span>
+                        <span className="nav-link-text ps-1">Sales</span>
+                      </div>
+                    </a>
+
+                    <ul
+                      className={`nav ${
+                        location.pathname === "/Customers"
+                          ? ""
+                          : "collapse"
+                      }`}
+                      id="Sales"
+                    >
+                      <li className="nav-item">
+                        <Link
+                          className={`nav-link ${
+                            location.pathname === "/Customers" ? "active" : ""
+                          }`}
+                          to="/Customers"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">Customers</span>
+                          </div>
+                        </Link>{" "}
+                      </li>
+                      
+                      
                     </ul>
                   </li>
                 </ul>
@@ -1742,7 +1835,3 @@ const Main = ({ children }) => {
 };
 
 export default Main;
-
-
-
-

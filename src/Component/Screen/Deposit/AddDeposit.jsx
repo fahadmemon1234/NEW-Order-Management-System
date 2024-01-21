@@ -191,7 +191,7 @@ function AddDeposit() {
           pauseOnHover: false,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "colored",
         });
 
         setTimeout(() => {
@@ -267,7 +267,7 @@ function AddDeposit() {
           pauseOnHover: false,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "colored",
         });
 
         console.log("Error adding Deposit:", error);

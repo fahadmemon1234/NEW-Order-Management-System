@@ -145,8 +145,7 @@ function AddWithDraw() {
         if (selectedPaymentType == "Cash") {
           // var ID = "-NfqYJMNFeYTGjIJ6Crc";
 
-          const CashID = '-NoSkv0ysgg_X2lPpq-X';
-          
+          const CashID = "-NoSkv0ysgg_X2lPpq-X";
 
           var TotaCashGet = CashOnHand;
 
@@ -161,8 +160,6 @@ function AddWithDraw() {
           // Update the product data in Firebase
           const TotalAmountRef = ref(db, `CashOnHand/${CashID}`);
           await update(TotalAmountRef, updatedTotalAmount);
-
-        
         } else {
           // ----------------Edit Bank Cash----------------
 
@@ -191,7 +188,7 @@ function AddWithDraw() {
           pauseOnHover: false,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "colored",
         });
 
         setTimeout(() => {
@@ -267,7 +264,7 @@ function AddWithDraw() {
           pauseOnHover: false,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "colored",
         });
 
         console.log("Error adding Deposit:", error);
@@ -477,7 +474,7 @@ function AddWithDraw() {
         onClick={handleShow}
         style={{ float: "right" }}
       >
-        Add Deposit
+        Add WithDraw
       </button>
 
       {/* -----------------------------------Modal--------------------------------------------- */}
@@ -493,16 +490,16 @@ function AddWithDraw() {
         </Modal.Header>
         <Modal.Body>
           <div className="container">
-          <form>
+            <form>
               <div className="row">
                 <div className="col-md-6 col-sm-6 col-lg-6">
                   <div className="mb-3">
                     <label
                       htmlFor="TransactionDate"
                       className="form-label"
-                      style={{ color: 'black' }}
+                      style={{ color: "black" }}
                     >
-                      Transaction Date <span style={{ color: 'red' }}>*</span>
+                      Transaction Date <span style={{ color: "red" }}>*</span>
                     </label>
                     <input
                       type="date"
@@ -512,13 +509,13 @@ function AddWithDraw() {
                       placeholder="Enter Transaction Date"
                       value={TransactionDate}
                       onBlur={() =>
-                        handleInputBlur('transactionDate', TransactionDate)
+                        handleInputBlur("transactionDate", TransactionDate)
                       }
-                      onFocus={() => setTransactionDateError('')}
-                      onChange={e => setTransactionDate(e.target.value)}
+                      onFocus={() => setTransactionDateError("")}
+                      onChange={(e) => setTransactionDate(e.target.value)}
                     />
                     {TransactionDateError && (
-                      <div style={{ color: 'red' }}>{TransactionDateError}</div>
+                      <div style={{ color: "red" }}>{TransactionDateError}</div>
                     )}
                   </div>
                 </div>
@@ -527,14 +524,14 @@ function AddWithDraw() {
                     <label
                       htmlFor="BankTitle"
                       className="form-label"
-                      style={{ color: 'black' }}
+                      style={{ color: "black" }}
                     >
                       Bank Title
                     </label>
                     <select
                       className="form-select brand"
                       id="Brand"
-                      onChange={e => setSelectedPaymentType(e.target.value)}
+                      onChange={(e) => setSelectedPaymentType(e.target.value)}
                       value={selectedPaymentType}
                     >
                       <option value="0" disabled>
@@ -549,14 +546,14 @@ function AddWithDraw() {
 
               <div className="row">
                 <div className="col-md-6 col-sm-6 col-lg-6">
-                  {selectedPaymentType === 'Bank' && (
+                  {selectedPaymentType === "Bank" && (
                     <div className="mb-3">
                       <label
                         htmlFor="Amount"
                         className="form-label"
-                        style={{ color: 'black' }}
+                        style={{ color: "black" }}
                       >
-                        Amount <span style={{ color: 'red' }}>*</span>
+                        Amount <span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         type="number"
@@ -565,23 +562,23 @@ function AddWithDraw() {
                         id="Amount"
                         placeholder="Enter Amount"
                         value={Amount}
-                        onBlur={() => handleInputBlur('amount', Amount)}
-                        onFocus={() => setAmountError('')}
-                        onChange={e => setAmount(e.target.value)}
+                        onBlur={() => handleInputBlur("amount", Amount)}
+                        onFocus={() => setAmountError("")}
+                        onChange={(e) => setAmount(e.target.value)}
                       />
                       {AmountError && (
-                        <div style={{ color: 'red' }}>{AmountError}</div>
+                        <div style={{ color: "red" }}>{AmountError}</div>
                       )}
                     </div>
                   )}
-                  {selectedPaymentType !== 'Bank' && (
+                  {selectedPaymentType !== "Bank" && (
                     <div className="mb-3">
                       <label
                         htmlFor="Amount"
                         className="form-label"
-                        style={{ color: 'black' }}
+                        style={{ color: "black" }}
                       >
-                        Amount <span style={{ color: 'red' }}>*</span>
+                        Amount <span style={{ color: "red" }}>*</span>
                       </label>
                       <input
                         type="number"
@@ -590,12 +587,12 @@ function AddWithDraw() {
                         id="Amount"
                         placeholder="Enter Amount"
                         value={Amount}
-                        onBlur={() => handleInputBlur('amount', Amount)}
-                        onFocus={() => setAmountError('')}
-                        onChange={e => setAmount(e.target.value)}
+                        onBlur={() => handleInputBlur("amount", Amount)}
+                        onFocus={() => setAmountError("")}
+                        onChange={(e) => setAmount(e.target.value)}
                       />
                       {AmountError && (
-                        <div style={{ color: 'red' }}>{AmountError}</div>
+                        <div style={{ color: "red" }}>{AmountError}</div>
                       )}
                     </div>
                   )}
@@ -605,26 +602,26 @@ function AddWithDraw() {
                     <label
                       htmlFor="BankAddress"
                       className="form-label"
-                      style={{ color: 'black' }}
+                      style={{ color: "black" }}
                     >
-                      Note <span style={{ color: 'red' }}>*</span>
+                      Note <span style={{ color: "red" }}>*</span>
                     </label>
                     <textarea
                       type="text"
                       className="form-control"
                       value={Note}
-                      onChange={e => setNote(e.target.value)}
-                      onBlur={() => handleInputBlur('note', Note)}
-                      onFocus={() => setNoteError('')}
+                      onChange={(e) => setNote(e.target.value)}
+                      onBlur={() => handleInputBlur("note", Note)}
+                      onFocus={() => setNoteError("")}
                       placeholder="Enter Note"
                     ></textarea>
                     {NoteError && (
-                      <div style={{ color: 'red' }}>{NoteError}</div>
+                      <div style={{ color: "red" }}>{NoteError}</div>
                     )}
                   </div>
                 </div>
               </div>
-              {selectedPaymentType === 'Bank' && (
+              {selectedPaymentType === "Bank" && (
                 <>
                   <div className="row">
                     <div className="col-md-6 col-sm-6 col-lg-6">
@@ -632,10 +629,10 @@ function AddWithDraw() {
                         <label
                           htmlFor="CheckOnline"
                           className="form-label"
-                          style={{ color: 'black' }}
+                          style={{ color: "black" }}
                         >
                           Check & Online:
-                          <span style={{ color: 'red' }}>*</span>
+                          <span style={{ color: "red" }}>*</span>
                         </label>
                         <input
                           type="text"
@@ -645,13 +642,13 @@ function AddWithDraw() {
                           placeholder="Enter Check & Online"
                           value={CheckOnline}
                           onBlur={() =>
-                            handleInputBlur('checkOnline', CheckOnline)
+                            handleInputBlur("checkOnline", CheckOnline)
                           }
-                          onFocus={() => setCheckOnlineError('')}
-                          onChange={e => setCheckOnline(e.target.value)}
+                          onFocus={() => setCheckOnlineError("")}
+                          onChange={(e) => setCheckOnline(e.target.value)}
                         />
                         {CheckOnlineError && (
-                          <div style={{ color: 'red' }}>{CheckOnlineError}</div>
+                          <div style={{ color: "red" }}>{CheckOnlineError}</div>
                         )}
                       </div>
                     </div>
@@ -661,9 +658,9 @@ function AddWithDraw() {
                         <label
                           htmlFor="BankTitle"
                           className="form-label"
-                          style={{ color: 'black' }}
+                          style={{ color: "black" }}
                         >
-                          Bank <span style={{ color: 'red' }}>*</span>
+                          Bank <span style={{ color: "red" }}>*</span>
                         </label>
                         {/* <Select
                           id="BankName"
@@ -680,26 +677,26 @@ function AddWithDraw() {
 
                         <Select
                           id="BankName"
-                          options={bankOptions}
+                          options={bank}
                           styles={{
                             ...customStyles,
-                            menu: provided => ({
+                            menu: (provided) => ({
                               ...provided,
-                              overflowY: 'auto', // Add scrollbar when needed
-                              maxHeight: '150px' // Set the maximum height here
-                            })
+                              overflowY: "auto", // Add scrollbar when needed
+                              maxHeight: "150px", // Set the maximum height here
+                            }),
                           }}
                           isSearchable={true}
                           placeholder="Select Bank"
                           onChange={handleBankSelect}
                           onBlur={() =>
-                            handleInputBlur('selectedBank', SelectedBank)
+                            handleInputBlur("selectedBank", SelectedBank)
                           }
-                          onFocus={() => setSelectedBankError('')}
+                          onFocus={() => setSelectedBankError("")}
                         />
 
                         {SelectedBankError && (
-                          <div style={{ color: 'red' }}>
+                          <div style={{ color: "red" }}>
                             {SelectedBankError}
                           </div>
                         )}
@@ -707,12 +704,12 @@ function AddWithDraw() {
                     </div>
                   </div>
 
-                  <div className="row" style={{ float: 'right' }}>
+                  <div className="row" style={{ float: "right" }}>
                     <div className="col-md-12 col-sm-12 col-lg-12">
                       <label
                         htmlFor="Amount"
                         className="form-label"
-                        style={{ color: 'black', fontSize: '20px' }}
+                        style={{ color: "black", fontSize: "20px" }}
                       >
                         <div id="bankAmount">
                           {`Rs: ` + bankAmount.toLocaleString()}
@@ -729,13 +726,13 @@ function AddWithDraw() {
                 </>
               )}
 
-              {selectedPaymentType === 'Cash' && (
-                <div className="row" style={{ float: 'right' }}>
+              {selectedPaymentType === "Cash" && (
+                <div className="row" style={{ float: "right" }}>
                   <div className="col-md-12 col-sm-12 col-lg-12">
                     <label
                       htmlFor="Amount"
                       className="form-label"
-                      style={{ color: 'black', fontSize: '20px' }}
+                      style={{ color: "black", fontSize: "20px" }}
                     >
                       {/* {CashOnHand.map((item, index) => (
                         <div key={index} id="TotalAmount">
@@ -747,8 +744,8 @@ function AddWithDraw() {
 
                       <div>
                         {CashOnHand !== null
-                          ? 'Rs:  ' + CashOnHand.toLocaleString()
-                          : 'Rs: 0'}
+                          ? "Rs:  " + CashOnHand.toLocaleString()
+                          : "Rs: 0"}
                       </div>
                     </label>
                   </div>

@@ -310,7 +310,7 @@ function Deposit() {
           pauseOnHover: false,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "colored",
         });
 
         setTimeout(() => {
@@ -386,7 +386,7 @@ function Deposit() {
           pauseOnHover: false,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "colored",
         });
 
         console.log("Error adding Deposit:", error);
@@ -710,9 +710,6 @@ function Deposit() {
                           </th>
                           <th className="text-900 sort" data-sort="BankAddress">
                             Description
-                          </th>
-                          <th className="text-900 sort" data-sort=" BranchName">
-                            Branch Name
                           </th>
                         </tr>
                       </thead>

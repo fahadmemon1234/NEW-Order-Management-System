@@ -6,6 +6,8 @@ import Banks from "./Component/Screen/Bank/Bank";
 import Deposit from "./Component/Screen/Deposit/Deposit";
 import WithDraw from "./Component/Screen/WithDraw/WithDraw";
 import Customers from "./Component/Screen/Customers/Customers";
+import SaleOrder from "./Component/Screen/SaleOrder/SaleOrder";
+import AddSaleOrder from "./Component/Screen/SaleOrder/AddSaleOrder";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
         {/* ----------Sales--------------------------- */}
 
         <Route path="/Customers" element={<Customers />}></Route>
+        <Route path="/SaleOrder" element={<SaleOrder />}></Route>
+        <Route path="/AddSaleOrder" element={<AddSaleOrder />}></Route>
       </Routes>
     </>
   );

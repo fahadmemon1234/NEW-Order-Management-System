@@ -300,7 +300,9 @@ const Main = ({ children }) => {
 
                     <ul
                       className={`nav ${
-                        location.pathname === "/Customers"
+                        location.pathname === "/Customers" ||
+                        location.pathname === "/SaleOrder" ||
+                        location.pathname === "/AddSaleOrder"
                           ? ""
                           : "collapse"
                       }`}
@@ -315,6 +317,20 @@ const Main = ({ children }) => {
                         >
                           <div className="d-flex align-items-center">
                             <span className="nav-link-text ps-1">Customers</span>
+                          </div>
+                        </Link>{" "}
+                      </li>
+
+
+                      <li className="nav-item">
+                        <Link
+                          className={`nav-link ${
+                            location.pathname === "/SaleOrder" || location.pathname === "/AddSaleOrder" ? "active" : ""
+                          }`}
+                          to="/SaleOrder"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">Sale Order</span>
                           </div>
                         </Link>{" "}
                       </li>

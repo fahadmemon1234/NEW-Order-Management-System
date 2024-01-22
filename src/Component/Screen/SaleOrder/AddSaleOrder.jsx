@@ -16,7 +16,7 @@ import InputMask from "react-input-mask";
 
 //DataBase
 // ---------------------------------------------------
-import { ref, get, onValue, update, remove } from "firebase/database";
+import { ref, get, onValue, update, remove, push } from "firebase/database";
 import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
@@ -24,6 +24,12 @@ import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 import AddCustModal from "./AddCustModal";
 // --------------------------------------------------
+
+//Notify
+// ---------------------------------------------------
+import { toast, ToastContainer } from "react-toastify";
+import "../../../assets/Css/Tostify.css";
+// ---------------------------------------------------
 
 function AddSaleOrder() {
   const [paymentMethod, setPaymentMethod] = useState("rdoCash");
@@ -98,9 +104,93 @@ function AddSaleOrder() {
     }),
   };
 
+  const [CounterSale, setCounterSale] = useState("Counter Sale");
+  const [Name, setName] = useState("");
+  const [PhoneNumber, setPhoneNumber] = useState("");
+
+  const [SalesMan, setSalesMan] = useState("Zohaib Memon");
+
+  const handleSaveOrder = () => {
+    debugger;
+    try {
+      const loggedInUID = localStorage.getItem("uid");
+
+      if (paymentMethod === "rdoCash") {
+        const SaleOrderRef = ref(db, "SaleOrder");
+        const newSaleOrder = {
+          uid: loggedInUID,
+          customer: CounterSale,
+          orderDate: orderDate,
+          name: Name,
+          phoneNumber: PhoneNumber,
+          paymentMethod: "rdoCash",
+        };
+        push(SaleOrderRef, newSaleOrder);
+      } else if (paymentMethod === "rdoCredit") {
+        const SaleOrderRef = ref(db, "SaleOrder");
+        const newSaleOrder = {
+          uid: loggedInUID,
+          customer: selectedCustomer,
+          orderDate: orderDate,
+          salesMan: SalesMan,
+          paymentMethod: "rdoCredit",
+        };
+        push(SaleOrderRef, newSaleOrder);
+      } else {
+        const SaleOrderRef = ref(db, "SaleOrder");
+        const newSaleOrder = {
+          uid: loggedInUID,
+          customer: selectedCustomer,
+          orderDate: orderDate,
+          name: Name,
+          paymentMethod: "rdoCashCredit",
+          phoneNumber: PhoneNumber,
+        };
+        push(SaleOrderRef, newSaleOrder);
+      }
+
+      toast.success("Sale Order Added Successfully", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (error) {
+      toast.error("Error adding SaleOrder: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      console.log("Error adding SaleOrder:", error);
+    }
+  };
+
   return (
     <>
       <Main>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+
         <div className="card" style={{ border: "1px solid #2c7be5" }}>
           <div className="card-body">
             <div className="container-fluid">
@@ -180,7 +270,8 @@ function AddSaleOrder() {
                         id="txtCustomerCash"
                         className="form-control"
                         readOnly
-                        value={"Counter Sale"}
+                        value={CounterSale}
+                        onChange={() => setCounterSale()}
                       ></input>
                     </div>
 
@@ -209,6 +300,8 @@ function AddSaleOrder() {
                         id="txtName"
                         className="form-control"
                         placeholder="Enter Name"
+                        value={Name}
+                        onChange={(e) => setName(e.target.value)}
                       ></input>
                     </div>
 
@@ -223,6 +316,8 @@ function AddSaleOrder() {
                         id="txtPhoneNo"
                         mask="999-9999999"
                         placeholder="+92 999-9999999"
+                        value={PhoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
                       />
 
                       {/* <Button
@@ -309,9 +404,10 @@ function AddSaleOrder() {
                           { value: "Zohaib Memon", label: "Zohaib Memon" },
                           // Add more static names as needed
                         ]}
-                        value={"Zohaib Memon"} // Set the desired pre-selected value here
+                        value={SalesMan} // Set the desired pre-selected value here
                         placeholder="Select SalesMan"
                         isSearchable={true}
+                        onChange={(e) => setSalesMan(e.target.value)}
                       />
                     </div>
 
@@ -388,6 +484,8 @@ function AddSaleOrder() {
                         id="txtName"
                         className="form-control"
                         placeholder="Enter Name"
+                        value={Name}
+                        onChange={(e) => setName(e.target.value)}
                       ></input>
                     </div>
 
@@ -402,6 +500,8 @@ function AddSaleOrder() {
                         id="txtPhoneNo"
                         mask="999-9999999"
                         placeholder="+92 999-9999999"
+                        value={PhoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
                       />
 
                       {/* <Button
@@ -418,7 +518,7 @@ function AddSaleOrder() {
               <Button
                 variant="primary"
                 style={{ float: "right", marginTop: 20 + "px" }}
-              
+                onClick={handleSaveOrder}
               >
                 Save Order
               </Button>

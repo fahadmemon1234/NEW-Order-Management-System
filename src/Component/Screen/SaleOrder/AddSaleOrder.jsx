@@ -5,16 +5,14 @@ import React, { useState, useEffect } from "react";
 import Main from "../../NavBar/Navbar";
 // ---------------------------------------------------
 
-
 // Bootstrap Modal
 // ---------------------------------------------------
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
-import InputMask from 'react-input-mask';
+import InputMask from "react-input-mask";
 // ---------------------------------------------------
-
 
 //DataBase
 // ---------------------------------------------------
@@ -22,13 +20,10 @@ import { ref, get, onValue, update, remove } from "firebase/database";
 import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
-
-
 // Add Modal
 // ---------------------------------------------------
 import AddCustModal from "./AddCustModal";
 // --------------------------------------------------
-
 
 function AddSaleOrder() {
   const [paymentMethod, setPaymentMethod] = useState("rdoCash");
@@ -48,10 +43,10 @@ function AddSaleOrder() {
         if (loggedInUID) {
           const dataRef = ref(db, "Customer");
           const snapshot = await get(dataRef);
-  
+
           if (snapshot.exists()) {
             const data = snapshot.val();
-  
+
             // Filter data based on the loggedInUID
             const filteredData = Object.keys(data)
               .filter((key) => data[key].uid === loggedInUID)
@@ -59,13 +54,13 @@ function AddSaleOrder() {
                 obj[key] = data[key];
                 return obj;
               }, {});
-  
+
             // Convert the filtered data object into an array of options
             const options = Object.keys(filteredData).map((key) => ({
               value: key,
               label: filteredData[key].customerName,
             }));
-  
+
             // Add the "Select Customer" option to the beginning of the array
             setCustomerName([
               {
@@ -84,18 +79,15 @@ function AddSaleOrder() {
         console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchData();
   }, [db, loggedInUID]);
-  
 
   // Get the current date in the format "YYYY-MM-DD"
   const currentDate = new Date().toISOString().split("T")[0];
 
   // Initialize the state with the current date
   const [orderDate, setOrderDate] = useState(currentDate);
-
-
 
   const customStyles = {
     control: (provided) => ({
@@ -109,8 +101,6 @@ function AddSaleOrder() {
   return (
     <>
       <Main>
-
-
         <div className="card" style={{ border: "1px solid #2c7be5" }}>
           <div className="card-body">
             <div className="container-fluid">
@@ -259,13 +249,13 @@ function AddSaleOrder() {
                       <Select
                         id="txtCustomerCredit"
                         styles={{
-                            ...customStyles,
-                            menu: (provided) => ({
-                              ...provided,
-                              overflowY: "auto", // Add scrollbar when needed
-                              maxHeight: "160px", // Set the maximum height here
-                            }),
-                          }}
+                          ...customStyles,
+                          menu: (provided) => ({
+                            ...provided,
+                            overflowY: "auto", // Add scrollbar when needed
+                            maxHeight: "160px", // Set the maximum height here
+                          }),
+                        }}
                         options={customerName}
                         value={selectedCustomer}
                         placeholder="Select Customer"
@@ -282,7 +272,7 @@ function AddSaleOrder() {
                       >
                         Add Customer
                       </a> */}
-                      <AddCustModal/>
+                      <AddCustModal />
                     </div>
 
                     <div className="col-md-6 col-lg-6 col-sm-6">
@@ -314,9 +304,12 @@ function AddSaleOrder() {
 
                       <Select
                         id="txtSalesMan"
-                        options={"Memon"}
-                       
-                        value={""}
+                        options={[
+                          { value: "Fahad Memon", label: "Fahad Memon" },
+                          { value: "Zohaib Memon", label: "Zohaib Memon" },
+                          // Add more static names as needed
+                        ]}
+                        value={"Zohaib Memon"} // Set the desired pre-selected value here
                         placeholder="Select SalesMan"
                         isSearchable={true}
                       />
@@ -347,13 +340,13 @@ function AddSaleOrder() {
                         id="txtCustomerCashCredit"
                         options={customerName}
                         styles={{
-                            ...customStyles,
-                            menu: (provided) => ({
-                              ...provided,
-                              overflowY: "auto", // Add scrollbar when needed
-                              maxHeight: "160px", // Set the maximum height here
-                            }),
-                          }}
+                          ...customStyles,
+                          menu: (provided) => ({
+                            ...provided,
+                            overflowY: "auto", // Add scrollbar when needed
+                            maxHeight: "160px", // Set the maximum height here
+                          }),
+                        }}
                         value={selectedCustomer}
                         placeholder="Select Customer"
                         onChange={(selectedOption) =>
@@ -367,7 +360,7 @@ function AddSaleOrder() {
                       >
                         Add Customer
                       </a> */}
-                      <AddCustModal/>
+                      <AddCustModal />
                     </div>
 
                     <div className="col-md-6 col-lg-6 col-sm-6">
@@ -425,6 +418,7 @@ function AddSaleOrder() {
               <Button
                 variant="primary"
                 style={{ float: "right", marginTop: 20 + "px" }}
+              
               >
                 Save Order
               </Button>

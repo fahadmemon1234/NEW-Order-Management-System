@@ -45,6 +45,13 @@ function SaleOrder() {
     const navigate = useNavigate();
 
     const NextPage = () => {
+      
+        localStorage.removeItem("isSaveOrderVisible");
+        localStorage.removeItem("ID");
+        localStorage.removeItem("orderDate");
+        localStorage.removeItem("name");
+        localStorage.removeItem("phoneNumber");
+        localStorage.removeItem("paymentMethod");
         // Navigate to the new page
         navigate('/AddSaleOrder');
       };

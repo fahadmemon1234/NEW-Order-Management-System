@@ -34,6 +34,8 @@ import "../../../assets/Css/Tostify.css";
 function AddSaleOrder() {
   const [paymentMethod, setPaymentMethod] = useState("rdoCash");
 
+  const [isSaveOrderVisible, setSaveOrderVisible] = useState(true);
+
   const handlePaymentMethodChange = (event) => {
     setPaymentMethod(event.target.value);
   };
@@ -110,6 +112,8 @@ function AddSaleOrder() {
 
   const [SalesMan, setSalesMan] = useState("Zohaib Memon");
 
+  const [orderId, setId] = useState("");
+
   const handleSaveOrder = () => {
     debugger;
     try {
@@ -125,28 +129,66 @@ function AddSaleOrder() {
           phoneNumber: PhoneNumber,
           paymentMethod: "rdoCash",
         };
-        push(SaleOrderRef, newSaleOrder);
+        const newSaleOrderRef = push(SaleOrderRef, newSaleOrder);
+        // Get the ID (key) of the newly pushed SaleOrder
+        const newSaleOrderId = newSaleOrderRef.key;
+        setId(newSaleOrderId);
+        localStorage.setItem("ID", newSaleOrderId);
+        setCounterSale(newSaleOrder.customer);
+        localStorage.setItem("customer", newSaleOrder.customer);
+        setOrderDate(newSaleOrder.orderDate);
+        localStorage.setItem("orderDate", newSaleOrder.orderDate);
+        setName(newSaleOrder.name);
+        localStorage.setItem("name", newSaleOrder.name);
+        setPhoneNumber(newSaleOrder.phoneNumber);
+        localStorage.setItem("phoneNumber", newSaleOrder.phoneNumber);
+        setPaymentMethod(newSaleOrder.paymentMethod);
+        localStorage.setItem("paymentMethod", newSaleOrder.paymentMethod);
       } else if (paymentMethod === "rdoCredit") {
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
           uid: loggedInUID,
-          customer: selectedCustomer,
+          customer: selectedCustomer.label,
           orderDate: orderDate,
           salesMan: SalesMan,
           paymentMethod: "rdoCredit",
         };
-        push(SaleOrderRef, newSaleOrder);
+        const newSaleOrderRef = push(SaleOrderRef, newSaleOrder);
+        const newSaleOrderId = newSaleOrderRef.key;
+        setId(newSaleOrderId);
+        localStorage.setItem("ID", newSaleOrderId);
+        setCustomerName(newSaleOrder.customer);
+        localStorage.setItem("customer", newSaleOrder.customer);
+        setOrderDate(newSaleOrder.orderDate);
+        localStorage.setItem("orderDate", newSaleOrder.orderDate);
+        setSalesMan(newSaleOrder.salesMan);
+        localStorage.setItem("salesMan", newSaleOrder.salesMan);
+        setPaymentMethod(newSaleOrder.paymentMethod);
+        localStorage.setItem("paymentMethod", newSaleOrder.paymentMethod);
       } else {
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
           uid: loggedInUID,
-          customer: selectedCustomer,
+          customer: selectedCustomer.label,
           orderDate: orderDate,
           name: Name,
           paymentMethod: "rdoCashCredit",
           phoneNumber: PhoneNumber,
         };
-        push(SaleOrderRef, newSaleOrder);
+        const newSaleOrderRef = push(SaleOrderRef, newSaleOrder);
+        const newSaleOrderId = newSaleOrderRef.key;
+        setId(newSaleOrderId);
+        localStorage.setItem("ID", newSaleOrderId);
+        setCustomerName(newSaleOrder.customer);
+        localStorage.setItem("customer", newSaleOrder.customer);
+        setOrderDate(newSaleOrder.orderDate);
+        localStorage.setItem("orderDate", newSaleOrder.orderDate);
+        setName(newSaleOrder.name);
+        localStorage.setItem("name", newSaleOrder.name);
+        setPhoneNumber(newSaleOrder.phoneNumber);
+        localStorage.setItem("phoneNumber", newSaleOrder.phoneNumber);
+        setPaymentMethod(newSaleOrder.paymentMethod);
+        localStorage.setItem("paymentMethod", newSaleOrder.paymentMethod);
       }
 
       toast.success("Sale Order Added Successfully", {
@@ -159,6 +201,10 @@ function AddSaleOrder() {
         progress: undefined,
         theme: "colored",
       });
+      setSaveOrderVisible(false);
+
+      // Save the state in local storage
+      localStorage.setItem("isSaveOrderVisible", "false");
     } catch (error) {
       toast.error("Error adding SaleOrder: " + error.message, {
         position: "top-right",
@@ -174,6 +220,124 @@ function AddSaleOrder() {
       console.log("Error adding SaleOrder:", error);
     }
   };
+
+  const handleUpdateOrder = () => {
+    debugger;
+    try {
+      const loggedInUID = localStorage.getItem("uid");
+
+      if (paymentMethod === "rdoCash") {
+        const newSaleOrder = {
+          uid: loggedInUID,
+          customer: CounterSale,
+          orderDate: orderDate,
+          name: Name,
+          phoneNumber: PhoneNumber,
+          paymentMethod: "rdoCash",
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        const newSaleOrderRef = update(SaleOrderRef, newSaleOrder);
+        // Get the ID (key) of the newly pushed SaleOrder
+
+        setCounterSale(newSaleOrder.customer);
+        setOrderDate(newSaleOrder.orderDate);
+        setName(newSaleOrder.name);
+        setPhoneNumber(newSaleOrder.phoneNumber);
+        setPaymentMethod(newSaleOrder.paymentMethod);
+      } else if (paymentMethod === "rdoCredit") {
+        const newSaleOrder = {
+          uid: loggedInUID,
+          customer: selectedCustomer.label,
+          orderDate: orderDate,
+          salesMan: SalesMan,
+          paymentMethod: "rdoCredit",
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        const newSaleOrderRef = update(SaleOrderRef, newSaleOrder);
+
+        setCustomerName(newSaleOrder.customer);
+        setOrderDate(newSaleOrder.orderDate);
+        setSalesMan(newSaleOrder.salesMan);
+        setPaymentMethod(newSaleOrder.paymentMethod);
+      } else {
+        const newSaleOrder = {
+          uid: loggedInUID,
+          customer: selectedCustomer.label,
+          orderDate: orderDate,
+          name: Name,
+          paymentMethod: "rdoCashCredit",
+          phoneNumber: PhoneNumber,
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        const newSaleOrderRef = update(SaleOrderRef, newSaleOrder);
+
+        setCustomerName(newSaleOrder.customer);
+        setOrderDate(newSaleOrder.orderDate);
+        setName(newSaleOrder.name);
+        setPhoneNumber(newSaleOrder.phoneNumber);
+        setPaymentMethod(newSaleOrder.paymentMethod);
+      }
+
+      toast.success("Sale Order Edit Successfully", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setSaveOrderVisible(false);
+    } catch (error) {
+      toast.error("Error adding SaleOrder: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      console.log("Error adding SaleOrder:", error);
+    }
+  };
+
+  useEffect(() => {
+    debugger;
+    // When the component mounts, check local storage for the saved state
+    const savedState = localStorage.getItem("isSaveOrderVisible");
+
+    const ID = localStorage.getItem("ID");
+    const customer = localStorage.getItem("customer");
+    const orderDate = localStorage.getItem("orderDate");
+    const name = localStorage.getItem("name");
+    const phoneNumber = localStorage.getItem("phoneNumber");
+    const paymentMethod = localStorage.getItem("paymentMethod");
+
+    // If there is a saved state, update the component state
+    if (savedState === "false") {
+      setSaveOrderVisible(false);
+      setCustomerName(customer);
+      setSelectedCustomer(customer);
+      setOrderDate(orderDate);
+      setName(name);
+      setId(ID);
+      setPhoneNumber(phoneNumber);
+      setPaymentMethod(paymentMethod);
+    } else {
+      setSaveOrderVisible(true);
+      setCustomerName("");
+      setOrderDate("");
+      setName("");
+      setSelectedCustomer("");
+      setId("");
+      setPhoneNumber("");
+      setPaymentMethod("rdoCash");
+    }
+  }, []);
 
   return (
     <>
@@ -256,272 +420,565 @@ function AddSaleOrder() {
                 </div>
               </div>
 
-              {/* input field Cash */}
+              {isSaveOrderVisible && (
+                <div id="SaveOrder">
+                  {/* input field Cash */}
 
-              {paymentMethod === "rdoCash" && (
-                <div className="Cash">
-                  <div className="row">
-                    <div className="col-md-6 col-lg-6 col-sm-6">
-                      <label className="form-label" htmlFor="SelectCustomer">
-                        Select Customer
-                      </label>
-                      <input
-                        type="text"
-                        id="txtCustomerCash"
-                        className="form-control"
-                        readOnly
-                        value={CounterSale}
-                        onChange={() => setCounterSale()}
-                      ></input>
-                    </div>
+                  {paymentMethod === "rdoCash" && (
+                    <div className="Cash">
+                      <div className="row">
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label
+                            className="form-label"
+                            htmlFor="SelectCustomer"
+                          >
+                            Select Customer
+                          </label>
+                          <input
+                            type="text"
+                            id="txtCustomerCash"
+                            className="form-control"
+                            readOnly
+                            value={CounterSale}
+                            onChange={() => setCounterSale()}
+                          ></input>
+                        </div>
 
-                    <div className="col-md-6 col-lg-6 col-sm-6">
-                      <label className="form-label" htmlFor="OrderDate">
-                        Order Date
-                      </label>
-                      <input
-                        type="date"
-                        id="txtOrderDate"
-                        className="form-control"
-                        value={orderDate}
-                        onChange={(e) => setOrderDate(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <br />
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="OrderDate">
+                            Order Date
+                          </label>
+                          <input
+                            type="date"
+                            id="txtOrderDate"
+                            className="form-control"
+                            value={orderDate}
+                            onChange={(e) => setOrderDate(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <br />
 
-                  <div className="row">
-                    <div className="col-md-6 col-lg-6 col-sm-6">
-                      <label className="form-label" htmlFor="Name">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        id="txtName"
-                        className="form-control"
-                        placeholder="Enter Name"
-                        value={Name}
-                        onChange={(e) => setName(e.target.value)}
-                      ></input>
-                    </div>
+                      <div className="row">
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="Name">
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            id="txtName"
+                            className="form-control"
+                            placeholder="Enter Name"
+                            value={Name}
+                            onChange={(e) => setName(e.target.value)}
+                          ></input>
+                        </div>
 
-                    <div className="col-md-6 col-lg-6 col-sm-6">
-                      <label className="form-label" htmlFor="PhoneNumber">
-                        Phone Number
-                      </label>
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="PhoneNumber">
+                            Phone Number
+                          </label>
 
-                      <InputMask
-                        className="form-control"
-                        name="PhoneNo"
-                        id="txtPhoneNo"
-                        mask="999-9999999"
-                        placeholder="+92 999-9999999"
-                        value={PhoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                      />
+                          <InputMask
+                            className="form-control"
+                            name="PhoneNo"
+                            id="txtPhoneNo"
+                            mask="999-9999999"
+                            placeholder="+92 999-9999999"
+                            value={PhoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                          />
 
-                      {/* <Button
+                          {/* <Button
                       variant="primary"
                       style={{ float: 'right', marginTop: 20 + 'px' }}
                     >
                       Save Order
                     </Button> */}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              )}
+                  )}
 
-              {/* input field Credit */}
+                  {/* input field Credit */}
 
-              {paymentMethod === "rdoCredit" && (
-                <div className="Credit">
-                  <div className="row">
-                    <div className="col-md-6 col-lg-6 col-sm-6">
-                      <label className="form-label" htmlFor="SelectCustomer">
-                        Select Customer
-                      </label>
+                  {paymentMethod === "rdoCredit" && (
+                    <div className="Credit">
+                      <div className="row">
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label
+                            className="form-label"
+                            htmlFor="SelectCustomer"
+                          >
+                            Select Customer
+                          </label>
 
-                      <Select
-                        id="txtCustomerCredit"
-                        styles={{
-                          ...customStyles,
-                          menu: (provided) => ({
-                            ...provided,
-                            overflowY: "auto", // Add scrollbar when needed
-                            maxHeight: "160px", // Set the maximum height here
-                          }),
-                        }}
-                        options={customerName}
-                        value={selectedCustomer}
-                        placeholder="Select Customer"
-                        onChange={(selectedOption) =>
-                          setSelectedCustomer(selectedOption)
-                        }
-                        isSearchable={true}
-                      />
+                          <Select
+                            id="txtCustomerCredit"
+                            styles={{
+                              ...customStyles,
+                              menu: (provided) => ({
+                                ...provided,
+                                overflowY: "auto", // Add scrollbar when needed
+                                maxHeight: "160px", // Set the maximum height here
+                              }),
+                            }}
+                            options={customerName}
+                            value={selectedCustomer}
+                            placeholder="Select Customer"
+                            onChange={(selectedOption) =>
+                              setSelectedCustomer(selectedOption)
+                            }
+                            isSearchable={true}
+                          />
 
-                      {/* <a
+                          {/* <a
                         href="#"
                         style={{ float: "right", fontSize: 13 + "px" }}
                        
                       >
                         Add Customer
                       </a> */}
-                      <AddCustModal />
-                    </div>
+                          <AddCustModal />
+                        </div>
 
-                    <div className="col-md-6 col-lg-6 col-sm-6">
-                      <label className="form-label" htmlFor="OrderDate">
-                        Order Date
-                      </label>
-                      <input
-                        type="date"
-                        id="txtOrderDate"
-                        className="form-control"
-                        value={orderDate}
-                        onChange={(e) => setOrderDate(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <br />
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="OrderDate">
+                            Order Date
+                          </label>
+                          <input
+                            type="date"
+                            id="txtOrderDate"
+                            className="form-control"
+                            value={orderDate}
+                            onChange={(e) => setOrderDate(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <br />
 
-                  <div className="row">
-                    <div className="col-md-6 col-lg-6 col-sm-6">
-                      <label className="form-label" htmlFor="SalesMan">
-                        SalesMan
-                      </label>
-                      {/* <input
+                      <div className="row">
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="SalesMan">
+                            SalesMan
+                          </label>
+                          {/* <input
                   type="text"
                   id="txtName"
                   className="form-control"
                   placeholder="Enter Name"
                 ></input> */}
 
-                      <Select
-                        id="txtSalesMan"
-                        options={[
-                          { value: "Fahad Memon", label: "Fahad Memon" },
-                          { value: "Zohaib Memon", label: "Zohaib Memon" },
-                          // Add more static names as needed
-                        ]}
-                        value={SalesMan} // Set the desired pre-selected value here
-                        placeholder="Select SalesMan"
-                        isSearchable={true}
-                        onChange={(e) => setSalesMan(e.target.value)}
-                      />
-                    </div>
+                          <Select
+                            id="txtSalesMan"
+                            options={[
+                              { value: "Fahad Memon", label: "Fahad Memon" },
+                              { value: "Zohaib Memon", label: "Zohaib Memon" },
+                              // Add more static names as needed
+                            ]}
+                            value={SalesMan} // Set the desired pre-selected value here
+                            placeholder="Select SalesMan"
+                            isSearchable={true}
+                            onChange={(e) => setSalesMan(e.target.value)}
+                          />
+                        </div>
 
-                    <div className="col-md-6 col-lg-6 col-sm-6">
-                      {/* <Button
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          {/* <Button
                       variant="primary"
                       style={{ float: 'right', marginTop: 85 + 'px' }}
                     >
                       Save Order
                     </Button> */}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              )}
+                  )}
 
-              {/* input field Cash/Credit */}
+                  {/* input field Cash/Credit */}
 
-              {paymentMethod === "rdoCashCredit" && (
-                <div className="Cash/Credit">
-                  <div className="row">
-                    <div className="col-md-6 col-lg-6 col-sm-6">
-                      <label className="form-label" htmlFor="SelectCustomer">
-                        Select Customer
-                      </label>
-                      <Select
-                        id="txtCustomerCashCredit"
-                        options={customerName}
-                        styles={{
-                          ...customStyles,
-                          menu: (provided) => ({
-                            ...provided,
-                            overflowY: "auto", // Add scrollbar when needed
-                            maxHeight: "160px", // Set the maximum height here
-                          }),
-                        }}
-                        value={selectedCustomer}
-                        placeholder="Select Customer"
-                        onChange={(selectedOption) =>
-                          setSelectedCustomer(selectedOption)
-                        }
-                        isSearchable={true}
-                      />
-                      {/* <a
+                  {paymentMethod === "rdoCashCredit" && (
+                    <div className="Cash/Credit">
+                      <div className="row">
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label
+                            className="form-label"
+                            htmlFor="SelectCustomer"
+                          >
+                            Select Customer
+                          </label>
+                          <Select
+                            id="txtCustomerCashCredit"
+                            options={customerName}
+                            styles={{
+                              ...customStyles,
+                              menu: (provided) => ({
+                                ...provided,
+                                overflowY: "auto", // Add scrollbar when needed
+                                maxHeight: "160px", // Set the maximum height here
+                              }),
+                            }}
+                            value={selectedCustomer}
+                            placeholder="Select Customer"
+                            onChange={(selectedOption) =>
+                              setSelectedCustomer(selectedOption)
+                            }
+                            isSearchable={true}
+                          />
+                          {/* <a
                         href="#"
                         style={{ float: "right", fontSize: 13 + "px" }}
                       >
                         Add Customer
                       </a> */}
-                      <AddCustModal />
-                    </div>
+                          <AddCustModal />
+                        </div>
 
-                    <div className="col-md-6 col-lg-6 col-sm-6">
-                      <label className="form-label" htmlFor="OrderDate">
-                        Order Date
-                      </label>
-                      <input
-                        type="date"
-                        id="txtOrderDate"
-                        className="form-control"
-                        value={orderDate}
-                        onChange={(e) => setOrderDate(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <br />
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="OrderDate">
+                            Order Date
+                          </label>
+                          <input
+                            type="date"
+                            id="txtOrderDate"
+                            className="form-control"
+                            value={orderDate}
+                            onChange={(e) => setOrderDate(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <br />
 
-                  <div className="row">
-                    <div className="col-md-6 col-lg-6 col-sm-6">
-                      <label className="form-label" htmlFor="Name">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        id="txtName"
-                        className="form-control"
-                        placeholder="Enter Name"
-                        value={Name}
-                        onChange={(e) => setName(e.target.value)}
-                      ></input>
-                    </div>
+                      <div className="row">
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="Name">
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            id="txtName"
+                            className="form-control"
+                            placeholder="Enter Name"
+                            value={Name}
+                            onChange={(e) => setName(e.target.value)}
+                          ></input>
+                        </div>
 
-                    <div className="col-md-6 col-lg-6 col-sm-6">
-                      <label className="form-label" htmlFor="PhoneNumber">
-                        Phone Number
-                      </label>
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="PhoneNumber">
+                            Phone Number
+                          </label>
 
-                      <InputMask
-                        className="form-control"
-                        name="PhoneNo"
-                        id="txtPhoneNo"
-                        mask="999-9999999"
-                        placeholder="+92 999-9999999"
-                        value={PhoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                      />
+                          <InputMask
+                            className="form-control"
+                            name="PhoneNo"
+                            id="txtPhoneNo"
+                            mask="999-9999999"
+                            placeholder="+92 999-9999999"
+                            value={PhoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                          />
 
-                      {/* <Button
+                          {/* <Button
                       variant="primary"
                       style={{ float: 'right', marginTop: 20 + 'px' }}
                     >
                       Save Order
                     </Button> */}
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  )}
+
+                  <Button
+                    variant="primary"
+                    style={{ float: "right", marginTop: 20 + "px" }}
+                    onClick={handleSaveOrder}
+                  >
+                    Save Order
+                  </Button>
                 </div>
               )}
 
-              <Button
-                variant="primary"
-                style={{ float: "right", marginTop: 20 + "px" }}
-                onClick={handleSaveOrder}
-              >
-                Save Order
-              </Button>
+              {!isSaveOrderVisible && (
+                <div id="UpdateOrder">
+                  {/* input field Cash */}
+
+                  {paymentMethod === "rdoCash" && (
+                    <div className="Cash">
+                      <div className="row">
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label
+                            className="form-label"
+                            htmlFor="SelectCustomer"
+                          >
+                            Select Customer
+                          </label>
+                          <input
+                            type="text"
+                            id="txtCustomerCash"
+                            className="form-control"
+                            readOnly
+                            value={CounterSale}
+                            onChange={() => setCounterSale()}
+                          ></input>
+                        </div>
+
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="OrderDate">
+                            Order Date
+                          </label>
+                          <input
+                            type="date"
+                            id="txtOrderDate"
+                            className="form-control"
+                            value={orderDate}
+                            onChange={(e) => setOrderDate(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <br />
+
+                      <div className="row">
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="Name">
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            id="txtName"
+                            className="form-control"
+                            placeholder="Enter Name"
+                            value={Name}
+                            onChange={(e) => setName(e.target.value)}
+                          ></input>
+                        </div>
+
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="PhoneNumber">
+                            Phone Number
+                          </label>
+
+                          <InputMask
+                            className="form-control"
+                            name="PhoneNo"
+                            id="txtPhoneNo"
+                            mask="999-9999999"
+                            placeholder="+92 999-9999999"
+                            value={PhoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                          />
+
+                          {/* <Button
+                      variant="primary"
+                      style={{ float: 'right', marginTop: 20 + 'px' }}
+                    >
+                      Save Order
+                    </Button> */}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* input field Credit */}
+
+                  {paymentMethod === "rdoCredit" && (
+                    <div className="Credit">
+                      <div className="row">
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label
+                            className="form-label"
+                            htmlFor="SelectCustomer"
+                          >
+                            Select Customer
+                          </label>
+
+                          <Select
+                            id="txtCustomerCredit"
+                            styles={{
+                              ...customStyles,
+                              menu: (provided) => ({
+                                ...provided,
+                                overflowY: "auto", // Add scrollbar when needed
+                                maxHeight: "160px", // Set the maximum height here
+                              }),
+                            }}
+                            options={customerName}
+                            value={selectedCustomer}
+                            placeholder="Select Customer"
+                            onChange={(selectedOption) =>
+                              setSelectedCustomer(selectedOption)
+                            }
+                            isSearchable={true}
+                          />
+
+                          {/* <a
+                        href="#"
+                        style={{ float: "right", fontSize: 13 + "px" }}
+                       
+                      >
+                        Add Customer
+                      </a> */}
+                          <AddCustModal />
+                        </div>
+
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="OrderDate">
+                            Order Date
+                          </label>
+                          <input
+                            type="date"
+                            id="txtOrderDate"
+                            className="form-control"
+                            value={orderDate}
+                            onChange={(e) => setOrderDate(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <br />
+
+                      <div className="row">
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="SalesMan">
+                            SalesMan
+                          </label>
+                          {/* <input
+                  type="text"
+                  id="txtName"
+                  className="form-control"
+                  placeholder="Enter Name"
+                ></input> */}
+
+                          <Select
+                            id="txtSalesMan"
+                            options={[
+                              { value: "Fahad Memon", label: "Fahad Memon" },
+                              { value: "Zohaib Memon", label: "Zohaib Memon" },
+                              // Add more static names as needed
+                            ]}
+                            value={SalesMan} // Set the desired pre-selected value here
+                            placeholder="Select SalesMan"
+                            isSearchable={true}
+                            onChange={(e) => setSalesMan(e.target.value)}
+                          />
+                        </div>
+
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          {/* <Button
+                      variant="primary"
+                      style={{ float: 'right', marginTop: 85 + 'px' }}
+                    >
+                      Save Order
+                    </Button> */}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* input field Cash/Credit */}
+
+                  {paymentMethod === "rdoCashCredit" && (
+                    <div className="Cash/Credit">
+                      <div className="row">
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label
+                            className="form-label"
+                            htmlFor="SelectCustomer"
+                          >
+                            Select Customer
+                          </label>
+                          <Select
+                            id="txtCustomerCashCredit"
+                            options={customerName}
+                            styles={{
+                              ...customStyles,
+                              menu: (provided) => ({
+                                ...provided,
+                                overflowY: "auto", // Add scrollbar when needed
+                                maxHeight: "160px", // Set the maximum height here
+                              }),
+                            }}
+                            value={selectedCustomer}
+                            placeholder="Select Customer"
+                            onChange={(selectedOption) =>
+                              setSelectedCustomer(selectedOption)
+                            }
+                            isSearchable={true}
+                          />
+                          {/* <a
+                        href="#"
+                        style={{ float: "right", fontSize: 13 + "px" }}
+                      >
+                        Add Customer
+                      </a> */}
+                          <AddCustModal />
+                        </div>
+
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="OrderDate">
+                            Order Date
+                          </label>
+                          <input
+                            type="date"
+                            id="txtOrderDate"
+                            className="form-control"
+                            value={orderDate}
+                            onChange={(e) => setOrderDate(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <br />
+
+                      <div className="row">
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="Name">
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            id="txtName"
+                            className="form-control"
+                            placeholder="Enter Name"
+                            value={Name}
+                            onChange={(e) => setName(e.target.value)}
+                          ></input>
+                        </div>
+
+                        <div className="col-md-6 col-lg-6 col-sm-6">
+                          <label className="form-label" htmlFor="PhoneNumber">
+                            Phone Number
+                          </label>
+
+                          <InputMask
+                            className="form-control"
+                            name="PhoneNo"
+                            id="txtPhoneNo"
+                            mask="999-9999999"
+                            placeholder="+92 999-9999999"
+                            value={PhoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                          />
+
+                          {/* <Button
+                      variant="primary"
+                      style={{ float: 'right', marginTop: 20 + 'px' }}
+                    >
+                      Save Order
+                    </Button> */}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <Button
+                    variant="primary"
+                    style={{ float: "right", marginTop: 20 + "px" }}
+                    onClick={handleUpdateOrder}
+                  >
+                    Update Order
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>

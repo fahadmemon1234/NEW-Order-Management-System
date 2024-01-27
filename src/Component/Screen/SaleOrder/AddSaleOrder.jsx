@@ -128,6 +128,7 @@ function AddSaleOrder() {
         const newSaleOrder = {
           uid: loggedInUID,
           customer: CounterSale,
+          status: 'New',
           orderDate: orderDate,
           name: Name,
           phoneNumber: PhoneNumber,
@@ -156,6 +157,7 @@ function AddSaleOrder() {
           uid: loggedInUID,
           customer: selectedCustomer.label,
           orderDate: orderDate,
+          status: 'New',
           salesMan: SalesMan,
           paymentMethod: "rdoCredit",
         };
@@ -180,6 +182,7 @@ function AddSaleOrder() {
           customer: selectedCustomer.label,
           orderDate: orderDate,
           name: Name,
+          status: 'New',
           paymentMethod: "rdoCashCredit",
           phoneNumber: PhoneNumber,
         };
@@ -520,6 +523,145 @@ function AddSaleOrder() {
     setTotal(totalValue);
 
   };
+
+
+
+  // -----------------------Add Item------------------
+  
+  const ID = localStorage.getItem("ID");
+
+  const handleAddItem = () =>{
+    try{
+      debugger;
+     
+      if (paymentMethod === "rdoCash") {
+        const SaleOrderRef = ref(db, "SaleOrderItem");
+        const NewSaleOrder = {
+          uid: loggedInUID,
+          saleOrderID: ID,
+          itemName: SelectedItem, 
+          quantity: Quantity,
+          measurement: Measurement,
+          salePrice: SalePrice,
+          description: Description,
+          totalPrice: total,
+          totalStock: TotalStock,
+          costPrice: CostPrice
+        };
+        push(SaleOrderRef, NewSaleOrder);
+
+        setQuantity('');
+        setMeasurement('');
+        setSalePrice('');
+        setDescription('');
+        setTotal('');
+        setTotalStock('');
+        setCostPrice('');
+        setItem(0);
+        setSelectedItem(0);
+      }
+
+
+    }
+    catch(error){
+      toast.error("Error adding SaleOrder: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      console.log("Error adding SaleOrder:", error);
+    }
+  }
+
+
+
+
+  //-------------------------------Table Data Show----------------------
+
+
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    if (loggedInUID) {
+      // Reference to the 'Product' node in Firebase Realtime Database
+      const DepositRef = ref(db, "SaleOrderItem");
+
+      // Attach an event listener for data changes
+      const fetchData = async () => {
+        onValue(DepositRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            // Convert the object of products into an array
+            const dataArray = Object.keys(data)
+              .filter((key) => data[key].uid === loggedInUID && data[key].saleOrderID === ID) // Filter data based on UID
+              .map((key) => ({
+                id: key,
+                ...data[key],
+              }));
+
+            setTableData(dataArray);
+          }
+        });
+      };
+
+      fetchData();
+    } else {
+      console.error("No user is currently logged in.");
+      // Handle the case where no user is logged in, perhaps by redirecting to the login page.
+    }
+  }, [loggedInUID, ID]);
+
+  const sortedTableData = tableData.sort((a, b) => b.id - a.id);
+  const sortedDataDescending = [...sortedTableData].sort((a, b) =>
+    b.id.localeCompare(a.id)
+  );
+
+
+   //   RowDropDown Selection
+
+   const [rowsToShow, setRowsToShow] = useState(5);
+
+   const handleSelectChange = (event) => {
+     setRowsToShow(parseInt(event.target.value, 10));
+   };
+ 
+   // Rows count and show
+   // const totalItems = 8; // Replace with the actual total number of items
+   const startIndexs = 1;
+   // const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
+   const rowCount = sortedDataDescending.length; // Add this line to get the row count
+   const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
+ 
+   const [currentPage, setCurrentPage] = useState(1);
+ 
+   const handlePrevClick = () => {
+     if (currentPage > 1) {
+       setCurrentPage(currentPage - 1);
+     }
+   };
+ 
+   const handleNextClick = () => {
+     const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
+     if (currentPage < totalPages) {
+       setCurrentPage(currentPage + 1);
+     }
+   };
+ 
+   const startIndex = (currentPage - 1) * rowsToShow;
+   const endIndex = Math.min(
+     startIndex + rowsToShow,
+     sortedDataDescending.length
+   );
+   const visibleItems = sortedDataDescending.slice(startIndex, endIndex);
+ 
+   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
+
 
   return (
     <>
@@ -1355,7 +1497,7 @@ function AddSaleOrder() {
 
               <div className="row">
                 <div className="col-md-12 col-sm-12 col-lg-12">
-                  <Button variant="primary" style={{ float: "right" }}>
+                  <Button variant="primary" style={{ float: "right" }} onClick={handleAddItem}>
                     Add Item
                   </Button>
                 </div>
@@ -1397,7 +1539,8 @@ function AddSaleOrder() {
                           </tr>
                         </thead>
                         <tbody className="list">
-                          <tr>
+                        {visibleItems.slice(0, rowsToShow).map((item) => (
+                          <tr key={item.id}>
                             <td>
                               <div style={{ display: "flex" }}>
                                 <button
@@ -1416,16 +1559,17 @@ function AddSaleOrder() {
                               </div>
                             </td>
 
-                            <td className="tdchild">Pepsi</td>
-                            <td className="tdchild">30000</td>
-                            <td className="tdchild">5</td>
-                            <td className="tdchild">15000</td>
+                            <td className="tdchild">{item.itemName}</td>
+                            <td className="tdchild">{item.salePrice}</td>
+                            <td className="tdchild">{item.quantity}</td>
+                            <td className="tdchild">{item.totalPrice}</td>
                             {/* Add more table data cells as needed */}
                           </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>
-                    {/* <div className="row align-items-center mt-3">
+                    <div className="row align-items-center mt-3">
                     <div className="pagination d-none"></div>
                     <div className="col">
                       <div
@@ -1447,6 +1591,7 @@ function AddSaleOrder() {
                           <option value="10">10</option>
                           <option value="15">15</option>
                         </select>
+                       
                       </div>
                     </div>
                     <div className="col-auto d-flex">
@@ -1470,7 +1615,7 @@ function AddSaleOrder() {
                         <span>Next</span>
                       </button>
                     </div>
-                  </div> */}
+                  </div>
                   </div>
                 </div>
               </div>

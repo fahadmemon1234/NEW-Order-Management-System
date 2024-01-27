@@ -357,6 +357,11 @@ function AddSaleOrder() {
 
   const [Quantity, setQuantity] = useState("");
   const [Measurement, setMeasurement] = useState("");
+  const [SalePrice, setSalePrice] = useState("");
+  const [Description, setDescription] = useState("");
+  const [TotalPrice, setTotalPrice] = useState("");
+  const [TotalStock, setTotalStock] = useState("");
+  const [CostPrice, setCostPrice] = useState("");
 
   // ---------------------------------variables End------------------------------------
 
@@ -381,9 +386,10 @@ function AddSaleOrder() {
             Id: key,
             value: data[key].itemName,
             label: data[key].itemName,
-            Quantity: data[key].itemQty,
+            TotalStock: data[key].itemQty,
             Measurement: data[key].measurement,
             SalePrice: data[key].sellPrice,
+            CostPrice: data[key].itemCost,
             uid: data[key].uid,
           }));
 
@@ -460,20 +466,59 @@ function AddSaleOrder() {
     const selectedBankData = ItemOptions.find(
       (option) => option.value === selectedOption?.value
     );
-    if (selectedBankData.Quantity != '' && selectedBankData.Measurement != '') {
-      var Quantity = selectedBankData.Quantity;
+    if (
+      selectedBankData.Measurement != "" &&
+      selectedBankData.SalePrice != "" &&
+      selectedBankData.TotalStock != "" &&
+      selectedBankData.CostPrice != ""
+    ) {
+
+      var TotalStock = selectedBankData.TotalStock;
+      var SalePrice = selectedBankData.SalePrice;
+      // var TotalPrice = selectedBankData.TotalPrice;
       var Measurement = selectedBankData.Measurement;
+      var CostPrice = selectedBankData.CostPrice;
 
       // Extract the numeric part using parseInt
-      var QuantityNumeric = parseFloat(Quantity);
+      var SalePriceNumeric = parseFloat(SalePrice);
+      // var TotalPriceNumeric = parseFloat(TotalPrice);
+      var TotalStockNumeric = parseFloat(TotalStock);
+      var CostPriceNumeric = parseFloat(CostPrice);
 
-      setQuantity(QuantityNumeric);
-      setMeasurement(Measurement)
-      // setBankID(`${selectedBankData.Id}`);
-    } else if (selectedBankData.Quantity == undefined) {
+      setSalePrice(SalePriceNumeric);
+      setTotalPrice('');
+      setTotalStock(TotalStockNumeric);
+      setMeasurement(Measurement);
+      setCostPrice(CostPriceNumeric);
       setQuantity('');
-      setMeasurement('')
+      setTotal('')
+      // setBankID(`${selectedBankData.Id}`);
+    } else {
+      setSalePrice('');
+      setMeasurement('');
+      setTotalPrice('')
+      setTotalStock('');
+      setCostPrice('');
+      setTotalPrice('');
     }
+  };
+
+  const [total, setTotal] = useState();
+
+  const handleQuantityChange = (e) => {
+    setQuantity(e.target.value);
+    updateTotal(e.target.value, SalePrice);
+  };
+
+  const handleSalePriceChange = (e) => {
+    setSalePrice(e.target.value);
+    updateTotal(Quantity, e.target.value);
+  };
+
+  const updateTotal = (quantity, salePrice) => {
+    const totalValue = quantity * salePrice;
+    setTotal(totalValue);
+
   };
 
   return (
@@ -1172,7 +1217,7 @@ function AddSaleOrder() {
                       name="Quantity"
                       id="Quantity"
                       value={Quantity}
-                      onChange={(e) => setQuantity(e.target.value)}
+                      onChange={handleQuantityChange}
                       readOnly={isReadOnly}
                     />
                   </div>
@@ -1214,6 +1259,8 @@ function AddSaleOrder() {
                       name="SalePrice"
                       id="SalePrice"
                       readOnly={isReadOnly}
+                      value={SalePrice}
+                      onChange={handleSalePriceChange}
                     />
                   </div>
                 </div>
@@ -1235,6 +1282,8 @@ function AddSaleOrder() {
                       id="Description"
                       rows="3"
                       readOnly={isReadOnly}
+                      value={Description}
+                      onChange={(e) => setDescription(e.target.value)}
                     ></textarea>
                   </div>
                 </div>
@@ -1255,6 +1304,8 @@ function AddSaleOrder() {
                       readOnly
                       name="TotalPrice"
                       id="TotalPrice"
+                      value={total}
+                      onChange={(e) => setTotalPrice(e.target.value)}
                     />
                   </div>
                 </div>
@@ -1274,6 +1325,8 @@ function AddSaleOrder() {
                       className="form-control"
                       name="TotalStock"
                       id="TotalStock"
+                      value={TotalStock}
+                      onChange={(e) => setTotalStock(e.target.value)}
                     />
                   </div>
                 </div>
@@ -1293,6 +1346,8 @@ function AddSaleOrder() {
                       name="CostPrice"
                       readOnly
                       id="CostPrice"
+                      value={CostPrice}
+                      onChange={(e) => setCostPrice(e.target.value)}
                     />
                   </div>
                 </div>

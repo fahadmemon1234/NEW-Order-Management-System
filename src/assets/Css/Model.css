@@ -64,3 +64,9 @@
   th.text-900.sort{
    color: white !important; 
   }
+
+
+  .form-control:disabled, .form-control[readonly]{
+    background-color: #edf2f9;
+    opacity: 1;
+  }

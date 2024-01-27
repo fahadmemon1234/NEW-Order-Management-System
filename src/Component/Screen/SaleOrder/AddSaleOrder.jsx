@@ -114,12 +114,16 @@ function AddSaleOrder() {
 
   const [orderId, setId] = useState("");
 
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isReadOnly, setIsReadOnly] = useState(true);
+
   const handleSaveOrder = () => {
     debugger;
     try {
       const loggedInUID = localStorage.getItem("uid");
 
       if (paymentMethod === "rdoCash") {
+        debugger;
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
           uid: loggedInUID,
@@ -144,6 +148,8 @@ function AddSaleOrder() {
         localStorage.setItem("phoneNumber", newSaleOrder.phoneNumber);
         setPaymentMethod(newSaleOrder.paymentMethod);
         localStorage.setItem("paymentMethod", newSaleOrder.paymentMethod);
+        setIsDisabled(false);
+        setIsReadOnly(false);
       } else if (paymentMethod === "rdoCredit") {
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
@@ -165,6 +171,8 @@ function AddSaleOrder() {
         localStorage.setItem("salesMan", newSaleOrder.salesMan);
         setPaymentMethod(newSaleOrder.paymentMethod);
         localStorage.setItem("paymentMethod", newSaleOrder.paymentMethod);
+        setIsDisabled(false);
+        setIsReadOnly(false);
       } else {
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
@@ -189,6 +197,8 @@ function AddSaleOrder() {
         localStorage.setItem("phoneNumber", newSaleOrder.phoneNumber);
         setPaymentMethod(newSaleOrder.paymentMethod);
         localStorage.setItem("paymentMethod", newSaleOrder.paymentMethod);
+        setIsDisabled(false);
+        setIsReadOnly(false);
       }
 
       toast.success("Sale Order Added Successfully", {
@@ -327,6 +337,8 @@ function AddSaleOrder() {
       setId(ID);
       setPhoneNumber(phoneNumber);
       setPaymentMethod(paymentMethod);
+      setIsReadOnly(false);
+      setIsDisabled(false);
     } else {
       setSaveOrderVisible(true);
       setCustomerName("");
@@ -336,8 +348,133 @@ function AddSaleOrder() {
       setId("");
       setPhoneNumber("");
       setPaymentMethod("rdoCash");
+      setIsReadOnly(true);
+      setIsDisabled(true);
     }
   }, []);
+
+  // ---------------------------------variables Start------------------------------------
+
+  const [Quantity, setQuantity] = useState("");
+  const [Measurement, setMeasurement] = useState("");
+
+  // ---------------------------------variables End------------------------------------
+
+  // ItemName Show Dropdown
+
+  const [Item, setItem] = useState([]);
+
+  const [ItemOptions, setItemOptions] = useState([]);
+
+  const [SelectedItem, setSelectedItem] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataRef = ref(db, "Product");
+        const snapshot = await get(dataRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          debugger;
+          // Convert the data object into an array of options
+          const options = Object.keys(data).map((key) => ({
+            Id: key,
+            value: data[key].itemName,
+            label: data[key].itemName,
+            Quantity: data[key].itemQty,
+            Measurement: data[key].measurement,
+            SalePrice: data[key].sellPrice,
+            uid: data[key].uid,
+          }));
+
+          // console.log("All Banks:", options); // Log all banks before filtering
+
+          // Filter options based on loggedInUID
+          const userItems = options.filter((Item) => Item.uid === loggedInUID);
+          setItem(userItems);
+
+          // console.log("User Banks:", userBanks); // Log filtered banks
+
+          if (userItems.length > 0) {
+            // Add the "Select Bank" option to the beginning of the array
+            setItemOptions([
+              {
+                value: "0",
+                label: "Select Item Name",
+                disabled: true,
+                selected: true,
+              },
+              ...userItems,
+            ]);
+          } else {
+            console.log("No matching Item for loggedInUID:", loggedInUID);
+
+            toast.error("No matching Item for loggedInUID: ", loggedInUID, {
+              position: "top-right",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+            // Handle the case where no matching banks are found
+          }
+        } else {
+          console.log("Data doesn't exist in the 'Item' node.");
+
+          toast.error("Data doesn't exist in the 'Item' node.", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
+      } catch (error) {
+        console.log("Error fetching data:", error);
+
+        toast.error("Error fetching data:", error.message, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    };
+
+    fetchData();
+  }, [db, loggedInUID]);
+
+  const handleItemSelect = (selectedOption) => {
+    debugger;
+    setSelectedItem(selectedOption?.value);
+    const selectedBankData = ItemOptions.find(
+      (option) => option.value === selectedOption?.value
+    );
+    if (selectedBankData.Quantity != '' && selectedBankData.Measurement != '') {
+      var Quantity = selectedBankData.Quantity;
+      var Measurement = selectedBankData.Measurement;
+
+      // Extract the numeric part using parseInt
+      var QuantityNumeric = parseFloat(Quantity);
+
+      setQuantity(QuantityNumeric);
+      setMeasurement(Measurement)
+      // setBankID(`${selectedBankData.Id}`);
+    } else if (selectedBankData.Quantity == undefined) {
+      setQuantity('');
+      setMeasurement('')
+    }
+  };
 
   return (
     <>
@@ -979,6 +1116,369 @@ function AddSaleOrder() {
                   </Button>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="card"
+          style={{ border: "1px solid #2c7be5", marginTop: "10px" }}
+        >
+          <div className="card-body">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-6 col-sm-6 col-lg-6">
+                  <div className="mb-3">
+                    <label
+                      htmlFor="ItemName"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      Item Name
+                    </label>
+
+                    <Select
+                      id="ItemName"
+                      options={Item}
+                      styles={{
+                        ...customStyles,
+                        menu: (provided) => ({
+                          ...provided,
+                          overflowY: "auto", // Add scrollbar when needed
+                          maxHeight: "150px", // Set the maximum height here
+                        }),
+                      }}
+                      isSearchable={true}
+                      placeholder="Select Item Name"
+                      onChange={handleItemSelect}
+                      isDisabled={isDisabled}
+                    />
+                  </div>
+                </div>
+
+                <div className="col-md-2 col-sm-2 col-lg-2">
+                  <div className="mb-3">
+                    <label
+                      htmlFor="Quantity"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      Quantity
+                    </label>
+
+                    <input
+                      type="number"
+                      className="form-control"
+                      name="Quantity"
+                      id="Quantity"
+                      value={Quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                      readOnly={isReadOnly}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-2 col-sm-2 col-lg-2">
+                  <div className="mb-3">
+                    <label
+                      htmlFor="Measurement"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      Measurement
+                    </label>
+
+                    <input
+                      type="text"
+                      readOnly
+                      className="form-control"
+                      name="Measurement"
+                      id="Measurement"
+                      value={Measurement}
+                      onChange={(e) => setMeasurement(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-2 col-sm-2 col-lg-2">
+                  <div className="mb-3">
+                    <label
+                      htmlFor="SalePrice"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      Sale Price
+                    </label>
+
+                    <input
+                      type="number"
+                      className="form-control"
+                      name="SalePrice"
+                      id="SalePrice"
+                      readOnly={isReadOnly}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-md-6 col-sm-6 col-lg-6">
+                  <div className="mb-3">
+                    <label
+                      htmlFor="Description"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      Description
+                    </label>
+
+                    <textarea
+                      class="form-control"
+                      id="Description"
+                      rows="3"
+                      readOnly={isReadOnly}
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div className="col-md-2 col-sm-2 col-lg-2">
+                  <div className="mb-3">
+                    <label
+                      htmlFor="TotalPrice"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      Total Price
+                    </label>
+
+                    <input
+                      type="number"
+                      className="form-control"
+                      readOnly
+                      name="TotalPrice"
+                      id="TotalPrice"
+                    />
+                  </div>
+                </div>
+                <div className="col-md-2 col-sm-2 col-lg-2">
+                  <div className="mb-3">
+                    <label
+                      htmlFor="TotalStock"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      Total Stock
+                    </label>
+
+                    <input
+                      type="text"
+                      readOnly
+                      className="form-control"
+                      name="TotalStock"
+                      id="TotalStock"
+                    />
+                  </div>
+                </div>
+                <div className="col-md-2 col-sm-2 col-lg-2">
+                  <div className="mb-3">
+                    <label
+                      htmlFor="CostPrice"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      Cost Price
+                    </label>
+
+                    <input
+                      type="number"
+                      className="form-control"
+                      name="CostPrice"
+                      readOnly
+                      id="CostPrice"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-md-12 col-sm-12 col-lg-12">
+                  <Button variant="primary" style={{ float: "right" }}>
+                    Add Item
+                  </Button>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="row" style={{ paddingTop: "60px" }}>
+                <div className="col-md-12 col-sm-12 col-lg-12">
+                  <div
+                    id="tableExample"
+                    data-list='{"valueNames":["name","email","age"],"page":5,"pagination":true}'
+                  >
+                    <div className="table-responsive scrollbar">
+                      <table className="table table-bordered table-striped fs-10 mb-0">
+                        <thead className="bg-200">
+                          <tr>
+                            <th
+                              className="text-900 sort"
+                              data-sort="Action"
+                              style={{ width: "20%" }}
+                            >
+                              Action
+                            </th>
+                            <th className="text-900 sort" data-sort="ItemName">
+                              Item Name
+                            </th>
+                            <th className="text-900 sort" data-sort="SalePrice">
+                              Sale Price
+                            </th>
+                            <th className="text-900 sort" data-sort="Quantity">
+                              Quantity
+                            </th>
+                            <th
+                              className="text-900 sort"
+                              data-sort="OpeningBalanceDate"
+                            >
+                              Sub Total
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="list">
+                          <tr>
+                            <td>
+                              <div style={{ display: "flex" }}>
+                                <button
+                                  type="button"
+                                  className="btn btn-primary"
+                                  style={{ marginRight: "10px" }}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn btn-danger"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </td>
+
+                            <td className="tdchild">Pepsi</td>
+                            <td className="tdchild">30000</td>
+                            <td className="tdchild">5</td>
+                            <td className="tdchild">15000</td>
+                            {/* Add more table data cells as needed */}
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    {/* <div className="row align-items-center mt-3">
+                    <div className="pagination d-none"></div>
+                    <div className="col">
+                      <div
+                        className="d-flex align-items-center fs--1"
+                        style={{ fontSize: "14px" }}
+                      >
+                        <p className="mb-0">
+                          <span className="d-none d-sm-inline-block me-2">
+                            {paginationText}
+                          </span>
+                        </p>
+                        <p className="mb-0 mx-2">Rows per page:</p>
+                        <select
+                          className="w-auto form-select form-select-sm"
+                          defaultValue={rowsToShow}
+                          onChange={handleSelectChange}
+                        >
+                          <option value="5">5</option>
+                          <option value="10">10</option>
+                          <option value="15">15</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="col-auto d-flex">
+                      <button
+                        className="btn btn-sm btn-warning"
+                        type="button"
+                        data-list-pagination="prev"
+                        onClick={handlePrevClick}
+                        disabled={currentPage === 1}
+                      >
+                        <span>Previous</span>
+                      </button>
+                      <button
+                        className="btn btn-sm btn-primary px-4 ms-2"
+                        type="button"
+                        style={{ backgroundColor: "#2c7be5", color: "white" }}
+                        data-list-pagination="next"
+                        onClick={handleNextClick}
+                        disabled={currentPage === totalPages}
+                      >
+                        <span>Next</span>
+                      </button>
+                    </div>
+                  </div> */}
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="row"
+                style={{ paddingTop: "15px", float: "right" }}
+              >
+                <div className="col-md-12 col-sm-12 col-lg-12">
+                  <h5
+                    style={{
+                      color: "#2c7be5",
+                      fontWeight: "600",
+                      float: "right",
+                    }}
+                  >
+                    Total: 150,000
+                  </h5>
+
+                  <div className="mb-3" style={{ paddingTop: "40px" }}>
+                    <label
+                      htmlFor="Discount"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      Discount
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      name="Discount"
+                      id="Discount"
+                      placeholder="Enter Discount"
+                    />
+                  </div>
+
+                  <div className="mb-3" style={{ paddingTop: "10px" }}>
+                    <label
+                      htmlFor="Payment"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      Payment
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      name="Payment"
+                      readOnly
+                      value={"15000"}
+                      id="Payment"
+                      placeholder="Enter Payment"
+                    />
+                  </div>
+
+                  <Button
+                    variant="primary"
+                    style={{ float: "right", marginTop: 10 + "px" }}
+                  >
+                    Save & Close
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

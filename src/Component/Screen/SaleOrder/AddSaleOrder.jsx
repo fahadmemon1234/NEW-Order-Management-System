@@ -1091,8 +1091,58 @@ function AddSaleOrder() {
     }
   };
 
+const handleUpdateItem = () =>{
+  // console.log(EditID);
 
-  
+  try{
+
+    const loggedInUID = localStorage.getItem("uid");
+    const SaleOrderItemRef = ref(db, `SaleOrderItem/${EditID}`);
+
+    localStorage.setItem("ItemName", SelectedItem);
+
+    const newSaleOrderItem = {
+      uid: loggedInUID,
+      saleOrderID: ID,
+      itemName: SelectedItem,
+      quantity: Quantity,
+      measurement: Measurement,
+      salePrice: SalePrice,
+      description: Description,
+      totalPrice: total,
+      totalStock: Stock,
+      costPrice: CostPrice,
+    };
+    update(SaleOrderItemRef, newSaleOrderItem);
+
+
+    setQuantity("");
+    setMeasurement("");
+    setSalePrice("");
+    setDescription("");
+    setTotal("");
+    setStock("");
+    setTotalStock("");
+    setCostPrice("");
+    setSelectedItem(0);
+
+    setAddItemSection(false);
+
+  }
+  catch(error){
+    toast.error("Error adding Product: " + error.message, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  }
+}
+
 
   return (
     <>
@@ -2143,7 +2193,7 @@ function AddSaleOrder() {
                       <Button
                         variant="primary"
                         style={{ float: "right" }}
-                        onClick={handleAddItem}
+                        onClick={handleUpdateItem}
                       >
                         Update Item
                       </Button>

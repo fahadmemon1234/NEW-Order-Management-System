@@ -121,6 +121,19 @@ function AddSaleOrder() {
   const [isDisabled, setIsDisabled] = useState(true);
   const [isReadOnly, setIsReadOnly] = useState(true);
 
+  // Create a new Date object for the current date
+  const currentDates = new Date();
+
+  // Get day, month, and year
+  const day = currentDates.getDate();
+  const month = currentDates.getMonth() + 1; // Months are zero-indexed, so add 1
+  const year = currentDates.getFullYear();
+
+  // Create formatted date string in dd/mm/yyyy format
+  const formattedDate = `${day.toString().padStart(2, "0")}/${month
+    .toString()
+    .padStart(2, "0")}/${year}`;
+
   const handleSaveOrder = () => {
     debugger;
     try {
@@ -135,6 +148,7 @@ function AddSaleOrder() {
           status: "New",
           orderDate: orderDate,
           name: Name,
+          createdDate: formattedDate,
           phoneNumber: PhoneNumber,
           paymentMethod: "rdoCash",
         };
@@ -162,6 +176,7 @@ function AddSaleOrder() {
           customer: selectedCustomer.label,
           orderDate: orderDate,
           status: "New",
+          createdDate: formattedDate,
           salesMan: SalesMan,
           paymentMethod: "rdoCredit",
         };
@@ -187,6 +202,7 @@ function AddSaleOrder() {
           orderDate: orderDate,
           name: Name,
           status: "New",
+          createdDate: formattedDate,
           paymentMethod: "rdoCashCredit",
           phoneNumber: PhoneNumber,
         };
@@ -472,31 +488,79 @@ function AddSaleOrder() {
   const handleItemSelect = (selectedOption) => {
     debugger;
 
-    const itemExists = tableData.some(
-      (item) => item.itemName === selectedOption?.value
-    );
-    setExists(itemExists);
-    if (itemExists) {
-      toast.error("Your product already exists.", {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+    const ItemSection = localStorage.getItem("AddItemSection");
+    if (ItemSection === "true") {
+      const itemExists = tableData.some(
+        (item) => item.itemName === selectedOption?.value
+      );
+      setExists(itemExists);
+      if (itemExists) {
+        toast.error("Your product already exists.", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
 
-      setSelectedItem(0);
-      setIsReadOnly(true);
-      setSalePrice("");
-      setMeasurement("");
-      setTotalPrice("");
-      setTotalStock("");
-      setStock("");
-      setCostPrice("");
-      setTotalPrice("");
+        setSelectedItem(0);
+        setIsReadOnly(true);
+        setSalePrice("");
+        setMeasurement("");
+        setTotalPrice("");
+        setTotalStock("");
+        setStock("");
+        setCostPrice("");
+        setTotalPrice("");
+      } else {
+        setSelectedItem(selectedOption?.value);
+        setIsReadOnly(false);
+
+        const selectedBankData = ItemOptions.find(
+          (option) => option.value === selectedOption?.value
+        );
+        if (
+          selectedBankData.Measurement != "" &&
+          selectedBankData.SalePrice != "" &&
+          selectedBankData.TotalStock != "" &&
+          selectedBankData.CostPrice != ""
+        ) {
+          var TotalStock = selectedBankData.TotalStock;
+          var SalePrice = selectedBankData.SalePrice;
+          // var TotalPrice = selectedBankData.TotalPrice;
+          var Measurement = selectedBankData.Measurement;
+          var CostPrice = selectedBankData.CostPrice;
+
+          // Extract the numeric part using parseInt
+          var SalePriceNumeric = parseFloat(SalePrice);
+          // var TotalPriceNumeric = parseFloat(TotalPrice);
+          var TotalStockNumeric = parseFloat(TotalStock);
+          var CostPriceNumeric = parseFloat(CostPrice);
+
+          setSalePrice(SalePriceNumeric);
+          setTotalPrice("");
+          setTotalStock(TotalStockNumeric);
+          setStock(TotalStockNumeric);
+          setLastStock(TotalStockNumeric);
+          setMeasurement(Measurement);
+          setCostPrice(CostPriceNumeric);
+          setQuantity("");
+          setTotal("");
+          // setBankID(`${selectedBankData.Id}`);
+        } else {
+          setSalePrice("");
+          setMeasurement("");
+          setTotalPrice("");
+          setSelectedItem(0);
+          setStock("");
+          setTotalStock("");
+          setCostPrice("");
+          setTotalPrice("");
+        }
+      }
     } else {
       setSelectedItem(selectedOption?.value);
       setIsReadOnly(false);
@@ -526,6 +590,7 @@ function AddSaleOrder() {
         setTotalPrice("");
         setTotalStock(TotalStockNumeric);
         setStock(TotalStockNumeric);
+        setLastStock(TotalStockNumeric);
         setMeasurement(Measurement);
         setCostPrice(CostPriceNumeric);
         setQuantity("");
@@ -879,67 +944,6 @@ function AddSaleOrder() {
     }
   };
 
-  const navigate = useNavigate();
-
-  const handleSaleOrderTotalAmount = () => {
-    try {
-      const loggedInUID = localStorage.getItem("uid");
-      debugger;
-      const SaleOrderRef = ref(db, "SaleOrderTotalAmount");
-      const newSaleOrder = {
-        uid: loggedInUID,
-        discount: discount,
-        Payment: payment,
-        SaleOrderID: AmountID,
-      };
-      push(SaleOrderRef, newSaleOrder);
-
-      if (paymentMethod === "rdoCash") {
-        const newSaleOrder = {
-          uid: loggedInUID,
-          status: "Order Delivered",
-          paymentMethod: "rdoCash",
-        };
-        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
-        update(SaleOrderRef, newSaleOrder);
-      } else if (paymentMethod === "rdoCredit") {
-        const newSaleOrder = {
-          uid: loggedInUID,
-          status: "Order Delivered",
-          paymentMethod: "rdoCredit",
-        };
-        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
-        update(SaleOrderRef, newSaleOrder);
-      } else {
-        const newSaleOrder = {
-          uid: loggedInUID,
-          status: "Order Delivered",
-          paymentMethod: "rdoCashCredit",
-        };
-        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
-        update(SaleOrderRef, newSaleOrder);
-      }
-
-      setIsReadOnly(true);
-      setIsDisabled(true);
-
-      setTimeout(() => {
-        navigate("/SaleOrder");
-      }, 2000);
-    } catch (error) {
-      toast.error("Error adding SaleOrder: " + error.message, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    }
-  };
-
   // ---------------------Edit-----------------------
 
   const [EditID, setEditID] = useState("");
@@ -988,46 +992,41 @@ function AddSaleOrder() {
     // Use the stored value if it exists, otherwise, use the default (false)
     if (AddItemSec === "false") {
       setAddItemSection(false);
-      
 
       setEditID(EditIDs);
       setSelectedItem(itemName);
       setQuantity(quantity);
       setMeasurement(measurement);
       setSalePrice(salePrice);
-      if(description === "undefined"){
-        setDescription('');
-      }
-      else{
+      if (description === "undefined") {
+        setDescription("");
+      } else {
         setDescription(description);
       }
-      
+
       setTotal(total);
       setTotalPrice(totalPrice);
       setStock(stock);
       setTotalStock(totalStock);
       setCostPrice(costPrice);
-
     } else {
       setAddItemSection(true);
 
-      setEditID('');
-      setSelectedItem('');
-      setQuantity('');
-      setMeasurement('');
-      setSalePrice('');
-      setDescription('');
-      setTotal('');
-      setTotalPrice('');
-      setStock('');
-      setTotalStock('');
-      setCostPrice('');
+      setEditID("");
+      setSelectedItem("");
+      setQuantity("");
+      setMeasurement("");
+      setSalePrice("");
+      setDescription("");
+      setTotal("");
+      setTotalPrice("");
+      setStock("");
+      setTotalStock("");
+      setCostPrice("");
     }
   }, []);
 
-
-
-  const [LastStock, setLastStock]= useState('');
+  const [LastStock, setLastStock] = useState("");
 
   const handleQuantityUpdate = (e) => {
     setQuantity(e.target.value);
@@ -1079,6 +1078,10 @@ function AddSaleOrder() {
       const Qty = parseFloat(quantity);
       const newTotalStock = Qty - LastStock;
       setStock(newTotalStock);
+    } else if (quantity === "") {
+      setStock(LastStock);
+
+      setLastStock(LastStock);
     } else {
       const quantity = localStorage.getItem("EditQuantity");
       const stock = localStorage.getItem("EditStock");
@@ -1091,58 +1094,143 @@ function AddSaleOrder() {
     }
   };
 
-const handleUpdateItem = () =>{
-  // console.log(EditID);
+  const handleUpdateItem = () => {
+    // console.log(EditID);
 
-  try{
+    try {
+      const loggedInUID = localStorage.getItem("uid");
+      const SaleOrderItemRef = ref(db, `SaleOrderItem/${EditID}`);
 
-    const loggedInUID = localStorage.getItem("uid");
-    const SaleOrderItemRef = ref(db, `SaleOrderItem/${EditID}`);
+      localStorage.setItem("ItemName", SelectedItem);
 
-    localStorage.setItem("ItemName", SelectedItem);
+      const newSaleOrderItem = {
+        uid: loggedInUID,
+        saleOrderID: ID,
+        itemName: SelectedItem,
+        quantity: Quantity,
+        measurement: Measurement,
+        salePrice: SalePrice,
+        description: Description,
+        totalPrice: total,
+        totalStock: Stock,
+        costPrice: CostPrice,
+      };
+      update(SaleOrderItemRef, newSaleOrderItem);
 
-    const newSaleOrderItem = {
-      uid: loggedInUID,
-      saleOrderID: ID,
-      itemName: SelectedItem,
-      quantity: Quantity,
-      measurement: Measurement,
-      salePrice: SalePrice,
-      description: Description,
-      totalPrice: total,
-      totalStock: Stock,
-      costPrice: CostPrice,
-    };
-    update(SaleOrderItemRef, newSaleOrderItem);
+      setQuantity("");
+      setMeasurement("");
+      setSalePrice("");
+      setDescription("");
+      setTotal("");
+      setStock("");
+      setTotalStock("");
+      setCostPrice("");
+      setSelectedItem(0);
 
+      localStorage.setItem("AddItemSection", true);
+      setAddItemSection(true);
+    } catch (error) {
+      toast.error("Error adding Product: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
 
-    setQuantity("");
-    setMeasurement("");
-    setSalePrice("");
-    setDescription("");
-    setTotal("");
-    setStock("");
-    setTotalStock("");
-    setCostPrice("");
-    setSelectedItem(0);
+  // ---------------------------Save And Page Change----------------------------
 
-    setAddItemSection(false);
+  const navigate = useNavigate();
 
-  }
-  catch(error){
-    toast.error("Error adding Product: " + error.message, {
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-  }
-}
+  const handleSaleOrderTotalAmount = () => {
+    try {
+      const loggedInUID = localStorage.getItem("uid");
+      debugger;
+      const SaleOrderRef = ref(db, "SaleOrderTotalAmount");
+      const newSaleOrder = {
+        uid: loggedInUID,
+        discount: discount,
+        Payment: payment,
+        SaleOrderID: AmountID,
+      };
+      push(SaleOrderRef, newSaleOrder);
 
+      if (paymentMethod === "rdoCash") {
+        const newSaleOrder = {
+          uid: loggedInUID,
+          status: "Order Delivered",
+          Payment: payment,
+          paymentMethod: "rdoCash",
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        update(SaleOrderRef, newSaleOrder);
+      } else if (paymentMethod === "rdoCredit") {
+        const newSaleOrder = {
+          uid: loggedInUID,
+          status: "Order Delivered",
+          Payment: payment,
+          paymentMethod: "rdoCredit",
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        update(SaleOrderRef, newSaleOrder);
+      } else {
+        const newSaleOrder = {
+          uid: loggedInUID,
+          status: "Order Delivered",
+          Payment: payment,
+          paymentMethod: "rdoCashCredit",
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        update(SaleOrderRef, newSaleOrder);
+      }
+
+      setIsReadOnly(true);
+      setIsDisabled(true);
+
+      setDiscount("");
+
+      setTimeout(() => {
+        navigate("/SaleOrder");
+      }, 2000);
+
+      // Remove items from localStorage
+      localStorage.removeItem("ID");
+      localStorage.removeItem("customer");
+      localStorage.removeItem("orderDate");
+      localStorage.removeItem("name");
+      localStorage.removeItem("phoneNumber");
+      localStorage.removeItem("paymentMethod");
+      localStorage.removeItem("salesMan");
+      localStorage.removeItem("isSaveOrderVisible");
+      localStorage.removeItem("ItemName");
+      localStorage.removeItem("EditID");
+      localStorage.removeItem("EdititemName");
+      localStorage.removeItem("EditQuantity");
+      localStorage.removeItem("EditMeasurement");
+      localStorage.removeItem("EditSalePrice");
+      localStorage.removeItem("EditDescription");
+      localStorage.removeItem("EditTotal");
+      localStorage.removeItem("EditStock");
+      localStorage.removeItem("EditCostPrice");
+      localStorage.removeItem("AddItemSection");
+    } catch (error) {
+      toast.error("Error adding SaleOrder: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
 
   return (
     <>

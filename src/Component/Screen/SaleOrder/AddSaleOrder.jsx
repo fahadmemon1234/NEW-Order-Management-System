@@ -658,6 +658,79 @@ const handleTotalStockChange = (e) =>{
           setCostPrice("");
           setSelectedItem(0);
         }
+
+        else if (paymentMethod === "rdoCredit") {
+          localStorage.setItem("ItemName", SelectedItem);
+
+          const SaleOrderRef = ref(db, "SaleOrderItem");
+          const NewSaleOrder = {
+            uid: loggedInUID,
+            saleOrderID: ID,
+            itemName: SelectedItem,
+            quantity: Quantity,
+            measurement: Measurement,
+            salePrice: SalePrice,
+            description: Description,
+            totalPrice: total,
+            totalStock: TotalStock,
+            costPrice: CostPrice,
+          };
+          push(SaleOrderRef, NewSaleOrder);
+
+          setQuantity("");
+          setMeasurement("");
+          setSalePrice("");
+          setDescription("");
+          setTotal("");
+          setStock('');
+          setTotalStock("");
+          setCostPrice("");
+          setSelectedItem(0);
+        }
+
+        else if (paymentMethod === "rdoCashCredit") {
+          localStorage.setItem("ItemName", SelectedItem);
+
+          const SaleOrderRef = ref(db, "SaleOrderItem");
+          const NewSaleOrder = {
+            uid: loggedInUID,
+            saleOrderID: ID,
+            itemName: SelectedItem,
+            quantity: Quantity,
+            measurement: Measurement,
+            salePrice: SalePrice,
+            description: Description,
+            totalPrice: total,
+            totalStock: TotalStock,
+            costPrice: CostPrice,
+          };
+          push(SaleOrderRef, NewSaleOrder);
+
+          setQuantity("");
+          setMeasurement("");
+          setSalePrice("");
+          setDescription("");
+          setTotal("");
+          setStock('');
+          setTotalStock("");
+          setCostPrice("");
+          setSelectedItem(0);
+        }
+
+        else{
+
+          toast.error("Your product is not Add!", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+
+        }
       }
     } catch (error) {
       toast.error("Error adding SaleOrder: " + error.message, {

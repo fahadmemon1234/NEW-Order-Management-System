@@ -488,12 +488,12 @@ function AddSaleOrder() {
       setSelectedItem(0);
       setIsReadOnly(true);
       setSalePrice("");
-        setMeasurement("");
-        setTotalPrice("");
-        setTotalStock("");
-        setStock('');
-        setCostPrice("");
-        setTotalPrice("");
+      setMeasurement("");
+      setTotalPrice("");
+      setTotalStock("");
+      setStock("");
+      setCostPrice("");
+      setTotalPrice("");
     } else {
       setSelectedItem(selectedOption?.value);
       setIsReadOnly(false);
@@ -522,7 +522,7 @@ function AddSaleOrder() {
         setSalePrice(SalePriceNumeric);
         setTotalPrice("");
         setTotalStock(TotalStockNumeric);
-        setStock(TotalStockNumeric)
+        setStock(TotalStockNumeric);
         setMeasurement(Measurement);
         setCostPrice(CostPriceNumeric);
         setQuantity("");
@@ -533,7 +533,7 @@ function AddSaleOrder() {
         setMeasurement("");
         setTotalPrice("");
         setSelectedItem(0);
-        setStock('');
+        setStock("");
         setTotalStock("");
         setCostPrice("");
         setTotalPrice("");
@@ -551,11 +551,11 @@ function AddSaleOrder() {
     updateStock(e.target.value, TotalStock);
   };
 
-const handleTotalStockChange = (e) =>{
-  debugger;
-  setTotalStock(e.target.value);
-  updateStock(Quantity, e.target.value);
-}
+  const handleTotalStockChange = (e) => {
+    debugger;
+    setTotalStock(e.target.value);
+    updateStock(Quantity, e.target.value);
+  };
 
   const handleSalePriceChange = (e) => {
     setSalePrice(e.target.value);
@@ -567,12 +567,11 @@ const handleTotalStockChange = (e) =>{
     setTotal(totalValue);
   };
 
-
   const updateStock = (quantity, totalStock) => {
     debugger;
     if (parseFloat(quantity) > totalStock) {
       // Quantity cannot be greater than totalStock, show an error or handle it accordingly
-      toast.error("Quantity cannot be greater than totalStock.", {
+      toast.error("Quantity cannot be greater than TotalStock.", {
         position: "top-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -583,9 +582,9 @@ const handleTotalStockChange = (e) =>{
         theme: "colored",
       });
 
-      setQuantity('');
-      setTotalPrice('');
-      setTotal('');
+      setQuantity("");
+      setTotalPrice("");
+      setTotal("");
       setStock(TotalStock);
       // Additional logic for error handling if needed
     } else if (quantity !== "" && parseFloat(quantity) < totalStock) {
@@ -623,12 +622,12 @@ const handleTotalStockChange = (e) =>{
 
         setSelectedItem(0);
         setSalePrice("");
-          setMeasurement("");
-          setTotalPrice("");
-          setTotalStock("");
-          setStock('');
-          setCostPrice("");
-          setTotalPrice("");
+        setMeasurement("");
+        setTotalPrice("");
+        setTotalStock("");
+        setStock("");
+        setCostPrice("");
+        setTotalPrice("");
       } else {
         if (paymentMethod === "rdoCash") {
           localStorage.setItem("ItemName", SelectedItem);
@@ -653,13 +652,11 @@ const handleTotalStockChange = (e) =>{
           setSalePrice("");
           setDescription("");
           setTotal("");
-          setStock('');
+          setStock("");
           setTotalStock("");
           setCostPrice("");
           setSelectedItem(0);
-        }
-
-        else if (paymentMethod === "rdoCredit") {
+        } else if (paymentMethod === "rdoCredit") {
           localStorage.setItem("ItemName", SelectedItem);
 
           const SaleOrderRef = ref(db, "SaleOrderItem");
@@ -682,13 +679,11 @@ const handleTotalStockChange = (e) =>{
           setSalePrice("");
           setDescription("");
           setTotal("");
-          setStock('');
+          setStock("");
           setTotalStock("");
           setCostPrice("");
           setSelectedItem(0);
-        }
-
-        else if (paymentMethod === "rdoCashCredit") {
+        } else if (paymentMethod === "rdoCashCredit") {
           localStorage.setItem("ItemName", SelectedItem);
 
           const SaleOrderRef = ref(db, "SaleOrderItem");
@@ -711,14 +706,11 @@ const handleTotalStockChange = (e) =>{
           setSalePrice("");
           setDescription("");
           setTotal("");
-          setStock('');
+          setStock("");
           setTotalStock("");
           setCostPrice("");
           setSelectedItem(0);
-        }
-
-        else{
-
+        } else {
           toast.error("Your product is not Add!", {
             position: "top-right",
             autoClose: 1000,
@@ -729,7 +721,6 @@ const handleTotalStockChange = (e) =>{
             progress: undefined,
             theme: "colored",
           });
-
         }
       }
     } catch (error) {
@@ -829,7 +820,58 @@ const handleTotalStockChange = (e) =>{
 
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
 
-  const FinalPrice = visibleItems.reduce((acc, item) => acc + (item.totalPrice || 0), 0);
+  const FinalPrice = visibleItems.reduce(
+    (acc, item) => acc + (item.totalPrice || 0),
+    0
+  );
+
+
+
+
+
+
+
+
+  // --------------------Discount Box Footer-------------------------
+
+  const [discount, setDiscount] = useState("");
+  const [payment, setPayment] = useState("");
+
+  useEffect(() => {
+    // Update payment whenever finalPrice changes
+    setPayment(FinalPrice);
+  }, [FinalPrice]);
+
+  const handleDiscountChange = (e) => {
+    debugger;
+    const discountValue = e.target.value;
+    setDiscount(discountValue);
+
+    if(discountValue > FinalPrice){
+      toast.error("Discount cannot be greater than Payment.", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      setDiscount('');
+      setPayment(FinalPrice);
+    }
+    else if(discountValue !== ""){
+ // Assuming finalPrice is a state containing your original price
+ const discountedPayment = parseFloat(FinalPrice) - parseFloat(discountValue);
+ setPayment(discountedPayment);
+    }
+    else{
+      setPayment(FinalPrice);
+    }
+   
+  };
 
   return (
     <>
@@ -1818,6 +1860,8 @@ const handleTotalStockChange = (e) =>{
                             name="Discount"
                             id="Discount"
                             placeholder="Enter Discount"
+                            value={discount}
+                            onChange={handleDiscountChange}
                           />
                         </div>
 
@@ -1834,7 +1878,7 @@ const handleTotalStockChange = (e) =>{
                             className="form-control"
                             name="Payment"
                             readOnly
-                            value={FinalPrice}
+                            value={payment}
                             id="Payment"
                             placeholder="Enter Payment"
                           />
@@ -1843,6 +1887,7 @@ const handleTotalStockChange = (e) =>{
                         <Button
                           variant="primary"
                           style={{ float: "right", marginTop: 10 + "px" }}
+                          
                         >
                           Save & Close
                         </Button>

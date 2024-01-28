@@ -12,6 +12,7 @@ import Modal from "react-bootstrap/Modal";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import InputMask from "react-input-mask";
+import $ from "jquery";
 // ---------------------------------------------------
 
 //DataBase
@@ -128,7 +129,7 @@ function AddSaleOrder() {
         const newSaleOrder = {
           uid: loggedInUID,
           customer: CounterSale,
-          status: 'New',
+          status: "New",
           orderDate: orderDate,
           name: Name,
           phoneNumber: PhoneNumber,
@@ -157,7 +158,7 @@ function AddSaleOrder() {
           uid: loggedInUID,
           customer: selectedCustomer.label,
           orderDate: orderDate,
-          status: 'New',
+          status: "New",
           salesMan: SalesMan,
           paymentMethod: "rdoCredit",
         };
@@ -182,7 +183,7 @@ function AddSaleOrder() {
           customer: selectedCustomer.label,
           orderDate: orderDate,
           name: Name,
-          status: 'New',
+          status: "New",
           paymentMethod: "rdoCashCredit",
           phoneNumber: PhoneNumber,
         };
@@ -447,7 +448,7 @@ function AddSaleOrder() {
       } catch (error) {
         console.log("Error fetching data:", error);
 
-        toast.error("Error fetching data:", error.message, {
+        toast.error("Network Error:", error.message, {
           position: "top-right",
           autoClose: 1000,
           hideProgressBar: false,
@@ -463,55 +464,98 @@ function AddSaleOrder() {
     fetchData();
   }, [db, loggedInUID]);
 
+  const [Exists, setExists] = useState("");
+
   const handleItemSelect = (selectedOption) => {
     debugger;
-    setSelectedItem(selectedOption?.value);
-    const selectedBankData = ItemOptions.find(
-      (option) => option.value === selectedOption?.value
+
+    const itemExists = tableData.some(
+      (item) => item.itemName === selectedOption?.value
     );
-    if (
-      selectedBankData.Measurement != "" &&
-      selectedBankData.SalePrice != "" &&
-      selectedBankData.TotalStock != "" &&
-      selectedBankData.CostPrice != ""
-    ) {
+    setExists(itemExists);
+    if (itemExists) {
+      toast.error("Your product already exists.", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
 
-      var TotalStock = selectedBankData.TotalStock;
-      var SalePrice = selectedBankData.SalePrice;
-      // var TotalPrice = selectedBankData.TotalPrice;
-      var Measurement = selectedBankData.Measurement;
-      var CostPrice = selectedBankData.CostPrice;
-
-      // Extract the numeric part using parseInt
-      var SalePriceNumeric = parseFloat(SalePrice);
-      // var TotalPriceNumeric = parseFloat(TotalPrice);
-      var TotalStockNumeric = parseFloat(TotalStock);
-      var CostPriceNumeric = parseFloat(CostPrice);
-
-      setSalePrice(SalePriceNumeric);
-      setTotalPrice('');
-      setTotalStock(TotalStockNumeric);
-      setMeasurement(Measurement);
-      setCostPrice(CostPriceNumeric);
-      setQuantity('');
-      setTotal('')
-      // setBankID(`${selectedBankData.Id}`);
+      setSelectedItem(0);
+      setIsReadOnly(true);
+      setSalePrice("");
+        setMeasurement("");
+        setTotalPrice("");
+        setTotalStock("");
+        setStock('');
+        setCostPrice("");
+        setTotalPrice("");
     } else {
-      setSalePrice('');
-      setMeasurement('');
-      setTotalPrice('')
-      setTotalStock('');
-      setCostPrice('');
-      setTotalPrice('');
+      setSelectedItem(selectedOption?.value);
+      setIsReadOnly(false);
+
+      const selectedBankData = ItemOptions.find(
+        (option) => option.value === selectedOption?.value
+      );
+      if (
+        selectedBankData.Measurement != "" &&
+        selectedBankData.SalePrice != "" &&
+        selectedBankData.TotalStock != "" &&
+        selectedBankData.CostPrice != ""
+      ) {
+        var TotalStock = selectedBankData.TotalStock;
+        var SalePrice = selectedBankData.SalePrice;
+        // var TotalPrice = selectedBankData.TotalPrice;
+        var Measurement = selectedBankData.Measurement;
+        var CostPrice = selectedBankData.CostPrice;
+
+        // Extract the numeric part using parseInt
+        var SalePriceNumeric = parseFloat(SalePrice);
+        // var TotalPriceNumeric = parseFloat(TotalPrice);
+        var TotalStockNumeric = parseFloat(TotalStock);
+        var CostPriceNumeric = parseFloat(CostPrice);
+
+        setSalePrice(SalePriceNumeric);
+        setTotalPrice("");
+        setTotalStock(TotalStockNumeric);
+        setStock(TotalStockNumeric)
+        setMeasurement(Measurement);
+        setCostPrice(CostPriceNumeric);
+        setQuantity("");
+        setTotal("");
+        // setBankID(`${selectedBankData.Id}`);
+      } else {
+        setSalePrice("");
+        setMeasurement("");
+        setTotalPrice("");
+        setSelectedItem(0);
+        setStock('');
+        setTotalStock("");
+        setCostPrice("");
+        setTotalPrice("");
+      }
     }
   };
 
   const [total, setTotal] = useState();
 
+  const [Stock, setStock] = useState();
+
   const handleQuantityChange = (e) => {
     setQuantity(e.target.value);
     updateTotal(e.target.value, SalePrice);
+    updateStock(e.target.value, TotalStock);
   };
+
+const handleTotalStockChange = (e) =>{
+  debugger;
+  setTotalStock(e.target.value);
+  updateStock(Quantity, e.target.value);
+}
 
   const handleSalePriceChange = (e) => {
     setSalePrice(e.target.value);
@@ -521,49 +565,101 @@ function AddSaleOrder() {
   const updateTotal = (quantity, salePrice) => {
     const totalValue = quantity * salePrice;
     setTotal(totalValue);
-
   };
 
 
+  const updateStock = (quantity, totalStock) => {
+    debugger;
+    if (parseFloat(quantity) > totalStock) {
+      // Quantity cannot be greater than totalStock, show an error or handle it accordingly
+      toast.error("Quantity cannot be greater than totalStock.", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      setQuantity('');
+      setTotalPrice('');
+      setTotal('');
+      setStock(TotalStock);
+      // Additional logic for error handling if needed
+    } else if (quantity !== "" && parseFloat(quantity) < totalStock) {
+      const Qty = parseFloat(quantity);
+      const newTotalStock = totalStock - Qty;
+      setStock(newTotalStock);
+    } else if (parseFloat(quantity) === totalStock) {
+      const Qty = parseFloat(quantity);
+      const newTotalStock = Qty - totalStock;
+      setStock(newTotalStock);
+    } else {
+      // Assuming you want to do something specific in the 'else' case
+      setStock(TotalStock);
+      // Additional logic for other cases if needed
+    }
+  };
 
   // -----------------------Add Item------------------
-  
+
   const ID = localStorage.getItem("ID");
 
-  const handleAddItem = () =>{
-    try{
-      debugger;
-     
-      if (paymentMethod === "rdoCash") {
-        const SaleOrderRef = ref(db, "SaleOrderItem");
-        const NewSaleOrder = {
-          uid: loggedInUID,
-          saleOrderID: ID,
-          itemName: SelectedItem, 
-          quantity: Quantity,
-          measurement: Measurement,
-          salePrice: SalePrice,
-          description: Description,
-          totalPrice: total,
-          totalStock: TotalStock,
-          costPrice: CostPrice
-        };
-        push(SaleOrderRef, NewSaleOrder);
+  const handleAddItem = () => {
+    try {
+      if (Exists) {
+        toast.error("Your product already exists.", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
 
-        setQuantity('');
-        setMeasurement('');
-        setSalePrice('');
-        setDescription('');
-        setTotal('');
-        setTotalStock('');
-        setCostPrice('');
-        setItem(0);
         setSelectedItem(0);
+        setSalePrice("");
+          setMeasurement("");
+          setTotalPrice("");
+          setTotalStock("");
+          setStock('');
+          setCostPrice("");
+          setTotalPrice("");
+      } else {
+        if (paymentMethod === "rdoCash") {
+          localStorage.setItem("ItemName", SelectedItem);
+
+          const SaleOrderRef = ref(db, "SaleOrderItem");
+          const NewSaleOrder = {
+            uid: loggedInUID,
+            saleOrderID: ID,
+            itemName: SelectedItem,
+            quantity: Quantity,
+            measurement: Measurement,
+            salePrice: SalePrice,
+            description: Description,
+            totalPrice: total,
+            totalStock: TotalStock,
+            costPrice: CostPrice,
+          };
+          push(SaleOrderRef, NewSaleOrder);
+
+          setQuantity("");
+          setMeasurement("");
+          setSalePrice("");
+          setDescription("");
+          setTotal("");
+          setStock('');
+          setTotalStock("");
+          setCostPrice("");
+          setSelectedItem(0);
+        }
       }
-
-
-    }
-    catch(error){
+    } catch (error) {
       toast.error("Error adding SaleOrder: " + error.message, {
         position: "top-right",
         autoClose: 1000,
@@ -577,13 +673,9 @@ function AddSaleOrder() {
 
       console.log("Error adding SaleOrder:", error);
     }
-  }
-
-
-
+  };
 
   //-------------------------------Table Data Show----------------------
-
 
   const [tableData, setTableData] = useState([]);
 
@@ -599,7 +691,10 @@ function AddSaleOrder() {
           if (data) {
             // Convert the object of products into an array
             const dataArray = Object.keys(data)
-              .filter((key) => data[key].uid === loggedInUID && data[key].saleOrderID === ID) // Filter data based on UID
+              .filter(
+                (key) =>
+                  data[key].uid === loggedInUID && data[key].saleOrderID === ID
+              ) // Filter data based on UID
               .map((key) => ({
                 id: key,
                 ...data[key],
@@ -622,46 +717,46 @@ function AddSaleOrder() {
     b.id.localeCompare(a.id)
   );
 
+  //   RowDropDown Selection
 
-   //   RowDropDown Selection
+  const [rowsToShow, setRowsToShow] = useState(5);
 
-   const [rowsToShow, setRowsToShow] = useState(5);
+  const handleSelectChange = (event) => {
+    setRowsToShow(parseInt(event.target.value, 10));
+  };
 
-   const handleSelectChange = (event) => {
-     setRowsToShow(parseInt(event.target.value, 10));
-   };
- 
-   // Rows count and show
-   // const totalItems = 8; // Replace with the actual total number of items
-   const startIndexs = 1;
-   // const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
-   const rowCount = sortedDataDescending.length; // Add this line to get the row count
-   const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
- 
-   const [currentPage, setCurrentPage] = useState(1);
- 
-   const handlePrevClick = () => {
-     if (currentPage > 1) {
-       setCurrentPage(currentPage - 1);
-     }
-   };
- 
-   const handleNextClick = () => {
-     const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
-     if (currentPage < totalPages) {
-       setCurrentPage(currentPage + 1);
-     }
-   };
- 
-   const startIndex = (currentPage - 1) * rowsToShow;
-   const endIndex = Math.min(
-     startIndex + rowsToShow,
-     sortedDataDescending.length
-   );
-   const visibleItems = sortedDataDescending.slice(startIndex, endIndex);
- 
-   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
+  // Rows count and show
+  // const totalItems = 8; // Replace with the actual total number of items
+  const startIndexs = 1;
+  // const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
+  const rowCount = sortedDataDescending.length; // Add this line to get the row count
+  const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePrevClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const startIndex = (currentPage - 1) * rowsToShow;
+  const endIndex = Math.min(
+    startIndex + rowsToShow,
+    sortedDataDescending.length
+  );
+  const visibleItems = sortedDataDescending.slice(startIndex, endIndex);
+
+  const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
+
+  const FinalPrice = visibleItems.reduce((acc, item) => acc + (item.totalPrice || 0), 0);
 
   return (
     <>
@@ -1327,6 +1422,10 @@ function AddSaleOrder() {
                     <Select
                       id="ItemName"
                       options={Item}
+                      value={
+                        Item.find((option) => option.value === SelectedItem) ||
+                        null
+                      }
                       styles={{
                         ...customStyles,
                         menu: (provided) => ({
@@ -1467,8 +1566,8 @@ function AddSaleOrder() {
                       className="form-control"
                       name="TotalStock"
                       id="TotalStock"
-                      value={TotalStock}
-                      onChange={(e) => setTotalStock(e.target.value)}
+                      value={Stock}
+                      onChange={handleTotalStockChange}
                     />
                   </div>
                 </div>
@@ -1497,7 +1596,11 @@ function AddSaleOrder() {
 
               <div className="row">
                 <div className="col-md-12 col-sm-12 col-lg-12">
-                  <Button variant="primary" style={{ float: "right" }} onClick={handleAddItem}>
+                  <Button
+                    variant="primary"
+                    style={{ float: "right" }}
+                    onClick={handleAddItem}
+                  >
                     Add Item
                   </Button>
                 </div>
@@ -1539,144 +1642,140 @@ function AddSaleOrder() {
                           </tr>
                         </thead>
                         <tbody className="list">
-                        {visibleItems.slice(0, rowsToShow).map((item) => (
-                          <tr key={item.id}>
-                            <td>
-                              <div style={{ display: "flex" }}>
-                                <button
-                                  type="button"
-                                  className="btn btn-primary"
-                                  style={{ marginRight: "10px" }}
-                                >
-                                  Edit
-                                </button>
-                                <button
-                                  type="button"
-                                  className="btn btn-danger"
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            </td>
+                          {visibleItems.slice(0, rowsToShow).map((item) => (
+                            <tr key={item.id}>
+                              <td>
+                                <div style={{ display: "flex" }}>
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    style={{ marginRight: "10px" }}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              </td>
 
-                            <td className="tdchild">{item.itemName}</td>
-                            <td className="tdchild">{item.salePrice}</td>
-                            <td className="tdchild">{item.quantity}</td>
-                            <td className="tdchild">{item.totalPrice}</td>
-                            {/* Add more table data cells as needed */}
-                          </tr>
+                              <td className="tdchild">{item.itemName}</td>
+                              <td className="tdchild">{item.salePrice}</td>
+                              <td className="tdchild">{item.quantity}</td>
+                              <td className="tdchild">{item.totalPrice}</td>
+                              {/* Add more table data cells as needed */}
+                            </tr>
                           ))}
                         </tbody>
                       </table>
                     </div>
-                    <div className="row align-items-center mt-3">
-                    <div className="pagination d-none"></div>
-                    <div className="col">
-                      <div
-                        className="d-flex align-items-center fs--1"
-                        style={{ fontSize: "14px" }}
-                      >
-                        <p className="mb-0">
-                          <span className="d-none d-sm-inline-block me-2">
-                            {paginationText}
-                          </span>
-                        </p>
-                        <p className="mb-0 mx-2">Rows per page:</p>
-                        <select
-                          className="w-auto form-select form-select-sm"
-                          defaultValue={rowsToShow}
-                          onChange={handleSelectChange}
+                    <div className="row mt-3">
+                      <div className="pagination d-none"></div>
+                      <div className="col-md-9 col-sm-9 col-lg-9">
+                        <div
+                          className="d-flex align-items-center fs--1"
+                          style={{ fontSize: "14px" }}
                         >
-                          <option value="5">5</option>
-                          <option value="10">10</option>
-                          <option value="15">15</option>
-                        </select>
-                       
+                          <p className="mb-0">
+                            <span className="d-none d-sm-inline-block me-2">
+                              {paginationText}
+                            </span>
+                          </p>
+                          <p className="mb-0 mx-2">Rows per page:</p>
+                          <select
+                            className="w-auto form-select form-select-sm"
+                            defaultValue={rowsToShow}
+                            onChange={handleSelectChange}
+                          >
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                          </select>
+                        </div>
+                        <div>
+                          <button
+                            className="btn btn-sm btn-warning"
+                            type="button"
+                            data-list-pagination="prev"
+                            onClick={handlePrevClick}
+                            disabled={currentPage === 1}
+                          >
+                            <span>Previous</span>
+                          </button>
+                          <button
+                            className="btn btn-sm btn-primary px-4 ms-2"
+                            type="button"
+                            style={{
+                              backgroundColor: "#2c7be5",
+                              color: "white",
+                            }}
+                            data-list-pagination="next"
+                            onClick={handleNextClick}
+                            disabled={currentPage === totalPages}
+                          >
+                            <span>Next</span>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="col-md-3 col-sm-3 col-lg-3">
+                        <h5
+                          style={{
+                            color: "#2c7be5",
+                            fontWeight: "600",
+                            float: "right",
+                          }}
+                        >
+                          Total: {FinalPrice.toLocaleString()}
+                        </h5>
+
+                        <div className="mb-3" style={{ paddingTop: "40px" }}>
+                          <label
+                            htmlFor="Discount"
+                            className="form-label"
+                            style={{ color: "black" }}
+                          >
+                            Discount
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            name="Discount"
+                            id="Discount"
+                            placeholder="Enter Discount"
+                          />
+                        </div>
+
+                        <div className="mb-3" style={{ paddingTop: "10px" }}>
+                          <label
+                            htmlFor="Payment"
+                            className="form-label"
+                            style={{ color: "black" }}
+                          >
+                            Payment
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            name="Payment"
+                            readOnly
+                            value={FinalPrice}
+                            id="Payment"
+                            placeholder="Enter Payment"
+                          />
+                        </div>
+
+                        <Button
+                          variant="primary"
+                          style={{ float: "right", marginTop: 10 + "px" }}
+                        >
+                          Save & Close
+                        </Button>
                       </div>
                     </div>
-                    <div className="col-auto d-flex">
-                      <button
-                        className="btn btn-sm btn-warning"
-                        type="button"
-                        data-list-pagination="prev"
-                        onClick={handlePrevClick}
-                        disabled={currentPage === 1}
-                      >
-                        <span>Previous</span>
-                      </button>
-                      <button
-                        className="btn btn-sm btn-primary px-4 ms-2"
-                        type="button"
-                        style={{ backgroundColor: "#2c7be5", color: "white" }}
-                        data-list-pagination="next"
-                        onClick={handleNextClick}
-                        disabled={currentPage === totalPages}
-                      >
-                        <span>Next</span>
-                      </button>
-                    </div>
                   </div>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className="row"
-                style={{ paddingTop: "15px", float: "right" }}
-              >
-                <div className="col-md-12 col-sm-12 col-lg-12">
-                  <h5
-                    style={{
-                      color: "#2c7be5",
-                      fontWeight: "600",
-                      float: "right",
-                    }}
-                  >
-                    Total: 150,000
-                  </h5>
-
-                  <div className="mb-3" style={{ paddingTop: "40px" }}>
-                    <label
-                      htmlFor="Discount"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      Discount
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      name="Discount"
-                      id="Discount"
-                      placeholder="Enter Discount"
-                    />
-                  </div>
-
-                  <div className="mb-3" style={{ paddingTop: "10px" }}>
-                    <label
-                      htmlFor="Payment"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      Payment
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      name="Payment"
-                      readOnly
-                      value={"15000"}
-                      id="Payment"
-                      placeholder="Enter Payment"
-                    />
-                  </div>
-
-                  <Button
-                    variant="primary"
-                    style={{ float: "right", marginTop: 10 + "px" }}
-                  >
-                    Save & Close
-                  </Button>
                 </div>
               </div>
             </div>

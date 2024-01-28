@@ -1196,7 +1196,7 @@ function AddSaleOrder() {
 
       setTimeout(() => {
         navigate("/SaleOrder");
-      }, 2000);
+      }, 1000);
 
       // Remove items from localStorage
       localStorage.removeItem("ID");

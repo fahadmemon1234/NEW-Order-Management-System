@@ -218,7 +218,7 @@ function AddCustModal() {
         Add Customer
       </button> */}
 
-      <a href="#" style={{ float: "right", fontSize: 13 + "px" }} onClick={handleShow}>
+      <a href="#" style={{ float: "right", fontSize: 13 + "px",  fontWeight:'600' }} onClick={handleShow}>
         Add Customer
       </a>
 

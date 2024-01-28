@@ -12,7 +12,7 @@ import Modal from "react-bootstrap/Modal";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import InputMask from "react-input-mask";
-import $ from "jquery";
+import { useNavigate } from "react-router-dom";
 // ---------------------------------------------------
 
 //DataBase
@@ -24,6 +24,7 @@ import { db } from "../../Config/firebase";
 // Add Modal
 // ---------------------------------------------------
 import AddCustModal from "./AddCustModal";
+import AddProductModal from "./AddProduct";
 // --------------------------------------------------
 
 //Notify
@@ -33,6 +34,8 @@ import "../../../assets/Css/Tostify.css";
 // ---------------------------------------------------
 
 function AddSaleOrder() {
+  const [AddItemSection, setAddItemSection] = useState(true);
+
   const [paymentMethod, setPaymentMethod] = useState("rdoCash");
 
   const [isSaveOrderVisible, setSaveOrderVisible] = useState(true);
@@ -604,6 +607,8 @@ function AddSaleOrder() {
 
   // -----------------------Add Item------------------
 
+  const [AmountID, setAmountID] = useState("");
+
   const ID = localStorage.getItem("ID");
 
   const handleAddItem = () => {
@@ -642,11 +647,13 @@ function AddSaleOrder() {
             salePrice: SalePrice,
             description: Description,
             totalPrice: total,
-            totalStock: TotalStock,
+            totalStock: Stock,
             costPrice: CostPrice,
           };
-          push(SaleOrderRef, NewSaleOrder);
+          const AmountsId = push(SaleOrderRef, NewSaleOrder);
+          const newAmountID = AmountsId.key;
 
+          setAmountID(newAmountID);
           setQuantity("");
           setMeasurement("");
           setSalePrice("");
@@ -669,10 +676,14 @@ function AddSaleOrder() {
             salePrice: SalePrice,
             description: Description,
             totalPrice: total,
-            totalStock: TotalStock,
+            totalStock: Stock,
             costPrice: CostPrice,
           };
-          push(SaleOrderRef, NewSaleOrder);
+
+          const AmountsId = push(SaleOrderRef, NewSaleOrder);
+          const newAmountID = AmountsId.key;
+
+          setAmountID(newAmountID);
 
           setQuantity("");
           setMeasurement("");
@@ -696,10 +707,14 @@ function AddSaleOrder() {
             salePrice: SalePrice,
             description: Description,
             totalPrice: total,
-            totalStock: TotalStock,
+            totalStock: Stock,
             costPrice: CostPrice,
           };
-          push(SaleOrderRef, NewSaleOrder);
+
+          const AmountsId = push(SaleOrderRef, NewSaleOrder);
+          const newAmountID = AmountsId.key;
+
+          setAmountID(newAmountID);
 
           setQuantity("");
           setMeasurement("");
@@ -825,13 +840,6 @@ function AddSaleOrder() {
     0
   );
 
-
-
-
-
-
-
-
   // --------------------Discount Box Footer-------------------------
 
   const [discount, setDiscount] = useState("");
@@ -847,7 +855,7 @@ function AddSaleOrder() {
     const discountValue = e.target.value;
     setDiscount(discountValue);
 
-    if(discountValue > FinalPrice){
+    if (discountValue > FinalPrice) {
       toast.error("Discount cannot be greater than Payment.", {
         position: "top-right",
         autoClose: 1000,
@@ -859,19 +867,232 @@ function AddSaleOrder() {
         theme: "colored",
       });
 
-      setDiscount('');
+      setDiscount("");
+      setPayment(FinalPrice);
+    } else if (discountValue !== "") {
+      // Assuming finalPrice is a state containing your original price
+      const discountedPayment =
+        parseFloat(FinalPrice) - parseFloat(discountValue);
+      setPayment(discountedPayment);
+    } else {
       setPayment(FinalPrice);
     }
-    else if(discountValue !== ""){
- // Assuming finalPrice is a state containing your original price
- const discountedPayment = parseFloat(FinalPrice) - parseFloat(discountValue);
- setPayment(discountedPayment);
-    }
-    else{
-      setPayment(FinalPrice);
-    }
-   
   };
+
+  const navigate = useNavigate();
+
+  const handleSaleOrderTotalAmount = () => {
+    try {
+      const loggedInUID = localStorage.getItem("uid");
+      debugger;
+      const SaleOrderRef = ref(db, "SaleOrderTotalAmount");
+      const newSaleOrder = {
+        uid: loggedInUID,
+        discount: discount,
+        Payment: payment,
+        SaleOrderID: AmountID,
+      };
+      push(SaleOrderRef, newSaleOrder);
+
+      if (paymentMethod === "rdoCash") {
+        const newSaleOrder = {
+          uid: loggedInUID,
+          status: "Order Delivered",
+          paymentMethod: "rdoCash",
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        update(SaleOrderRef, newSaleOrder);
+      } else if (paymentMethod === "rdoCredit") {
+        const newSaleOrder = {
+          uid: loggedInUID,
+          status: "Order Delivered",
+          paymentMethod: "rdoCredit",
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        update(SaleOrderRef, newSaleOrder);
+      } else {
+        const newSaleOrder = {
+          uid: loggedInUID,
+          status: "Order Delivered",
+          paymentMethod: "rdoCashCredit",
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        update(SaleOrderRef, newSaleOrder);
+      }
+
+      setIsReadOnly(true);
+      setIsDisabled(true);
+
+      setTimeout(() => {
+        navigate("/SaleOrder");
+      }, 2000);
+    } catch (error) {
+      toast.error("Error adding SaleOrder: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
+
+  // ---------------------Edit-----------------------
+
+  const [EditID, setEditID] = useState("");
+
+  const handleEdit = async (item) => {
+    debugger;
+    localStorage.setItem("EditID", item.id);
+    setEditID(item.id);
+    localStorage.setItem("EdititemName", item.itemName);
+    setSelectedItem(item.itemName);
+    localStorage.setItem("EditQuantity", item.quantity);
+    setQuantity(item.quantity);
+    localStorage.setItem("EditMeasurement", item.measurement);
+    setMeasurement(item.measurement);
+    localStorage.setItem("EditSalePrice", item.salePrice);
+    setSalePrice(item.salePrice);
+    localStorage.setItem("EditDescription", item.description);
+    setDescription(item.description);
+    localStorage.setItem("EditTotal", item.totalPrice);
+    setTotal(item.totalPrice);
+    setTotalPrice(item.totalPrice);
+    localStorage.setItem("EditStock", item.totalStock);
+    setStock(item.totalStock);
+    setTotalStock(item.totalStock);
+    localStorage.setItem("EditCostPrice", item.costPrice);
+    setCostPrice(item.costPrice);
+
+    localStorage.setItem("AddItemSection", false);
+    setAddItemSection(false);
+  };
+
+  useEffect(() => {
+    debugger;
+    const AddItemSec = localStorage.getItem("AddItemSection");
+    const EditIDs = localStorage.getItem("EditID");
+    const itemName = localStorage.getItem("EdititemName");
+    const quantity = localStorage.getItem("EditQuantity");
+    const measurement = localStorage.getItem("EditMeasurement");
+    const salePrice = localStorage.getItem("EditSalePrice");
+    const description = localStorage.getItem("EditDescription");
+    const total = localStorage.getItem("EditTotal");
+    const totalPrice = localStorage.getItem("EditTotalPrice");
+    const stock = localStorage.getItem("EditStock");
+    const totalStock = localStorage.getItem("EditTotalStock");
+    const costPrice = localStorage.getItem("EditCostPrice");
+    // Use the stored value if it exists, otherwise, use the default (false)
+    if (AddItemSec === "false") {
+      setAddItemSection(false);
+      
+
+      setEditID(EditIDs);
+      setSelectedItem(itemName);
+      setQuantity(quantity);
+      setMeasurement(measurement);
+      setSalePrice(salePrice);
+      if(description === "undefined"){
+        setDescription('');
+      }
+      else{
+        setDescription(description);
+      }
+      
+      setTotal(total);
+      setTotalPrice(totalPrice);
+      setStock(stock);
+      setTotalStock(totalStock);
+      setCostPrice(costPrice);
+
+    } else {
+      setAddItemSection(true);
+
+      setEditID('');
+      setSelectedItem('');
+      setQuantity('');
+      setMeasurement('');
+      setSalePrice('');
+      setDescription('');
+      setTotal('');
+      setTotalPrice('');
+      setStock('');
+      setTotalStock('');
+      setCostPrice('');
+    }
+  }, []);
+
+
+
+  const [LastStock, setLastStock]= useState('');
+
+  const handleQuantityUpdate = (e) => {
+    setQuantity(e.target.value);
+    NewTotal(e.target.value, SalePrice);
+    NewStocks(e.target.value, LastStock);
+  };
+
+  const handleTotalStockUpdate = (e) => {
+    debugger;
+    setTotalStock(e.target.value);
+    NewStocks(Quantity, e.target.value);
+  };
+
+  const handleSalePriceUpdate = (e) => {
+    setSalePrice(e.target.value);
+    NewTotal(Quantity, e.target.value);
+  };
+
+  const NewTotal = (quantity, salePrice) => {
+    const totalValue = quantity * salePrice;
+    setTotal(totalValue);
+  };
+
+  const NewStocks = (quantity, LastStock) => {
+    debugger;
+    if (parseFloat(quantity) > LastStock) {
+      // Quantity cannot be greater than totalStock, show an error or handle it accordingly
+      toast.error("Quantity cannot be greater than TotalStock.", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      setQuantity("");
+      setTotalPrice("");
+      setTotal("");
+      setStock(TotalStock);
+      // Additional logic for error handling if needed
+    } else if (quantity !== "" && parseFloat(quantity) < LastStock) {
+      const Qty = parseFloat(quantity);
+      const newTotalStock = LastStock - Qty;
+      setStock(newTotalStock);
+    } else if (parseFloat(quantity) === LastStock) {
+      const Qty = parseFloat(quantity);
+      const newTotalStock = Qty - LastStock;
+      setStock(newTotalStock);
+    } else {
+      const quantity = localStorage.getItem("EditQuantity");
+      const stock = localStorage.getItem("EditStock");
+      const newTotalStock = parseFloat(stock) + parseFloat(quantity);
+      // Assuming you want to do something specific in the 'else' case
+      setStock(newTotalStock);
+
+      setLastStock(newTotalStock);
+      // Additional logic for other cases if needed
+    }
+  };
+
+
+  
 
   return (
     <>
@@ -1523,203 +1744,413 @@ function AddSaleOrder() {
         >
           <div className="card-body">
             <div className="container-fluid">
-              <div className="row">
-                <div className="col-md-6 col-sm-6 col-lg-6">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="ItemName"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      Item Name
-                    </label>
+              {AddItemSection && (
+                <>
+                  <div className="row">
+                    <div className="col-md-6 col-sm-6 col-lg-6">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="ItemName"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Item Name
+                        </label>
 
-                    <Select
-                      id="ItemName"
-                      options={Item}
-                      value={
-                        Item.find((option) => option.value === SelectedItem) ||
-                        null
-                      }
-                      styles={{
-                        ...customStyles,
-                        menu: (provided) => ({
-                          ...provided,
-                          overflowY: "auto", // Add scrollbar when needed
-                          maxHeight: "150px", // Set the maximum height here
-                        }),
-                      }}
-                      isSearchable={true}
-                      placeholder="Select Item Name"
-                      onChange={handleItemSelect}
-                      isDisabled={isDisabled}
-                    />
+                        <Select
+                          id="ItemName"
+                          options={Item}
+                          value={
+                            Item.find(
+                              (option) => option.value === SelectedItem
+                            ) || null
+                          }
+                          styles={{
+                            ...customStyles,
+                            menu: (provided) => ({
+                              ...provided,
+                              overflowY: "auto", // Add scrollbar when needed
+                              maxHeight: "150px", // Set the maximum height here
+                            }),
+                          }}
+                          isSearchable={true}
+                          placeholder="Select Item Name"
+                          onChange={handleItemSelect}
+                          isDisabled={isDisabled}
+                        />
+                        <AddProductModal />
+                      </div>
+                    </div>
+
+                    <div className="col-md-2 col-sm-2 col-lg-2">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="Quantity"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Quantity
+                        </label>
+
+                        <input
+                          type="number"
+                          className="form-control"
+                          name="Quantity"
+                          id="Quantity"
+                          value={Quantity}
+                          onChange={handleQuantityChange}
+                          readOnly={isReadOnly}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-lg-2">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="Measurement"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Measurement
+                        </label>
+
+                        <input
+                          type="text"
+                          readOnly
+                          className="form-control"
+                          name="Measurement"
+                          id="Measurement"
+                          value={Measurement}
+                          onChange={(e) => setMeasurement(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-lg-2">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="SalePrice"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Sale Price
+                        </label>
+
+                        <input
+                          type="number"
+                          className="form-control"
+                          name="SalePrice"
+                          id="SalePrice"
+                          readOnly={isReadOnly}
+                          value={SalePrice}
+                          onChange={handleSalePriceChange}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div className="col-md-2 col-sm-2 col-lg-2">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="Quantity"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      Quantity
-                    </label>
+                  <div className="row">
+                    <div className="col-md-6 col-sm-6 col-lg-6">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="Description"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Description
+                        </label>
 
-                    <input
-                      type="number"
-                      className="form-control"
-                      name="Quantity"
-                      id="Quantity"
-                      value={Quantity}
-                      onChange={handleQuantityChange}
-                      readOnly={isReadOnly}
-                    />
+                        <textarea
+                          class="form-control"
+                          id="Description"
+                          rows="3"
+                          readOnly={isReadOnly}
+                          value={Description}
+                          onChange={(e) => setDescription(e.target.value)}
+                        ></textarea>
+                      </div>
+                    </div>
+
+                    <div className="col-md-2 col-sm-2 col-lg-2">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="TotalPrice"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Total Price
+                        </label>
+
+                        <input
+                          type="number"
+                          className="form-control"
+                          readOnly
+                          name="TotalPrice"
+                          id="TotalPrice"
+                          value={total}
+                          onChange={(e) => setTotalPrice(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-lg-2">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="TotalStock"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Total Stock
+                        </label>
+
+                        <input
+                          type="text"
+                          readOnly
+                          className="form-control"
+                          name="TotalStock"
+                          id="TotalStock"
+                          value={Stock}
+                          onChange={handleTotalStockChange}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-lg-2">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="CostPrice"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Cost Price
+                        </label>
+
+                        <input
+                          type="number"
+                          className="form-control"
+                          name="CostPrice"
+                          readOnly
+                          id="CostPrice"
+                          value={CostPrice}
+                          onChange={(e) => setCostPrice(e.target.value)}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-2 col-sm-2 col-lg-2">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="Measurement"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      Measurement
-                    </label>
 
-                    <input
-                      type="text"
-                      readOnly
-                      className="form-control"
-                      name="Measurement"
-                      id="Measurement"
-                      value={Measurement}
-                      onChange={(e) => setMeasurement(e.target.value)}
-                    />
+                  <div className="row">
+                    <div className="col-md-12 col-sm-12 col-lg-12">
+                      <Button
+                        variant="primary"
+                        style={{ float: "right" }}
+                        onClick={handleAddItem}
+                      >
+                        Add Item
+                      </Button>
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-2 col-sm-2 col-lg-2">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="SalePrice"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      Sale Price
-                    </label>
+                </>
+              )}
 
-                    <input
-                      type="number"
-                      className="form-control"
-                      name="SalePrice"
-                      id="SalePrice"
-                      readOnly={isReadOnly}
-                      value={SalePrice}
-                      onChange={handleSalePriceChange}
-                    />
+              {!AddItemSection && (
+                <>
+                  <div className="row">
+                    <div className="col-md-6 col-sm-6 col-lg-6">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="ItemName"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Item Name
+                        </label>
+
+                        <Select
+                          id="ItemName"
+                          options={Item}
+                          value={
+                            Item.find(
+                              (option) => option.value === SelectedItem
+                            ) || null
+                          }
+                          styles={{
+                            ...customStyles,
+                            menu: (provided) => ({
+                              ...provided,
+                              overflowY: "auto", // Add scrollbar when needed
+                              maxHeight: "150px", // Set the maximum height here
+                            }),
+                          }}
+                          isSearchable={true}
+                          placeholder="Select Item Name"
+                          onChange={handleItemSelect}
+                          isDisabled={isDisabled}
+                        />
+                        <AddProductModal />
+                      </div>
+                    </div>
+
+                    <div className="col-md-2 col-sm-2 col-lg-2">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="Quantity"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Quantity
+                        </label>
+
+                        <input
+                          type="number"
+                          className="form-control"
+                          name="Quantity"
+                          id="Quantity"
+                          value={Quantity}
+                          onChange={handleQuantityUpdate}
+                          readOnly={isReadOnly}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-lg-2">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="Measurement"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Measurement
+                        </label>
+
+                        <input
+                          type="text"
+                          readOnly
+                          className="form-control"
+                          name="Measurement"
+                          id="Measurement"
+                          value={Measurement}
+                          onChange={(e) => setMeasurement(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-lg-2">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="SalePrice"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Sale Price
+                        </label>
+
+                        <input
+                          type="number"
+                          className="form-control"
+                          name="SalePrice"
+                          id="SalePrice"
+                          readOnly={isReadOnly}
+                          value={SalePrice}
+                          onChange={handleSalePriceUpdate}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              <div className="row">
-                <div className="col-md-6 col-sm-6 col-lg-6">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="Description"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      Description
-                    </label>
+                  <div className="row">
+                    <div className="col-md-6 col-sm-6 col-lg-6">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="Description"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Description
+                        </label>
 
-                    <textarea
-                      class="form-control"
-                      id="Description"
-                      rows="3"
-                      readOnly={isReadOnly}
-                      value={Description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    ></textarea>
+                        <textarea
+                          class="form-control"
+                          id="Description"
+                          rows="3"
+                          readOnly={isReadOnly}
+                          value={Description}
+                          onChange={(e) => setDescription(e.target.value)}
+                        ></textarea>
+                      </div>
+                    </div>
+
+                    <div className="col-md-2 col-sm-2 col-lg-2">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="TotalPrice"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Total Price
+                        </label>
+
+                        <input
+                          type="number"
+                          className="form-control"
+                          readOnly
+                          name="TotalPrice"
+                          id="TotalPrice"
+                          value={total}
+                          onChange={(e) => setTotalPrice(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-lg-2">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="TotalStock"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Total Stock
+                        </label>
+
+                        <input
+                          type="text"
+                          readOnly
+                          className="form-control"
+                          name="TotalStock"
+                          id="TotalStock"
+                          value={Stock}
+                          onChange={handleTotalStockUpdate}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-lg-2">
+                      <div className="mb-3">
+                        <label
+                          htmlFor="CostPrice"
+                          className="form-label"
+                          style={{ color: "black" }}
+                        >
+                          Cost Price
+                        </label>
+
+                        <input
+                          type="number"
+                          className="form-control"
+                          name="CostPrice"
+                          readOnly
+                          id="CostPrice"
+                          value={CostPrice}
+                          onChange={(e) => setCostPrice(e.target.value)}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div className="col-md-2 col-sm-2 col-lg-2">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="TotalPrice"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      Total Price
-                    </label>
-
-                    <input
-                      type="number"
-                      className="form-control"
-                      readOnly
-                      name="TotalPrice"
-                      id="TotalPrice"
-                      value={total}
-                      onChange={(e) => setTotalPrice(e.target.value)}
-                    />
+                  <div className="row">
+                    <div className="col-md-12 col-sm-12 col-lg-12">
+                      <Button
+                        variant="primary"
+                        style={{ float: "right" }}
+                        onClick={handleAddItem}
+                      >
+                        Update Item
+                      </Button>
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-2 col-sm-2 col-lg-2">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="TotalStock"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      Total Stock
-                    </label>
-
-                    <input
-                      type="text"
-                      readOnly
-                      className="form-control"
-                      name="TotalStock"
-                      id="TotalStock"
-                      value={Stock}
-                      onChange={handleTotalStockChange}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-2 col-sm-2 col-lg-2">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="CostPrice"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      Cost Price
-                    </label>
-
-                    <input
-                      type="number"
-                      className="form-control"
-                      name="CostPrice"
-                      readOnly
-                      id="CostPrice"
-                      value={CostPrice}
-                      onChange={(e) => setCostPrice(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-md-12 col-sm-12 col-lg-12">
-                  <Button
-                    variant="primary"
-                    style={{ float: "right" }}
-                    onClick={handleAddItem}
-                  >
-                    Add Item
-                  </Button>
-                </div>
-              </div>
+                </>
+              )}
 
               {/* Footer */}
               <div className="row" style={{ paddingTop: "60px" }}>
@@ -1765,6 +2196,7 @@ function AddSaleOrder() {
                                     type="button"
                                     className="btn btn-primary"
                                     style={{ marginRight: "10px" }}
+                                    onClick={() => handleEdit(item)}
                                   >
                                     Edit
                                   </button>
@@ -1810,7 +2242,7 @@ function AddSaleOrder() {
                             <option value="15">15</option>
                           </select>
                         </div>
-                        <div>
+                        <div style={{ paddingTop: "10px" }}>
                           <button
                             className="btn btn-sm btn-warning"
                             type="button"
@@ -1887,7 +2319,7 @@ function AddSaleOrder() {
                         <Button
                           variant="primary"
                           style={{ float: "right", marginTop: 10 + "px" }}
-                          
+                          onClick={handleSaleOrderTotalAmount}
                         >
                           Save & Close
                         </Button>

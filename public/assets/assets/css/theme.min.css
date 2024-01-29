@@ -4875,8 +4875,8 @@ fieldset:disabled .tox .tox-dialog__footer .tox-button--secondary,
 
 .btn-success {
     --falcon-btn-color: #fff;
-    --falcon-btn-bg: #00d27a;
-    --falcon-btn-border-color: #00d27a;
+    --falcon-btn-bg: #005f37;
+    --falcon-btn-border-color: #005f37;
     --falcon-btn-hover-color: #fff;
     --falcon-btn-hover-bg: #00b368;
     --falcon-btn-hover-border-color: #00a862;

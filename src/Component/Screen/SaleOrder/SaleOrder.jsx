@@ -40,12 +40,26 @@ function SaleOrder() {
   const navigate = useNavigate();
 
   const NextPage = () => {
-    localStorage.removeItem("isSaveOrderVisible");
     localStorage.removeItem("ID");
+    localStorage.removeItem("customer");
     localStorage.removeItem("orderDate");
     localStorage.removeItem("name");
     localStorage.removeItem("phoneNumber");
     localStorage.removeItem("paymentMethod");
+    localStorage.removeItem("salesMan");
+    localStorage.removeItem("isSaveOrderVisible");
+    localStorage.removeItem("ItemName");
+    localStorage.removeItem("EditID");
+    localStorage.removeItem("EdititemName");
+    localStorage.removeItem("EditQuantity");
+    localStorage.removeItem("EditMeasurement");
+    localStorage.removeItem("EditSalePrice");
+    localStorage.removeItem("EditDescription");
+    localStorage.removeItem("EditTotal");
+    localStorage.removeItem("EditStock");
+    localStorage.removeItem("EditCostPrice");
+    localStorage.removeItem("ProductID");
+    localStorage.removeItem("AddItemSection");
     // Navigate to the new page
     navigate("/AddSaleOrder");
   };
@@ -235,6 +249,8 @@ function SaleOrder() {
                           <tr key={item.id}>
                             <td>
                               <div style={{ display: "flex" }}>
+                              {item.status === "New" && (
+                                <>
                                 <button
                                   type="button"
                                   className="btn btn-primary"
@@ -250,6 +266,17 @@ function SaleOrder() {
                                 >
                                   Delete
                                 </button>
+                                </>
+                              )}
+
+                                {item.status === "Order Delivered" && (
+                                  <button
+                                    type="button"
+                                    className="btn btn-success"
+                                  >
+                                    Print
+                                  </button>
+                                )}
                               </div>
                             </td>
                             <td className="tdchild">{item.orderDate}</td>

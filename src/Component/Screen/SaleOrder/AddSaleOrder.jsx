@@ -485,6 +485,8 @@ function AddSaleOrder() {
 
   const [Exists, setExists] = useState("");
 
+  const [ProductID, setProductID] = useState('');
+
   const handleItemSelect = (selectedOption) => {
     debugger;
 
@@ -517,6 +519,8 @@ function AddSaleOrder() {
         setTotalPrice("");
       } else {
         setSelectedItem(selectedOption?.value);
+        localStorage.setItem("ProductID", selectedOption?.Id);
+        setProductID(selectedOption?.Id);
         setIsReadOnly(false);
 
         const selectedBankData = ItemOptions.find(
@@ -563,6 +567,8 @@ function AddSaleOrder() {
       }
     } else {
       setSelectedItem(selectedOption?.value);
+      localStorage.setItem("ProductID", selectedOption?.Id);
+        setProductID(selectedOption?.Id);
       setIsReadOnly(false);
 
       const selectedBankData = ItemOptions.find(
@@ -676,8 +682,10 @@ function AddSaleOrder() {
 
   const ID = localStorage.getItem("ID");
 
-  const handleAddItem = () => {
+  const handleAddItem = async () => {
+    debugger;
     try {
+
       if (Exists) {
         toast.error("Your product already exists.", {
           position: "top-right",
@@ -701,11 +709,13 @@ function AddSaleOrder() {
       } else {
         if (paymentMethod === "rdoCash") {
           localStorage.setItem("ItemName", SelectedItem);
+          
 
           const SaleOrderRef = ref(db, "SaleOrderItem");
           const NewSaleOrder = {
             uid: loggedInUID,
             saleOrderID: ID,
+            ProductID: ProductID,
             itemName: SelectedItem,
             quantity: Quantity,
             measurement: Measurement,
@@ -716,11 +726,25 @@ function AddSaleOrder() {
             costPrice: CostPrice,
           };
           const AmountsId = push(SaleOrderRef, NewSaleOrder);
+
+          if(Stock !== '' && SalePrice !== ''){
+          const updatedProduct = {
+            uid:loggedInUID,
+            itemQty: Stock,
+            sellPrice:SalePrice
+          };
+  
+          // Update the product data in Firebase
+          const productRef = ref(db, `Product/${ProductID}`);
+          await update(productRef, updatedProduct);
+        }
+
           const newAmountID = AmountsId.key;
 
           setAmountID(newAmountID);
           setQuantity("");
           setMeasurement("");
+          setProductID('');
           setSalePrice("");
           setDescription("");
           setTotal("");
@@ -739,6 +763,7 @@ function AddSaleOrder() {
             quantity: Quantity,
             measurement: Measurement,
             salePrice: SalePrice,
+            ProductID: ProductID,
             description: Description,
             totalPrice: total,
             totalStock: Stock,
@@ -746,6 +771,20 @@ function AddSaleOrder() {
           };
 
           const AmountsId = push(SaleOrderRef, NewSaleOrder);
+
+          if(Stock !== '' && SalePrice !== ''){
+          const updatedProduct = {
+            uid:loggedInUID,
+            itemQty: Stock,
+            sellPrice:SalePrice
+          };
+  
+          // Update the product data in Firebase
+          const productRef = ref(db, `Product/${ProductID}`);
+          await update(productRef, updatedProduct);
+
+        }
+        
           const newAmountID = AmountsId.key;
 
           setAmountID(newAmountID);
@@ -753,6 +792,7 @@ function AddSaleOrder() {
           setQuantity("");
           setMeasurement("");
           setSalePrice("");
+          setProductID('');
           setDescription("");
           setTotal("");
           setStock("");
@@ -772,11 +812,26 @@ function AddSaleOrder() {
             salePrice: SalePrice,
             description: Description,
             totalPrice: total,
+            ProductID: ProductID,
             totalStock: Stock,
             costPrice: CostPrice,
           };
 
           const AmountsId = push(SaleOrderRef, NewSaleOrder);
+
+
+          if(Stock !== '' && SalePrice !== ''){
+          const updatedProduct = {
+            uid:loggedInUID,
+            itemQty: Stock,
+            sellPrice:SalePrice
+          };
+  
+          // Update the product data in Firebase
+          const productRef = ref(db, `Product/${ProductID}`);
+          await update(productRef, updatedProduct);
+
+        }
           const newAmountID = AmountsId.key;
 
           setAmountID(newAmountID);
@@ -784,6 +839,7 @@ function AddSaleOrder() {
           setQuantity("");
           setMeasurement("");
           setSalePrice("");
+          setProductID('');
           setDescription("");
           setTotal("");
           setStock("");
@@ -802,7 +858,13 @@ function AddSaleOrder() {
             theme: "colored",
           });
         }
+
+      
+
+
       }
+
+      localStorage.setItem("AddItemSection", true);
     } catch (error) {
       toast.error("Error adding SaleOrder: " + error.message, {
         position: "top-right",
@@ -952,6 +1014,8 @@ function AddSaleOrder() {
     debugger;
     localStorage.setItem("EditID", item.id);
     setEditID(item.id);
+    localStorage.setItem("ProductID", item.ProductID);
+    setProductID(item.ProductID);
     localStorage.setItem("EdititemName", item.itemName);
     setSelectedItem(item.itemName);
     localStorage.setItem("EditQuantity", item.quantity);
@@ -973,12 +1037,15 @@ function AddSaleOrder() {
 
     localStorage.setItem("AddItemSection", false);
     setAddItemSection(false);
+
+    setIsReadOnly(false);
   };
 
   useEffect(() => {
     debugger;
     const AddItemSec = localStorage.getItem("AddItemSection");
     const EditIDs = localStorage.getItem("EditID");
+    const ProductID = localStorage.getItem("ProductID");
     const itemName = localStorage.getItem("EdititemName");
     const quantity = localStorage.getItem("EditQuantity");
     const measurement = localStorage.getItem("EditMeasurement");
@@ -995,6 +1062,7 @@ function AddSaleOrder() {
 
       setEditID(EditIDs);
       setSelectedItem(itemName);
+      setProductID(ProductID);
       setQuantity(quantity);
       setMeasurement(measurement);
       setSalePrice(salePrice);
@@ -1016,6 +1084,7 @@ function AddSaleOrder() {
       setSelectedItem("");
       setQuantity("");
       setMeasurement("");
+      setProductID('');
       setSalePrice("");
       setDescription("");
       setTotal("");
@@ -1065,10 +1134,15 @@ function AddSaleOrder() {
         theme: "colored",
       });
 
+      const quantity = localStorage.getItem("EditQuantity");
+      const stock = localStorage.getItem("EditStock");
+      const newTotalStock = parseFloat(stock) + parseFloat(quantity);
+
       setQuantity("");
       setTotalPrice("");
       setTotal("");
-      setStock(TotalStock);
+      setStock(newTotalStock);
+      setTotalStock(newTotalStock);
       // Additional logic for error handling if needed
     } else if (quantity !== "" && parseFloat(quantity) < LastStock) {
       const Qty = parseFloat(quantity);
@@ -1078,10 +1152,6 @@ function AddSaleOrder() {
       const Qty = parseFloat(quantity);
       const newTotalStock = Qty - LastStock;
       setStock(newTotalStock);
-    } else if (quantity === "") {
-      setStock(LastStock);
-
-      setLastStock(LastStock);
     } else {
       const quantity = localStorage.getItem("EditQuantity");
       const stock = localStorage.getItem("EditStock");
@@ -1094,9 +1164,9 @@ function AddSaleOrder() {
     }
   };
 
-  const handleUpdateItem = () => {
+  const handleUpdateItem = async () => {
     // console.log(EditID);
-
+debugger;
     try {
       const loggedInUID = localStorage.getItem("uid");
       const SaleOrderItemRef = ref(db, `SaleOrderItem/${EditID}`);
@@ -1116,6 +1186,19 @@ function AddSaleOrder() {
         costPrice: CostPrice,
       };
       update(SaleOrderItemRef, newSaleOrderItem);
+
+if(Stock !== '' && SalePrice !== ''){
+  const updatedProduct = {
+    uid:loggedInUID,
+    itemQty: Stock,
+    sellPrice:SalePrice
+  };
+
+  // Update the product data in Firebase
+  const productRef = ref(db, `Product/${ProductID}`);
+  await update(productRef, updatedProduct);
+}
+     
 
       setQuantity("");
       setMeasurement("");
@@ -1218,6 +1301,10 @@ function AddSaleOrder() {
       localStorage.removeItem("EditStock");
       localStorage.removeItem("EditCostPrice");
       localStorage.removeItem("AddItemSection");
+
+      setIsReadOnly(true);
+      setSaveOrderVisible(true);
+      
     } catch (error) {
       toast.error("Error adding SaleOrder: " + error.message, {
         position: "top-right",

@@ -1347,30 +1347,8 @@ function AddSaleOrder() {
     }
   }, []);
 
-  const handleCustomerChange = (selectedOption) => {
-    debugger;
-    setSelectedCustomer(selectedOption?.value);
-  };
 
 
-
-  // const handleBankSelect = (selectedOption) => {
-  //   setSelectedBank(selectedOption?.value);
-  //   const selectedBankData = bankOptions.find(
-  //     (option) => option.value === selectedOption?.value
-  //   );
-  //   if (selectedBankData.Balance !== undefined) {
-  //     var balanceString = selectedBankData.Balance;
-
-  //     // Extract the numeric part using parseInt
-  //     var balanceNumeric = parseFloat(balanceString);
-
-  //     setBankAmount(balanceNumeric);
-  //     setBankID(`${selectedBankData.Id}`);
-  //   } else if (selectedBankData.Balance === undefined) {
-  //     setBankAmount("Rs: 0");
-  //   }
-  // };
 
 // ----------------------Delete-----------------------------
 
@@ -1661,13 +1639,11 @@ debugger;
                               }),
                             }}
                             options={customerName}
-                            value={
-                              Item.find(
-                                (option) => option.value === selectedCustomer
-                              ) || null
-                            }
+                            value={customerName.find(
+                              (option) => option.value === selectedCustomer
+                            )}
                             placeholder="Select Customer"
-                            onChange={(selectedOption)=>handleCustomerChange(selectedOption)}
+                            onChange={(selectedOption)=>setSelectedCustomer(selectedOption)}
                             isSearchable={true}
                           />
 
@@ -1757,11 +1733,9 @@ debugger;
                                 maxHeight: "160px", // Set the maximum height here
                               }),
                             }}
-                            value={
-                              Item.find(
-                                (option) => option.value === selectedCustomer
-                              ) || null
-                            }
+                            value={customerName.find(
+                              (option) => option.value === selectedCustomer
+                            )}
                             placeholder="Select Customer"
                             onChange={(selectedOption) =>
                               setSelectedCustomer(selectedOption)

@@ -8,7 +8,6 @@ import Main from "../../NavBar/Navbar";
 // Bootstrap Modal
 // ---------------------------------------------------
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import InputMask from "react-input-mask";
@@ -272,11 +271,17 @@ function AddSaleOrder() {
         const newSaleOrderRef = update(SaleOrderRef, newSaleOrder);
         // Get the ID (key) of the newly pushed SaleOrder
 
-        setCounterSale(newSaleOrder.customer);
+        localStorage.setItem("customer", newSaleOrder.customer);
+        setCustomerName(newSaleOrder.customer);
+        localStorage.setItem("orderDate", newSaleOrder.orderDate);
         setOrderDate(newSaleOrder.orderDate);
+        localStorage.setItem("name", newSaleOrder.name);
         setName(newSaleOrder.name);
+        localStorage.setItem("phoneNumber", newSaleOrder.phoneNumber);
         setPhoneNumber(newSaleOrder.phoneNumber);
+        localStorage.setItem("paymentMethod", newSaleOrder.paymentMethod);
         setPaymentMethod(newSaleOrder.paymentMethod);
+
       } else if (paymentMethod === "rdoCredit") {
         const newSaleOrder = {
           uid: loggedInUID,
@@ -288,10 +293,17 @@ function AddSaleOrder() {
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         const newSaleOrderRef = update(SaleOrderRef, newSaleOrder);
 
+        localStorage.setItem("customer", newSaleOrder.customer);
         setCustomerName(newSaleOrder.customer);
+        localStorage.setItem("orderDate", newSaleOrder.orderDate);
         setOrderDate(newSaleOrder.orderDate);
+        localStorage.setItem("salesMan", newSaleOrder.salesMan);
         setSalesMan(newSaleOrder.salesMan);
+        localStorage.setItem("paymentMethod", newSaleOrder.paymentMethod);
         setPaymentMethod(newSaleOrder.paymentMethod);
+
+      
+        
       } else {
         const newSaleOrder = {
           uid: loggedInUID,
@@ -304,11 +316,18 @@ function AddSaleOrder() {
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         const newSaleOrderRef = update(SaleOrderRef, newSaleOrder);
 
+        localStorage.setItem("customer", newSaleOrder.customer);
         setCustomerName(newSaleOrder.customer);
+        localStorage.setItem("orderDate", newSaleOrder.orderDate);
         setOrderDate(newSaleOrder.orderDate);
+        localStorage.setItem("name", newSaleOrder.name);
         setName(newSaleOrder.name);
+        localStorage.setItem("phoneNumber", newSaleOrder.phoneNumber);
         setPhoneNumber(newSaleOrder.phoneNumber);
+        localStorage.setItem("paymentMethod", newSaleOrder.paymentMethod);
         setPaymentMethod(newSaleOrder.paymentMethod);
+
+
       }
 
       toast.success("Sale Order Edit Successfully", {
@@ -1319,6 +1338,25 @@ if(Stock !== '' && SalePrice !== ''){
     }
   };
 
+
+
+  useEffect(() => {
+    // Fetch customer data or set it from localStorage
+    const customerData = localStorage.getItem("customer");
+  
+    // Check if customerData is a valid JSON
+    try {
+      const parsedCustomerData = JSON.parse(customerData);
+      setCustomerName(parsedCustomerData);
+      setSelectedCustomer(parsedCustomerData[0]); // Set the default selected customer if needed
+    } catch (error) {
+      // Handle the case where customerData is not valid JSON
+      // Assuming customerData is a simple string, create an array with a single element
+      setCustomerName([{ value: customerData, label: customerData }]);
+      setSelectedCustomer({ value: customerData, label: customerData });
+    }
+  }, []);
+
   return (
     <>
       <Main>
@@ -1504,7 +1542,11 @@ if(Stock !== '' && SalePrice !== ''){
                               }),
                             }}
                             options={customerName}
-                            value={selectedCustomer}
+                            value={
+                              Item.find(
+                                (option) => option.value === selectedCustomer
+                              ) || null
+                            }
                             placeholder="Select Customer"
                             onChange={(selectedOption) =>
                               setSelectedCustomer(selectedOption)
@@ -1598,7 +1640,11 @@ if(Stock !== '' && SalePrice !== ''){
                                 maxHeight: "160px", // Set the maximum height here
                               }),
                             }}
-                            value={selectedCustomer}
+                            value={
+                              Item.find(
+                                (option) => option.value === selectedCustomer
+                              ) || null
+                            }
                             placeholder="Select Customer"
                             onChange={(selectedOption) =>
                               setSelectedCustomer(selectedOption)
@@ -1870,6 +1916,7 @@ if(Stock !== '' && SalePrice !== ''){
                           <Select
                             id="txtCustomerCashCredit"
                             options={customerName}
+                            value={selectedCustomer}
                             styles={{
                               ...customStyles,
                               menu: (provided) => ({
@@ -1878,7 +1925,6 @@ if(Stock !== '' && SalePrice !== ''){
                                 maxHeight: "160px", // Set the maximum height here
                               }),
                             }}
-                            value={selectedCustomer}
                             placeholder="Select Customer"
                             onChange={(selectedOption) =>
                               setSelectedCustomer(selectedOption)

@@ -68,7 +68,8 @@ function AddSaleOrder() {
 
             // Convert the filtered data object into an array of options
             const options = Object.keys(filteredData).map((key) => ({
-              value: key,
+              Id: key,
+              value: filteredData[key].customerName,
               label: filteredData[key].customerName,
             }));
 
@@ -1346,6 +1347,31 @@ function AddSaleOrder() {
     }
   }, []);
 
+  const handleCustomerChange = (selectedOption) => {
+    debugger;
+    setSelectedCustomer(selectedOption?.value);
+  };
+
+
+
+  // const handleBankSelect = (selectedOption) => {
+  //   setSelectedBank(selectedOption?.value);
+  //   const selectedBankData = bankOptions.find(
+  //     (option) => option.value === selectedOption?.value
+  //   );
+  //   if (selectedBankData.Balance !== undefined) {
+  //     var balanceString = selectedBankData.Balance;
+
+  //     // Extract the numeric part using parseInt
+  //     var balanceNumeric = parseFloat(balanceString);
+
+  //     setBankAmount(balanceNumeric);
+  //     setBankID(`${selectedBankData.Id}`);
+  //   } else if (selectedBankData.Balance === undefined) {
+  //     setBankAmount("Rs: 0");
+  //   }
+  // };
+
 // ----------------------Delete-----------------------------
 
   const [showAlert, setShowAlert] = useState(false);
@@ -1641,9 +1667,7 @@ debugger;
                               ) || null
                             }
                             placeholder="Select Customer"
-                            onChange={(selectedOption) =>
-                              setSelectedCustomer(selectedOption)
-                            }
+                            onChange={(selectedOption)=>handleCustomerChange(selectedOption)}
                             isSearchable={true}
                           />
 

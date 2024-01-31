@@ -151,6 +151,7 @@ function AddSaleOrder() {
           createdDate: formattedDate,
           phoneNumber: PhoneNumber,
           paymentMethod: "rdoCash",
+          Payment: 0
         };
         const newSaleOrderRef = push(SaleOrderRef, newSaleOrder);
         // Get the ID (key) of the newly pushed SaleOrder
@@ -179,6 +180,7 @@ function AddSaleOrder() {
           createdDate: formattedDate,
           salesMan: SalesMan,
           paymentMethod: "rdoCredit",
+          Payment: 0
         };
         const newSaleOrderRef = push(SaleOrderRef, newSaleOrder);
         const newSaleOrderId = newSaleOrderRef.key;
@@ -205,6 +207,7 @@ function AddSaleOrder() {
           createdDate: formattedDate,
           paymentMethod: "rdoCashCredit",
           phoneNumber: PhoneNumber,
+          Payment: 0
         };
         const newSaleOrderRef = push(SaleOrderRef, newSaleOrder);
         const newSaleOrderId = newSaleOrderRef.key;

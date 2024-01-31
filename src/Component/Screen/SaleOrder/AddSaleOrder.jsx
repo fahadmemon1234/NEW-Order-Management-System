@@ -174,7 +174,7 @@ function AddSaleOrder() {
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
           uid: loggedInUID,
-          customer: selectedCustomer.label,
+          customer: selectedCustomer.value,
           orderDate: orderDate,
           status: "New",
           createdDate: formattedDate,
@@ -200,7 +200,7 @@ function AddSaleOrder() {
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
           uid: loggedInUID,
-          customer: selectedCustomer.label,
+          customer: selectedCustomer.value,
           orderDate: orderDate,
           name: Name,
           status: "New",
@@ -288,7 +288,7 @@ function AddSaleOrder() {
       } else if (paymentMethod === "rdoCredit") {
         const newSaleOrder = {
           uid: loggedInUID,
-          customer: selectedCustomer.label,
+          customer: selectedCustomer.value,
           orderDate: orderDate,
           salesMan: SalesMan,
           paymentMethod: "rdoCredit",
@@ -307,7 +307,7 @@ function AddSaleOrder() {
       } else {
         const newSaleOrder = {
           uid: loggedInUID,
-          customer: selectedCustomer.label,
+          customer: selectedCustomer.value,
           orderDate: orderDate,
           name: Name,
           paymentMethod: "rdoCashCredit",
@@ -384,7 +384,7 @@ function AddSaleOrder() {
       setCustomerName("");
       setOrderDate("");
       setName("");
-      setSelectedCustomer("");
+      setSelectedCustomer(0);
       setId("");
       setPhoneNumber("");
       setPaymentMethod("rdoCash");

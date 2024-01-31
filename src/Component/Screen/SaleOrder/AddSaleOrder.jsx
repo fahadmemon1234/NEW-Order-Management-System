@@ -281,7 +281,6 @@ function AddSaleOrder() {
         setPhoneNumber(newSaleOrder.phoneNumber);
         localStorage.setItem("paymentMethod", newSaleOrder.paymentMethod);
         setPaymentMethod(newSaleOrder.paymentMethod);
-
       } else if (paymentMethod === "rdoCredit") {
         const newSaleOrder = {
           uid: loggedInUID,
@@ -301,9 +300,6 @@ function AddSaleOrder() {
         setSalesMan(newSaleOrder.salesMan);
         localStorage.setItem("paymentMethod", newSaleOrder.paymentMethod);
         setPaymentMethod(newSaleOrder.paymentMethod);
-
-      
-        
       } else {
         const newSaleOrder = {
           uid: loggedInUID,
@@ -326,8 +322,6 @@ function AddSaleOrder() {
         setPhoneNumber(newSaleOrder.phoneNumber);
         localStorage.setItem("paymentMethod", newSaleOrder.paymentMethod);
         setPaymentMethod(newSaleOrder.paymentMethod);
-
-
       }
 
       toast.success("Sale Order Edit Successfully", {
@@ -504,7 +498,7 @@ function AddSaleOrder() {
 
   const [Exists, setExists] = useState("");
 
-  const [ProductID, setProductID] = useState('');
+  const [ProductID, setProductID] = useState("");
 
   const handleItemSelect = (selectedOption) => {
     debugger;
@@ -587,7 +581,7 @@ function AddSaleOrder() {
     } else {
       setSelectedItem(selectedOption?.value);
       localStorage.setItem("ProductID", selectedOption?.Id);
-        setProductID(selectedOption?.Id);
+      setProductID(selectedOption?.Id);
       setIsReadOnly(false);
 
       const selectedBankData = ItemOptions.find(
@@ -704,7 +698,6 @@ function AddSaleOrder() {
   const handleAddItem = async () => {
     debugger;
     try {
-
       if (Exists) {
         toast.error("Your product already exists.", {
           position: "top-right",
@@ -728,7 +721,6 @@ function AddSaleOrder() {
       } else {
         if (paymentMethod === "rdoCash") {
           localStorage.setItem("ItemName", SelectedItem);
-          
 
           const SaleOrderRef = ref(db, "SaleOrderItem");
           const NewSaleOrder = {
@@ -746,24 +738,24 @@ function AddSaleOrder() {
           };
           const AmountsId = push(SaleOrderRef, NewSaleOrder);
 
-          if(Stock !== '' && SalePrice !== ''){
-          const updatedProduct = {
-            uid:loggedInUID,
-            itemQty: Stock,
-            sellPrice:SalePrice
-          };
-  
-          // Update the product data in Firebase
-          const productRef = ref(db, `Product/${ProductID}`);
-          await update(productRef, updatedProduct);
-        }
+          if (Stock !== "" && SalePrice !== "") {
+            const updatedProduct = {
+              uid: loggedInUID,
+              itemQty: Stock,
+              sellPrice: SalePrice,
+            };
+
+            // Update the product data in Firebase
+            const productRef = ref(db, `Product/${ProductID}`);
+            await update(productRef, updatedProduct);
+          }
 
           const newAmountID = AmountsId.key;
 
           setAmountID(newAmountID);
           setQuantity("");
           setMeasurement("");
-          setProductID('');
+          setProductID("");
           setSalePrice("");
           setDescription("");
           setTotal("");
@@ -791,19 +783,18 @@ function AddSaleOrder() {
 
           const AmountsId = push(SaleOrderRef, NewSaleOrder);
 
-          if(Stock !== '' && SalePrice !== ''){
-          const updatedProduct = {
-            uid:loggedInUID,
-            itemQty: Stock,
-            sellPrice:SalePrice
-          };
-  
-          // Update the product data in Firebase
-          const productRef = ref(db, `Product/${ProductID}`);
-          await update(productRef, updatedProduct);
+          if (Stock !== "" && SalePrice !== "") {
+            const updatedProduct = {
+              uid: loggedInUID,
+              itemQty: Stock,
+              sellPrice: SalePrice,
+            };
 
-        }
-        
+            // Update the product data in Firebase
+            const productRef = ref(db, `Product/${ProductID}`);
+            await update(productRef, updatedProduct);
+          }
+
           const newAmountID = AmountsId.key;
 
           setAmountID(newAmountID);
@@ -811,7 +802,7 @@ function AddSaleOrder() {
           setQuantity("");
           setMeasurement("");
           setSalePrice("");
-          setProductID('');
+          setProductID("");
           setDescription("");
           setTotal("");
           setStock("");
@@ -838,19 +829,17 @@ function AddSaleOrder() {
 
           const AmountsId = push(SaleOrderRef, NewSaleOrder);
 
+          if (Stock !== "" && SalePrice !== "") {
+            const updatedProduct = {
+              uid: loggedInUID,
+              itemQty: Stock,
+              sellPrice: SalePrice,
+            };
 
-          if(Stock !== '' && SalePrice !== ''){
-          const updatedProduct = {
-            uid:loggedInUID,
-            itemQty: Stock,
-            sellPrice:SalePrice
-          };
-  
-          // Update the product data in Firebase
-          const productRef = ref(db, `Product/${ProductID}`);
-          await update(productRef, updatedProduct);
-
-        }
+            // Update the product data in Firebase
+            const productRef = ref(db, `Product/${ProductID}`);
+            await update(productRef, updatedProduct);
+          }
           const newAmountID = AmountsId.key;
 
           setAmountID(newAmountID);
@@ -858,7 +847,7 @@ function AddSaleOrder() {
           setQuantity("");
           setMeasurement("");
           setSalePrice("");
-          setProductID('');
+          setProductID("");
           setDescription("");
           setTotal("");
           setStock("");
@@ -877,10 +866,6 @@ function AddSaleOrder() {
             theme: "colored",
           });
         }
-
-      
-
-
       }
 
       localStorage.setItem("AddItemSection", true);
@@ -1103,7 +1088,7 @@ function AddSaleOrder() {
       setSelectedItem("");
       setQuantity("");
       setMeasurement("");
-      setProductID('');
+      setProductID("");
       setSalePrice("");
       setDescription("");
       setTotal("");
@@ -1185,7 +1170,7 @@ function AddSaleOrder() {
 
   const handleUpdateItem = async () => {
     // console.log(EditID);
-debugger;
+    debugger;
     try {
       const loggedInUID = localStorage.getItem("uid");
       const SaleOrderItemRef = ref(db, `SaleOrderItem/${EditID}`);
@@ -1206,18 +1191,17 @@ debugger;
       };
       update(SaleOrderItemRef, newSaleOrderItem);
 
-if(Stock !== '' && SalePrice !== ''){
-  const updatedProduct = {
-    uid:loggedInUID,
-    itemQty: Stock,
-    sellPrice:SalePrice
-  };
+      if (Stock !== "" && SalePrice !== "") {
+        const updatedProduct = {
+          uid: loggedInUID,
+          itemQty: Stock,
+          sellPrice: SalePrice,
+        };
 
-  // Update the product data in Firebase
-  const productRef = ref(db, `Product/${ProductID}`);
-  await update(productRef, updatedProduct);
-}
-     
+        // Update the product data in Firebase
+        const productRef = ref(db, `Product/${ProductID}`);
+        await update(productRef, updatedProduct);
+      }
 
       setQuantity("");
       setMeasurement("");
@@ -1323,7 +1307,6 @@ if(Stock !== '' && SalePrice !== ''){
 
       setIsReadOnly(true);
       setSaveOrderVisible(true);
-      
     } catch (error) {
       toast.error("Error adding SaleOrder: " + error.message, {
         position: "top-right",
@@ -1338,24 +1321,134 @@ if(Stock !== '' && SalePrice !== ''){
     }
   };
 
-
-
+  // Customer DropDown Populate
   useEffect(() => {
     // Fetch customer data or set it from localStorage
     const customerData = localStorage.getItem("customer");
-  
+
     // Check if customerData is a valid JSON
     try {
-      const parsedCustomerData = JSON.parse(customerData);
-      setCustomerName(parsedCustomerData);
-      setSelectedCustomer(parsedCustomerData[0]); // Set the default selected customer if needed
-    } catch (error) {
-      // Handle the case where customerData is not valid JSON
-      // Assuming customerData is a simple string, create an array with a single element
+      
       setCustomerName([{ value: customerData, label: customerData }]);
       setSelectedCustomer({ value: customerData, label: customerData });
+    } catch (error) {
+      toast.error("Error adding: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    
     }
   }, []);
+
+// ----------------------Delete-----------------------------
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [showOK, setShowOK] = useState(false);
+
+  const [Deleteid, setDeleteId] = useState(null);
+
+  const [pID, setpID] = useState('');
+const [EditQuantityTotal, setEditQuantityTotal] = useState('');
+
+  const handleDelete = async (item) => {
+    debugger;
+    localStorage.setItem("EditID", item.id);
+    localStorage.setItem("ProductID", item.ProductID);
+    localStorage.setItem("EdititemName", item.itemName);
+    localStorage.setItem("EditQuantity", item.quantity);
+    localStorage.setItem("EditMeasurement", item.measurement);
+    localStorage.setItem("EditSalePrice", item.salePrice);
+    localStorage.setItem("EditDescription", item.description);
+    localStorage.setItem("EditTotal", item.totalPrice);
+    localStorage.setItem("EditStock", item.totalStock);
+    localStorage.setItem("EditCostPrice", item.costPrice);
+    localStorage.setItem("AddItemSection", false);
+
+    const EditQuantityTotals = parseFloat(item.quantity) + item.totalStock;
+
+    setEditQuantityTotal(EditQuantityTotals)
+    setDeleteId(item.id);
+    setpID(item.ProductID)
+    setShowAlert(true);
+
+    
+
+  };
+
+
+  const handleConfirmDelete = async () => {
+    try {
+debugger;
+
+
+      if (EditQuantityTotal !== "") {
+        const updatedProduct = {
+          uid: loggedInUID,
+          itemQty: EditQuantityTotal
+        };
+  
+        // Update the product data in Firebase
+        const productRef = ref(db, `Product/${pID}`);
+        await update(productRef, updatedProduct);
+
+        const dataRef = ref(db, `SaleOrderItem/${Deleteid}`);
+        await remove(dataRef);
+
+        
+      // Update the data state after deletion
+      const updatedData = tableData.filter((item) => item.id !== Deleteid);
+      setTableData(updatedData);
+
+      }
+    
+
+
+      localStorage.removeItem("EditID");
+      setEditID('');
+      localStorage.removeItem("ProductID");
+      setProductID('');
+      localStorage.removeItem("EdititemName");
+      setSelectedItem('');
+      localStorage.removeItem("EditQuantity");
+      setQuantity('');
+      localStorage.removeItem("EditMeasurement");
+      setMeasurement('');
+      localStorage.removeItem("EditSalePrice");
+      setSalePrice('');
+      localStorage.removeItem("EditDescription");
+      setDescription('');
+      localStorage.removeItem("EditTotal");
+      setTotal('');
+      setTotalPrice('');
+      localStorage.removeItem("EditStock");
+      setStock('');
+      setTotalStock('');
+      localStorage.removeItem("EditCostPrice");
+      setCostPrice('');
+  
+      localStorage.setItem("AddItemSection", true);
+      setAddItemSection(true);
+
+      setShowAlert(false);
+      setShowOK(true);
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowAlert(false);
+  };
+
+  const handleOK = () => {
+    setShowOK(false);
+  };
 
   return (
     <>
@@ -2474,6 +2567,7 @@ if(Stock !== '' && SalePrice !== ''){
                                   <button
                                     type="button"
                                     className="btn btn-danger"
+                                    onClick={() => handleDelete(item)}
                                   >
                                     Delete
                                   </button>
@@ -2602,6 +2696,26 @@ if(Stock !== '' && SalePrice !== ''){
             </div>
           </div>
         </div>
+
+
+        <SweetAlert
+          warning
+          show={showAlert}
+          title="Confirm Deletion"
+          showCancel
+          confirmBtnText="Yes, delete it!"
+          confirmBtnBsStyle="danger"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+          focusCancelBtn
+        >
+          Are you sure you want to delete this item?
+        </SweetAlert>
+
+        <SweetAlert show={showOK} success title="Deleted!" onConfirm={handleOK}>
+          Your item has been deleted.
+        </SweetAlert>
+
       </Main>
     </>
   );

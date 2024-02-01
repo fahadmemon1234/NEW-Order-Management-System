@@ -8,6 +8,7 @@ import WithDraw from "./Component/Screen/WithDraw/WithDraw";
 import Customers from "./Component/Screen/Customers/Customers";
 import SaleOrder from "./Component/Screen/SaleOrder/SaleOrder";
 import AddSaleOrder from "./Component/Screen/SaleOrder/AddSaleOrder";
+import PrintReceipt from "./Component/Screen/SaleOrder/PrintReceipt";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path="/Customers" element={<Customers />}></Route>
         <Route path="/SaleOrder" element={<SaleOrder />}></Route>
         <Route path="/AddSaleOrder" element={<AddSaleOrder />}></Route>
+        <Route path="/PrintReceipt" element={<PrintReceipt />}></Route>
       </Routes>
     </>
   );

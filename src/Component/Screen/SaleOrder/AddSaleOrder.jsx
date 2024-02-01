@@ -43,8 +43,8 @@ function AddSaleOrder() {
     setPaymentMethod(event.target.value);
   };
 
-  const [customerName, setCustomerName] = useState([]);
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [customerName, setCustomerName] = useState('');
+  const [selectedCustomer, setSelectedCustomer] = useState('');
 
   const loggedInUID = localStorage.getItem("uid");
 
@@ -1326,29 +1326,29 @@ function AddSaleOrder() {
   };
 
   // Customer DropDown Populate
-  useEffect(() => {
-    // Fetch customer data or set it from localStorage
-    const customerData = localStorage.getItem("customer");
+  // useEffect(() => {
+  //   // Fetch customer data or set it from localStorage
+  //   const customerData = localStorage.getItem("customer");
 
-    // Check if customerData is a valid JSON
-    try {
+  //   // Check if customerData is a valid JSON
+  //   try {
       
-      setCustomerName([{ value: customerData, label: customerData }]);
-      setSelectedCustomer({ value: customerData, label: customerData });
-    } catch (error) {
-      toast.error("Error adding: " + error.message, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+  //     // setCustomerName([{ value: customerData, label: customerData }]);
+  //     setSelectedCustomer({ value: customerData, label: customerData });
+  //   } catch (error) {
+  //     toast.error("Error adding: " + error.message, {
+  //       position: "top-right",
+  //       autoClose: 1000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: false,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "colored",
+  //     });
     
-    }
-  }, []);
+  //   }
+  // }, []);
 
 
 
@@ -1924,7 +1924,11 @@ debugger;
                               }),
                             }}
                             options={customerName}
-                            value={selectedCustomer}
+                            value={
+                              customerName.find(
+                                (option) => option.value === selectedCustomer
+                              ) || null
+                            }
                             placeholder="Select Customer"
                             onChange={(selectedOption) =>
                               setSelectedCustomer(selectedOption)

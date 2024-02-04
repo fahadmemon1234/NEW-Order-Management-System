@@ -43,8 +43,8 @@ function AddSaleOrder() {
     setPaymentMethod(event.target.value);
   };
 
-  const [customerName, setCustomerName] = useState('');
-  const [selectedCustomer, setSelectedCustomer] = useState('');
+  const [customerName, setCustomerName] = useState("");
+  const [selectedCustomer, setSelectedCustomer] = useState("");
 
   const loggedInUID = localStorage.getItem("uid");
 
@@ -151,7 +151,7 @@ function AddSaleOrder() {
           createdDate: formattedDate,
           phoneNumber: PhoneNumber,
           paymentMethod: "rdoCash",
-          Payment: 0
+          Payment: 0,
         };
         const newSaleOrderRef = push(SaleOrderRef, newSaleOrder);
         // Get the ID (key) of the newly pushed SaleOrder
@@ -180,7 +180,7 @@ function AddSaleOrder() {
           createdDate: formattedDate,
           salesMan: SalesMan,
           paymentMethod: "rdoCredit",
-          Payment: 0
+          Payment: 0,
         };
         const newSaleOrderRef = push(SaleOrderRef, newSaleOrder);
         const newSaleOrderId = newSaleOrderRef.key;
@@ -207,7 +207,7 @@ function AddSaleOrder() {
           createdDate: formattedDate,
           paymentMethod: "rdoCashCredit",
           phoneNumber: PhoneNumber,
-          Payment: 0
+          Payment: 0,
         };
         const newSaleOrderRef = push(SaleOrderRef, newSaleOrder);
         const newSaleOrderId = newSaleOrderRef.key;
@@ -752,6 +752,21 @@ function AddSaleOrder() {
             // Update the product data in Firebase
             const productRef = ref(db, `Product/${ProductID}`);
             await update(productRef, updatedProduct);
+
+            const newSaleOrder = {
+              uid: loggedInUID,
+              ProductID: ProductID,
+              itemName: SelectedItem,
+              quantity: Quantity,
+              measurement: Measurement,
+              salePrice: SalePrice,
+              description: Description,
+              totalPrice: total,
+              totalStock: Stock,
+              costPrice: CostPrice,
+            };
+            const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+            await update(SaleOrderRef, newSaleOrder);
           }
 
           const newAmountID = AmountsId.key;
@@ -797,6 +812,23 @@ function AddSaleOrder() {
             // Update the product data in Firebase
             const productRef = ref(db, `Product/${ProductID}`);
             await update(productRef, updatedProduct);
+
+
+
+            const newSaleOrder = {
+              uid: loggedInUID,
+              ProductID: ProductID,
+              itemName: SelectedItem,
+              quantity: Quantity,
+              measurement: Measurement,
+              salePrice: SalePrice,
+              description: Description,
+              totalPrice: total,
+              totalStock: Stock,
+              costPrice: CostPrice,
+            };
+            const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+            await update(SaleOrderRef, newSaleOrder);
           }
 
           const newAmountID = AmountsId.key;
@@ -843,6 +875,23 @@ function AddSaleOrder() {
             // Update the product data in Firebase
             const productRef = ref(db, `Product/${ProductID}`);
             await update(productRef, updatedProduct);
+
+
+
+            const newSaleOrder = {
+              uid: loggedInUID,
+              ProductID: ProductID,
+              itemName: SelectedItem,
+              quantity: Quantity,
+              measurement: Measurement,
+              salePrice: SalePrice,
+              description: Description,
+              totalPrice: total,
+              totalStock: Stock,
+              costPrice: CostPrice,
+            };
+            const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+            await update(SaleOrderRef, newSaleOrder);
           }
           const newAmountID = AmountsId.key;
 
@@ -1205,6 +1254,23 @@ function AddSaleOrder() {
         // Update the product data in Firebase
         const productRef = ref(db, `Product/${ProductID}`);
         await update(productRef, updatedProduct);
+
+
+
+        const newSaleOrder = {
+          uid: loggedInUID,
+          ProductID: ProductID,
+          itemName: SelectedItem,
+          quantity: Quantity,
+          measurement: Measurement,
+          salePrice: SalePrice,
+          description: Description,
+          totalPrice: total,
+          totalStock: Stock,
+          costPrice: CostPrice,
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        await update(SaleOrderRef, newSaleOrder);
       }
 
       setQuantity("");
@@ -1332,7 +1398,7 @@ function AddSaleOrder() {
 
   //   // Check if customerData is a valid JSON
   //   try {
-      
+
   //     // setCustomerName([{ value: customerData, label: customerData }]);
   //     setSelectedCustomer({ value: customerData, label: customerData });
   //   } catch (error) {
@@ -1346,22 +1412,19 @@ function AddSaleOrder() {
   //       progress: undefined,
   //       theme: "colored",
   //     });
-    
+
   //   }
   // }, []);
 
-
-
-
-// ----------------------Delete-----------------------------
+  // ----------------------Delete-----------------------------
 
   const [showAlert, setShowAlert] = useState(false);
   const [showOK, setShowOK] = useState(false);
 
   const [Deleteid, setDeleteId] = useState(null);
 
-  const [pID, setpID] = useState('');
-const [EditQuantityTotal, setEditQuantityTotal] = useState('');
+  const [pID, setpID] = useState("");
+  const [EditQuantityTotal, setEditQuantityTotal] = useState("");
 
   const handleDelete = async (item) => {
     debugger;
@@ -1379,27 +1442,22 @@ const [EditQuantityTotal, setEditQuantityTotal] = useState('');
 
     const EditQuantityTotals = parseFloat(item.quantity) + item.totalStock;
 
-    setEditQuantityTotal(EditQuantityTotals)
+    setEditQuantityTotal(EditQuantityTotals);
     setDeleteId(item.id);
-    setpID(item.ProductID)
+    setpID(item.ProductID);
     setShowAlert(true);
-
-    
-
   };
-
 
   const handleConfirmDelete = async () => {
     try {
-debugger;
-
+      debugger;
 
       if (EditQuantityTotal !== "") {
         const updatedProduct = {
           uid: loggedInUID,
-          itemQty: EditQuantityTotal
+          itemQty: EditQuantityTotal,
         };
-  
+
         // Update the product data in Firebase
         const productRef = ref(db, `Product/${pID}`);
         await update(productRef, updatedProduct);
@@ -1407,38 +1465,34 @@ debugger;
         const dataRef = ref(db, `SaleOrderItem/${Deleteid}`);
         await remove(dataRef);
 
-        
-      // Update the data state after deletion
-      const updatedData = tableData.filter((item) => item.id !== Deleteid);
-      setTableData(updatedData);
-
+        // Update the data state after deletion
+        const updatedData = tableData.filter((item) => item.id !== Deleteid);
+        setTableData(updatedData);
       }
-    
-
 
       localStorage.removeItem("EditID");
-      setEditID('');
+      setEditID("");
       localStorage.removeItem("ProductID");
-      setProductID('');
+      setProductID("");
       localStorage.removeItem("EdititemName");
-      setSelectedItem('');
+      setSelectedItem("");
       localStorage.removeItem("EditQuantity");
-      setQuantity('');
+      setQuantity("");
       localStorage.removeItem("EditMeasurement");
-      setMeasurement('');
+      setMeasurement("");
       localStorage.removeItem("EditSalePrice");
-      setSalePrice('');
+      setSalePrice("");
       localStorage.removeItem("EditDescription");
-      setDescription('');
+      setDescription("");
       localStorage.removeItem("EditTotal");
-      setTotal('');
-      setTotalPrice('');
+      setTotal("");
+      setTotalPrice("");
       localStorage.removeItem("EditStock");
-      setStock('');
-      setTotalStock('');
+      setStock("");
+      setTotalStock("");
       localStorage.removeItem("EditCostPrice");
-      setCostPrice('');
-  
+      setCostPrice("");
+
       localStorage.setItem("AddItemSection", true);
       setAddItemSection(true);
 
@@ -1646,7 +1700,9 @@ debugger;
                               (option) => option.value === selectedCustomer
                             )}
                             placeholder="Select Customer"
-                            onChange={(selectedOption)=>setSelectedCustomer(selectedOption)}
+                            onChange={(selectedOption) =>
+                              setSelectedCustomer(selectedOption)
+                            }
                             isSearchable={true}
                           />
 
@@ -2702,7 +2758,6 @@ debugger;
           </div>
         </div>
 
-
         <SweetAlert
           warning
           show={showAlert}
@@ -2720,7 +2775,6 @@ debugger;
         <SweetAlert show={showOK} success title="Deleted!" onConfirm={handleOK}>
           Your item has been deleted.
         </SweetAlert>
-
       </Main>
     </>
   );

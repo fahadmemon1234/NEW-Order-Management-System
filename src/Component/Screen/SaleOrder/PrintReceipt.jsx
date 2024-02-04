@@ -129,7 +129,7 @@ function PrintReceipt(){
     </div>
 
 
-    <h3>Thank You!</h3>
+    <h3 className="h3">Thank You!</h3>
 
 </div>
 

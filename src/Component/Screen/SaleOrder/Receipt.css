@@ -99,7 +99,7 @@ tfoot tr:first-child td:first-child, tfoot tr:first-child td:last-child {
     margin-top: 25px;
 }
 
-h3 {
+.h3 {
     border-top: 1px dashed #000;
     padding-top: 10px;
     margin-top: 25px;

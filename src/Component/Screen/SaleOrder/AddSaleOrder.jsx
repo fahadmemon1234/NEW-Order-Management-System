@@ -544,10 +544,10 @@ function AddSaleOrder() {
           (option) => option.value === selectedOption?.value
         );
         if (
-          selectedBankData.Measurement != "" &&
-          selectedBankData.SalePrice != "" &&
-          selectedBankData.TotalStock != "" &&
-          selectedBankData.CostPrice != ""
+          selectedBankData.Measurement !== "" &&
+          selectedBankData.SalePrice !== "" &&
+          selectedBankData.TotalStock !== "" &&
+          selectedBankData.CostPrice !== ""
         ) {
           var TotalStock = selectedBankData.TotalStock;
           var SalePrice = selectedBankData.SalePrice;
@@ -570,6 +570,7 @@ function AddSaleOrder() {
           setCostPrice(CostPriceNumeric);
           setQuantity("");
           setTotal("");
+
           // setBankID(`${selectedBankData.Id}`);
         } else {
           setSalePrice("");
@@ -592,10 +593,10 @@ function AddSaleOrder() {
         (option) => option.value === selectedOption?.value
       );
       if (
-        selectedBankData.Measurement != "" &&
-        selectedBankData.SalePrice != "" &&
-        selectedBankData.TotalStock != "" &&
-        selectedBankData.CostPrice != ""
+        selectedBankData.Measurement !== "" &&
+        selectedBankData.SalePrice !== "" &&
+        selectedBankData.TotalStock !== "" &&
+        selectedBankData.CostPrice !== ""
       ) {
         var TotalStock = selectedBankData.TotalStock;
         var SalePrice = selectedBankData.SalePrice;
@@ -618,6 +619,7 @@ function AddSaleOrder() {
         setCostPrice(CostPriceNumeric);
         setQuantity("");
         setTotal("");
+
         // setBankID(`${selectedBankData.Id}`);
       } else {
         setSalePrice("");
@@ -813,8 +815,6 @@ function AddSaleOrder() {
             const productRef = ref(db, `Product/${ProductID}`);
             await update(productRef, updatedProduct);
 
-
-
             const newSaleOrder = {
               uid: loggedInUID,
               ProductID: ProductID,
@@ -875,8 +875,6 @@ function AddSaleOrder() {
             // Update the product data in Firebase
             const productRef = ref(db, `Product/${ProductID}`);
             await update(productRef, updatedProduct);
-
-
 
             const newSaleOrder = {
               uid: loggedInUID,
@@ -1254,8 +1252,6 @@ function AddSaleOrder() {
         // Update the product data in Firebase
         const productRef = ref(db, `Product/${ProductID}`);
         await update(productRef, updatedProduct);
-
-
 
         const newSaleOrder = {
           uid: loggedInUID,

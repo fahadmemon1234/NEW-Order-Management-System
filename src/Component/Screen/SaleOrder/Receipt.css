@@ -80,10 +80,11 @@ tfoot tr:first-child td {
 tfoot::before {
     content: '';
     width: 100%;
-    border-top: 1px dashed #000;
+    /* border-top: 1px dashed #000; */
     display: block;
     position: absolute;
 }
+
 
 tfoot tr:first-child td:first-child, tfoot tr:first-child td:last-child {
     font-weight: bold;

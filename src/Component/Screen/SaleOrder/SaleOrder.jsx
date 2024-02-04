@@ -14,7 +14,7 @@ import Main from "../../NavBar/Navbar";
 
 // Add Modal
 // ---------------------------------------------------
-import AddSaleOrder from "./AddSaleOrder";
+import PrintReceipts from "./PrintReceipt";
 // --------------------------------------------------
 
 //DataBase
@@ -36,7 +36,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "../../../assets/Css/Tostify.css";
 // ---------------------------------------------------
 
-function SaleOrder() {
+const SaleOrder = ({ setPrintContent }) => {
   const navigate = useNavigate();
 
   const NextPage = () => {
@@ -144,6 +144,26 @@ function SaleOrder() {
 
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
 
+  const openPrintWindow = (item) => {
+    debugger;
+
+    localStorage.setItem("ID", item.id);
+    localStorage.setItem("Customer", item.customer);
+    localStorage.setItem("InvoiceDate", item.orderDate);
+
+    localStorage.setItem("ItemName", item.itemName);
+    localStorage.setItem("Quantity", item.quantity);
+    localStorage.setItem("Price", item.salePrice);
+    localStorage.setItem("Total", item.totalPrice);
+
+    const printWindow = window.open("/PrintReceipt", "_blank");
+
+    // Ensure the window has loaded before triggering print
+    printWindow.onload = () => {
+      printWindow.print();
+    };
+  };
+
   return (
     <>
       <Main>
@@ -249,30 +269,31 @@ function SaleOrder() {
                           <tr key={item.id}>
                             <td>
                               <div style={{ display: "flex" }}>
-                              {item.status === "New" && (
-                                <>
-                                <button
-                                  type="button"
-                                  className="btn btn-primary"
-                                  style={{ marginRight: "10px" }}
-                                  // onClick={() => handleShow(item)}
-                                >
-                                  Edit
-                                </button>
-                                <button
-                                  type="button"
-                                  className="btn btn-danger"
-                                  // onClick={() => handleDelete(item.id)}
-                                >
-                                  Delete
-                                </button>
-                                </>
-                              )}
+                                {item.status === "New" && (
+                                  <>
+                                    <button
+                                      type="button"
+                                      className="btn btn-primary"
+                                      style={{ marginRight: "10px" }}
+                                      // onClick={() => handleShow(item)}
+                                    >
+                                      Edit
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="btn btn-danger"
+                                      // onClick={() => handleDelete(item.id)}
+                                    >
+                                      Delete
+                                    </button>
+                                  </>
+                                )}
 
                                 {item.status === "Order Delivered" && (
                                   <button
                                     type="button"
                                     className="btn btn-success"
+                                    onClick={() => openPrintWindow(item)}
                                   >
                                     Print
                                   </button>
@@ -346,6 +367,6 @@ function SaleOrder() {
       </Main>
     </>
   );
-}
+};
 
 export default SaleOrder;

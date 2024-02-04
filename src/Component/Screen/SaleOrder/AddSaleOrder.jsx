@@ -1373,7 +1373,7 @@ function AddSaleOrder() {
       localStorage.removeItem("EditTotal");
       localStorage.removeItem("EditStock");
       localStorage.removeItem("EditCostPrice");
-      localStorage.removeItem("AddItemSection");
+      localStorage.setItem("AddItemSection", false);
 
       setIsReadOnly(true);
       setSaveOrderVisible(true);

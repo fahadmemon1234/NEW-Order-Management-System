@@ -32,6 +32,7 @@ function PrintReceipt() {
               ) // Filter data based on UID
               .map((key) => ({
                 id: key,
+                
                 ...data[key],
               }));
 

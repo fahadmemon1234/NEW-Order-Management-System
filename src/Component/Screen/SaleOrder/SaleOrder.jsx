@@ -164,6 +164,36 @@ const SaleOrder = ({ setPrintContent }) => {
     };
   };
 
+
+  // ------------------Edit---------------------------------
+
+  const handleEdit = (item) =>{
+    debugger;
+    navigate(`/AddSaleOrder?EditID=${item.id}`);
+
+
+    localStorage.setItem("ID", item.id);
+    localStorage.setItem("customer", item.customer);
+    localStorage.setItem("orderDate", item.orderDate)
+    localStorage.setItem("name", item.name)
+    localStorage.setItem("phoneNumber", item.phoneNumber)
+    localStorage.setItem("paymentMethod", item.paymentMethod)
+    localStorage.setItem("salesMan", item.salesMan)
+    localStorage.setItem("isSaveOrderVisible", false);
+    localStorage.removeItem("ItemName");
+    localStorage.removeItem("EditID");
+    localStorage.removeItem("EdititemName");
+    localStorage.removeItem("EditQuantity");
+    localStorage.removeItem("EditMeasurement");
+    localStorage.removeItem("EditSalePrice");
+    localStorage.removeItem("EditDescription");
+    localStorage.removeItem("EditTotal");
+    localStorage.removeItem("EditStock");
+    localStorage.removeItem("EditCostPrice");
+    localStorage.removeItem("ProductID");
+    localStorage.setItem("AddItemSection", true);
+  }
+
   return (
     <>
       <Main>
@@ -275,7 +305,7 @@ const SaleOrder = ({ setPrintContent }) => {
                                       type="button"
                                       className="btn btn-primary"
                                       style={{ marginRight: "10px" }}
-                                      // onClick={() => handleShow(item)}
+                                      onClick={() => handleEdit(item)}
                                     >
                                       Edit
                                     </button>

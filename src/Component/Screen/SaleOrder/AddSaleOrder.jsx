@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 // Main Page Connect
 // ---------------------------------------------------
 import Main from "../../NavBar/Navbar";
+
+import { useLocation } from "react-router-dom";
 // ---------------------------------------------------
 
 // Bootstrap Modal
@@ -59,6 +61,7 @@ function AddSaleOrder() {
             const data = snapshot.val();
 
             // Filter data based on the loggedInUID
+            debugger;
             const filteredData = Object.keys(data)
               .filter((key) => data[key].uid === loggedInUID)
               .reduce((obj, key) => {
@@ -1273,6 +1276,8 @@ function AddSaleOrder() {
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
       } else {
+
+       
         const newSaleOrder = {
           uid: loggedInUID,
           status: "Order Delivered",
@@ -1282,6 +1287,8 @@ function AddSaleOrder() {
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
       }
+
+     
 
       setIsReadOnly(true);
       setIsDisabled(true);
@@ -1448,6 +1455,14 @@ function AddSaleOrder() {
   const handleOK = () => {
     setShowOK(false);
   };
+
+  // -------------------Query String popuate--------------
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("EditID");
+
+ 
 
   return (
     <>

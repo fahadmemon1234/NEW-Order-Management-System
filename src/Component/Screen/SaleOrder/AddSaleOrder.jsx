@@ -298,6 +298,7 @@ function AddSaleOrder() {
 
         localStorage.setItem("customer", newSaleOrder.customer);
         setCustomerName(newSaleOrder.customer);
+        setSelectedCustomer(newSaleOrder.customer);
         localStorage.setItem("orderDate", newSaleOrder.orderDate);
         setOrderDate(newSaleOrder.orderDate);
         localStorage.setItem("salesMan", newSaleOrder.salesMan);
@@ -318,6 +319,7 @@ function AddSaleOrder() {
 
         localStorage.setItem("customer", newSaleOrder.customer);
         setCustomerName(newSaleOrder.customer);
+        setSelectedCustomer(newSaleOrder.customer);
         localStorage.setItem("orderDate", newSaleOrder.orderDate);
         setOrderDate(newSaleOrder.orderDate);
         localStorage.setItem("name", newSaleOrder.name);
@@ -2006,7 +2008,6 @@ function AddSaleOrder() {
                           <Select
                             id="txtCustomerCashCredit"
                             options={customerName}
-                            value={selectedCustomer}
                             styles={{
                               ...customStyles,
                               menu: (provided) => ({
@@ -2015,12 +2016,21 @@ function AddSaleOrder() {
                                 maxHeight: "160px", // Set the maximum height here
                               }),
                             }}
+                            value={
+                              Array.isArray(customerName)
+                                ? customerName.find(
+                                    (option) =>
+                                      option.value === selectedCustomer
+                                  )
+                                : null
+                            }
                             placeholder="Select Customer"
                             onChange={(selectedOption) =>
                               setSelectedCustomer(selectedOption)
                             }
                             isSearchable={true}
                           />
+
                           {/* <a
                         href="#"
                         style={{ float: "right", fontSize: 13 + "px" }}

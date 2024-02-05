@@ -156,6 +156,9 @@ const SaleOrder = ({ setPrintContent }) => {
     localStorage.setItem("Price", item.salePrice);
     localStorage.setItem("Total", item.totalPrice);
 
+    localStorage.setItem("TotalAmount", item.Payment);
+
+
     const printWindow = window.open("/PrintReceipt", "_blank");
 
     // Ensure the window has loaded before triggering print

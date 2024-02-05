@@ -12,6 +12,8 @@ function PrintReceipt() {
   const loggedInUID = localStorage.getItem("uid");
   const SaleID = localStorage.getItem("ID");
 
+
+
   useEffect(() => {
     if (loggedInUID) {
       // Reference to the 'Product' node in Firebase Realtime Database
@@ -32,7 +34,7 @@ function PrintReceipt() {
               ) // Filter data based on UID
               .map((key) => ({
                 id: key,
-                
+
                 ...data[key],
               }));
 
@@ -72,6 +74,7 @@ function PrintReceipt() {
   localStorage.getItem("ID");
   const Customer = localStorage.getItem("Customer");
   const InvoiceDate = localStorage.getItem("InvoiceDate");
+  const TotalAmount = localStorage.getItem("TotalAmount");
 
   return (
     <>
@@ -158,7 +161,7 @@ function PrintReceipt() {
                   <td>Total</td>
                   <td></td>
                   <td></td>
-                  <td>RS:2,500</td>
+                  <td>Rs: {TotalAmount.toLocaleString()}</td>
                 </tr>
 
                 <tr>

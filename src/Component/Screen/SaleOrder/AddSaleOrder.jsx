@@ -754,21 +754,6 @@ function AddSaleOrder() {
             // Update the product data in Firebase
             const productRef = ref(db, `Product/${ProductID}`);
             await update(productRef, updatedProduct);
-
-            const newSaleOrder = {
-              uid: loggedInUID,
-              ProductID: ProductID,
-              itemName: SelectedItem,
-              quantity: Quantity,
-              measurement: Measurement,
-              salePrice: SalePrice,
-              description: Description,
-              totalPrice: total,
-              totalStock: Stock,
-              costPrice: CostPrice,
-            };
-            const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
-            await update(SaleOrderRef, newSaleOrder);
           }
 
           const newAmountID = AmountsId.key;
@@ -814,21 +799,6 @@ function AddSaleOrder() {
             // Update the product data in Firebase
             const productRef = ref(db, `Product/${ProductID}`);
             await update(productRef, updatedProduct);
-
-            const newSaleOrder = {
-              uid: loggedInUID,
-              ProductID: ProductID,
-              itemName: SelectedItem,
-              quantity: Quantity,
-              measurement: Measurement,
-              salePrice: SalePrice,
-              description: Description,
-              totalPrice: total,
-              totalStock: Stock,
-              costPrice: CostPrice,
-            };
-            const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
-            await update(SaleOrderRef, newSaleOrder);
           }
 
           const newAmountID = AmountsId.key;
@@ -875,21 +845,6 @@ function AddSaleOrder() {
             // Update the product data in Firebase
             const productRef = ref(db, `Product/${ProductID}`);
             await update(productRef, updatedProduct);
-
-            const newSaleOrder = {
-              uid: loggedInUID,
-              ProductID: ProductID,
-              itemName: SelectedItem,
-              quantity: Quantity,
-              measurement: Measurement,
-              salePrice: SalePrice,
-              description: Description,
-              totalPrice: total,
-              totalStock: Stock,
-              costPrice: CostPrice,
-            };
-            const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
-            await update(SaleOrderRef, newSaleOrder);
           }
           const newAmountID = AmountsId.key;
 
@@ -1252,21 +1207,6 @@ function AddSaleOrder() {
         // Update the product data in Firebase
         const productRef = ref(db, `Product/${ProductID}`);
         await update(productRef, updatedProduct);
-
-        const newSaleOrder = {
-          uid: loggedInUID,
-          ProductID: ProductID,
-          itemName: SelectedItem,
-          quantity: Quantity,
-          measurement: Measurement,
-          salePrice: SalePrice,
-          description: Description,
-          totalPrice: total,
-          totalStock: Stock,
-          costPrice: CostPrice,
-        };
-        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
-        await update(SaleOrderRef, newSaleOrder);
       }
 
       setQuantity("");

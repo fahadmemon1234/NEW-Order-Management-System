@@ -57,6 +57,7 @@ function PrintReceipt() {
 
   const componentRef = useRef();
 
+  
   //   const openPrintWindow = useReactToPrint({
   //         content: () => componentRef.current,
   //         documentTitle: "Print Receipt",

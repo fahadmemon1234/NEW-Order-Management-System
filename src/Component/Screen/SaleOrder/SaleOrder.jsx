@@ -168,6 +168,9 @@ const SaleOrder = ({ setPrintContent }) => {
   };
 
 
+
+
+
   // ------------------Edit---------------------------------
 
   const handleEdit = (item) =>{

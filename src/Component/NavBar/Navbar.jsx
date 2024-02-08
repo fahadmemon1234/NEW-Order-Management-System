@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // Navbar Css
 // ---------------------------------------------------
@@ -12,7 +12,47 @@ import ProfilePic from "../../assets/img/img/team/3-thumb.png";
 import FavIcn from "../../assets/img/img/icons/spot-illustrations/falcon.png";
 // ---------------------------------------------------
 
+//DataBase
+// ---------------------------------------------------
+import { ref, onValue } from "firebase/database";
+import { db } from "../Config/firebase";
+// ---------------------------------------------------
+
 const Main = ({ children }) => {
+  const [tableData, setTableData] = useState([]);
+
+  const loggedInUID = localStorage.getItem("uid");
+
+  useEffect(() => {
+    if (loggedInUID) {
+      // Reference to the 'Product' node in Firebase Realtime Database
+      const productRef = ref(db, "CodeType");
+
+      // Attach an event listener for data changes
+      const fetchData = () => {
+        onValue(productRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            // Convert the object of products into an array
+            const dataArray = Object.keys(data)
+              .filter((key) => data[key].uid === loggedInUID) // Filter data based on UID
+              .map((key) => ({
+                id: key,
+                ...data[key],
+              }));
+
+            setTableData(dataArray);
+          }
+        });
+      };
+
+      fetchData();
+    } else {
+      console.error("No user is currently logged in.");
+      // Handle the case where no user is logged in, perhaps by redirecting to the login page.
+    }
+  }, [loggedInUID]);
+
   const location = useLocation();
 
   // Navbar Side Btn Toggle
@@ -316,30 +356,93 @@ const Main = ({ children }) => {
                           to="/Customers"
                         >
                           <div className="d-flex align-items-center">
-                            <span className="nav-link-text ps-1">Customers</span>
+                            <span className="nav-link-text ps-1">
+                              Customers
+                            </span>
                           </div>
                         </Link>{" "}
                       </li>
-
 
                       <li className="nav-item">
                         <Link
                           className={`nav-link ${
-                            location.pathname === "/SaleOrder" || location.pathname === "/AddSaleOrder" ? "active" : ""
+                            location.pathname === "/SaleOrder" ||
+                            location.pathname === "/AddSaleOrder"
+                              ? "active"
+                              : ""
                           }`}
                           to="/SaleOrder"
                         >
                           <div className="d-flex align-items-center">
-                            <span className="nav-link-text ps-1">Sale Order</span>
+                            <span className="nav-link-text ps-1">
+                              Sale Order
+                            </span>
                           </div>
                         </Link>{" "}
                       </li>
-                      
-                      
                     </ul>
 
+                    {/* ---------------------------Manage----------------- */}
 
+                    <a
+                      className="nav-link dropdown-indicator"
+                      href="#Manage"
+                      role="button"
+                      data-bs-toggle="collapse"
+                      aria-expanded="false"
+                      aria-controls="Manage"
+                    >
+                      <div className="d-flex align-items-center">
+                        <span className="nav-link-icon">
+                          <svg
+                            className="svg-inline--fa fa-brands fa-salesforce fa-w-18 fa"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="fa-brands fa-salesforce"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 576 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M128 160h320v192H128V160zm400 96c0 26.51 21.49 48 48 48v96c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48v-96c26.51 0 48-21.49 48-48s-21.49-48-48-48v-96c0-26.51 21.49-48 48-48h480c26.51 0 48 21.49 48 48v96c-26.51 0-48 21.49-48 48zm-48-104c0-13.255-10.745-24-24-24H120c-13.255 0-24 10.745-24 24v208c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24V152z"
+                            ></path>
+                          </svg>{" "}
+                          <span className="fa-solid fa-bars-progress"></span>{" "}
+                        </span>
+                        <span className="nav-link-text ps-1">Manage</span>
+                      </div>
+                    </a>
+                    {tableData.map((item) => (
+                    <ul
+                      className={`nav ${
+                        location.pathname === `/${item.codeType}` ? "" : "collapse"
+                      }`}
+                      id="Manage"
+                    >
+                      
+                        <li className="nav-item" key={item.id}>
+                          <Link
+                            className={`nav-link ${
+                              location.pathname === `/${item.codeType}` ? "active" : ""
+                            }`}
+                            to={`/${item.codeType}`}
+                          >
+                            <div className="d-flex align-items-center">
+                              <span className="nav-link-text ps-1">
+                                {item.codeType}{" "}
+                                {/* Assuming 'codeType' is one of the properties */}
+                              </span>
+                            </div>
+                          </Link>{" "}
+                        </li>
+                     
+                    </ul>
+                     ))}
 
+                    {/* ---------------------------Settings----------------- */}
 
                     <a
                       className="nav-link dropdown-indicator"
@@ -375,9 +478,7 @@ const Main = ({ children }) => {
 
                     <ul
                       className={`nav ${
-                        location.pathname === "/CodeType"
-                          ? ""
-                          : "collapse"
+                        location.pathname === "/CodeType" ? "" : "collapse"
                       }`}
                       id="Settings"
                     >
@@ -389,15 +490,12 @@ const Main = ({ children }) => {
                           to="/CodeType"
                         >
                           <div className="d-flex align-items-center">
-                            <span className="nav-link-text ps-1">Code Type</span>
+                            <span className="nav-link-text ps-1">
+                              Code Type
+                            </span>
                           </div>
                         </Link>{" "}
                       </li>
-
-
-                     
-                      
-                      
                     </ul>
                   </li>
                 </ul>

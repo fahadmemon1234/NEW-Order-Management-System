@@ -11,6 +11,7 @@ import AddSaleOrder from "./Component/Screen/SaleOrder/AddSaleOrder";
 import PrintReceipt from "./Component/Screen/SaleOrder/PrintReceipt";
 import { Route, Routes } from "react-router-dom";
 import CodeType from "./Component/Screen/CodeType/CodeType";
+import Code from "./Component/Screen/Code/Code";
 
 function App() {
   return (
@@ -36,9 +37,11 @@ function App() {
         <Route path="/AddSaleOrder" element={<AddSaleOrder />}></Route>
         <Route path="/PrintReceipt" element={<PrintReceipt />}></Route>
 
+        {/* ----------Manage--------------------------- */}
+        <Route path="/Manage" element={<Code />}></Route>
 
-         {/* ----------Settings--------------------------- */}
-         <Route path="/CodeType" element={<CodeType />}></Route>
+        {/* ----------Settings--------------------------- */}
+        <Route path="/CodeType" element={<CodeType />}></Route>
       </Routes>
     </>
   );

@@ -1,4 +1,4 @@
-.container {
+.containers {
     display: block;
     width: 100%;
     background: #fff;
@@ -39,45 +39,43 @@
     margin-top: 25px;
 }
 
-table {
+.custom-table {
     width: 100%;
 }
 
-thead, tfoot {
+.custom-table thead, .custom-table tfoot {
     position: relative;
 }
 
-thead th:not(:last-child) {
+.custom-table thead th:not(:last-child) {
     text-align: left;
 }
 
-thead th:last-child {
+.custom-table thead th:last-child {
     text-align: right;
 }
 
-
-
-tbody td:not(:last-child), tfoot td:not(:last-child) {
+.custom-table tbody td:not(:last-child), .custom-table tfoot td:not(:last-child) {
     text-align: left;
 }
 
-tbody td:last-child, tfoot td:last-child{
+.custom-table tbody td:last-child, .custom-table tfoot td:last-child {
     text-align: right;
 }
 
-tbody tr:first-child td {
+.custom-table tbody tr:first-child td {
     padding-top: 15px;
 }
 
-tbody tr:last-child td {
+.custom-table tbody tr:last-child td {
     padding-bottom: 15px;
 }
 
-tfoot tr:first-child td {
+.custom-table tfoot tr:first-child td {
     padding-top: 15px;
 }
 
-tfoot::before {
+.custom-table tfoot::before {
     content: '';
     width: 100%;
     /* border-top: 1px dashed #000; */
@@ -85,11 +83,12 @@ tfoot::before {
     position: absolute;
 }
 
-
-tfoot tr:first-child td:first-child, tfoot tr:first-child td:last-child {
+.custom-table tfoot tr:first-child td:first-child,
+.custom-table tfoot tr:first-child td:last-child {
     font-weight: bold;
     font-size: 20px;
 }
+
 
 .date_time_con {
     display: flex;

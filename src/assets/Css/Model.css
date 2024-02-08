@@ -6,6 +6,10 @@
     margin: 0 auto;
     margin-top: 5px;
   }
+
+  .small-Model{
+    margin-top: 2%;
+  }
   
   .custom-modalSetting {
     max-width: 500px !important; /* Adjust the width as needed */

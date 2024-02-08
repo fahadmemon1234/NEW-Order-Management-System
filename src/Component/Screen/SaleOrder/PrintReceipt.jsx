@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { useReactToPrint } from "react-to-print";
-import { ref, onValue, update, remove, get } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 import { db } from "../../Config/firebase";
 
 import "./Receipt.css";
@@ -79,7 +78,7 @@ function PrintReceipt() {
 
   return (
     <>
-      <div className="container" id="tableId" ref={componentRef}>
+      <div className="containers" id="tableId" ref={componentRef}>
         <div className="receipt_header">
           <h1>
             Receipt of Sale <span>Shop Name</span>
@@ -106,7 +105,7 @@ function PrintReceipt() {
           </div>
 
           <div className="items">
-            <table>
+            <table className="custom-table">
               <thead>
                 <th style={{ paddingLeft: "10px", width: "180px" }}>
                   ITEM NAME

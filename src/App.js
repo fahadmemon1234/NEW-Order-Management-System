@@ -10,6 +10,7 @@ import SaleOrder from "./Component/Screen/SaleOrder/SaleOrder";
 import AddSaleOrder from "./Component/Screen/SaleOrder/AddSaleOrder";
 import PrintReceipt from "./Component/Screen/SaleOrder/PrintReceipt";
 import { Route, Routes } from "react-router-dom";
+import CodeType from "./Component/Screen/CodeType/CodeType";
 
 function App() {
   return (
@@ -34,6 +35,10 @@ function App() {
         <Route path="/SaleOrder" element={<SaleOrder />}></Route>
         <Route path="/AddSaleOrder" element={<AddSaleOrder />}></Route>
         <Route path="/PrintReceipt" element={<PrintReceipt />}></Route>
+
+
+         {/* ----------Settings--------------------------- */}
+         <Route path="/CodeType" element={<CodeType />}></Route>
       </Routes>
     </>
   );

@@ -3,9 +3,13 @@ import React, { useState, useEffect } from "react";
 // Main Page Connect
 // ---------------------------------------------------
 import Main from "../../NavBar/Navbar";
+import { useLocation } from "react-router-dom";
 // ---------------------------------------------------
 
-
+// Add Modal
+// ---------------------------------------------------
+import AddCode from "./AddCode";
+// --------------------------------------------------
 
 //DataBase
 // ---------------------------------------------------
@@ -14,83 +18,92 @@ import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
 function Code() {
-//   const [tableData, setTableData] = useState([]);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const CodeTypeName = searchParams.get("CodeName");
 
-//   const loggedInUID = localStorage.getItem("uid");
+  const [tableData, setTableData] = useState([]);
 
-//   useEffect(() => {
-//     if (loggedInUID) {
-//       // Reference to the 'Product' node in Firebase Realtime Database
-//       const productRef = ref(db, "CodeType");
+  const loggedInUID = localStorage.getItem("uid");
+  useEffect(() => {
+    if (loggedInUID) {
+      
+      // Reference to the 'Product' node in Firebase Realtime Database
+      const productRef = ref(db, `${CodeTypeName}`);
 
-//       // Attach an event listener for data changes
-//       const fetchData = () => {
-//         onValue(productRef, (snapshot) => {
-//           const data = snapshot.val();
-//           if (data) {
-//             // Convert the object of products into an array
-//             const dataArray = Object.keys(data)
-//               .filter((key) => data[key].uid === loggedInUID) // Filter data based on UID
-//               .map((key) => ({
-//                 id: key,
-//                 ...data[key],
-//               }));
+      // Attach an event listener for data changes
+      const fetchData = () => {
+        onValue(productRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            // Convert the object of products into an array
+            const dataArray = Object.keys(data)
+              .filter((key) => data[key].uid === loggedInUID) // Filter data based on UID
+              .map((key) => ({
+                id: key,
+                ...data[key],
+              }));
 
-//             setTableData(dataArray);
-//           }
-//         });
-//       };
+            setTableData(dataArray);
+          }
+        });
+      };
 
-//       fetchData();
-//     } else {
-//       console.error("No user is currently logged in.");
-//       // Handle the case where no user is logged in, perhaps by redirecting to the login page.
-//     }
-//   }, [loggedInUID]);
+      fetchData();
+    } else {
+      console.error("No user is currently logged in.");
+      // Handle the case where no user is logged in, perhaps by redirecting to the login page.
+    }
+  }, [loggedInUID]);
 
-//   const sortedTableData = tableData.sort((a, b) => b.id - a.id);
-//   const sortedDataDescending = [...sortedTableData].sort((a, b) =>
-//     b.id.localeCompare(a.id)
-//   );
+  const sortedTableData = tableData.sort((a, b) => b.id - a.id);
+  const sortedDataDescending = [...sortedTableData].sort((a, b) =>
+    b.id.localeCompare(a.id)
+  );
 
-//   //   RowDropDown Selection
+  //   RowDropDown Selection
 
-//   const [rowsToShow, setRowsToShow] = useState(5);
+  const [rowsToShow, setRowsToShow] = useState(5);
 
-//   const handleSelectChange = (event) => {
-//     setRowsToShow(parseInt(event.target.value, 10));
-//   };
+  const handleSelectChange = (event) => {
+    setRowsToShow(parseInt(event.target.value, 10));
+  };
 
-//   // Rows count and show
-//   // const totalItems = 8; // Replace with the actual total number of items
-//   const startIndexs = 1;
-//   // const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
-//   const rowCount = sortedDataDescending.length; // Add this line to get the row count
-//   const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
+  // Rows count and show
+  // const totalItems = 8; // Replace with the actual total number of items
+  const startIndexs = 1;
+  // const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
+  const rowCount = sortedDataDescending.length; // Add this line to get the row count
+  const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
 
-//   const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
-//   const handlePrevClick = () => {
-//     if (currentPage > 1) {
-//       setCurrentPage(currentPage - 1);
-//     }
-//   };
+  const handlePrevClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
-//   const handleNextClick = () => {
-//     const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
-//     if (currentPage < totalPages) {
-//       setCurrentPage(currentPage + 1);
-//     }
-//   };
+  const handleNextClick = () => {
+    const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
-//   const startIndex = (currentPage - 1) * rowsToShow;
-//   const endIndex = Math.min(
-//     startIndex + rowsToShow,
-//     sortedDataDescending.length
-//   );
-//   const visibleItems = sortedDataDescending.slice(startIndex, endIndex);
+  const startIndex = (currentPage - 1) * rowsToShow;
+  const endIndex = Math.min(
+    startIndex + rowsToShow,
+    sortedDataDescending.length
+  );
+  const visibleItems = sortedDataDescending.slice(startIndex, endIndex);
 
-//   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
+  const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
+
+
+
+
+
 
   return (
     <>
@@ -102,12 +115,12 @@ function Code() {
               style={{ paddingTop: "30px", alignItems: "center" }}
             >
               <div className="col-md-6 col-sm-6 col-lg-6">
-                <h1>Code Type</h1>
+                <h1>{CodeTypeName}</h1>
               </div>
 
               <div className="col-md-6 col-sm-6 col-lg-6">
                 <div style={{ float: "right" }}>
-                  {/* <AddCodeType /> */}
+                  <AddCode />
 
                   <br />
                   <br />
@@ -151,39 +164,49 @@ function Code() {
                           <th className="text-900 sort" data-sort="Action">
                             Action
                           </th>
-                          <th
-                            className="text-900 sort"
-                            data-sort="CodeValue"
-                          >
+                          <th className="text-900 sort" data-sort="CodeValue">
                             Code Value
                           </th>
-                          <th
-                            className="text-900 sort"
-                            data-sort="IsActive"
-                          >
+                          <th className="text-900 sort" data-sort="IsActive">
                             IsActive
                           </th>
                         </tr>
                       </thead>
                       <tbody className="list">
-                          <tr>
-                            <td>
+                        {visibleItems.slice(0, rowsToShow).map((item) => (
+                          <tr key={item.id}>
+                            <td style={{width:'19%'}}>
                               <div style={{ display: "flex" }}>
                                 <button
                                   type="button"
                                   className="btn btn-primary"
                                   style={{ marginRight: "10px" }}
-                                 
                                 >
                                   Edit
                                 </button>
-                               
+                                <button
+                                  type="button"
+                                  className="btn btn-danger"
+                                  
+                                >
+                                  Delete
+                                </button>
                               </div>
                             </td>
-                            <td className="tdchild">asdasd</td>
-                            <td className="tdchild">asdasd</td>
+                            <td className="tdchild">{item.codeValue}</td>
+                            <td className="tdchild">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  id="inlineCheckbox1"
+                                  type="checkbox"
+                                  checked={item.isActive}
+                                />
+                              </div>
+                            </td>
                             {/* Add more table data cells as needed */}
                           </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -196,14 +219,14 @@ function Code() {
                       >
                         <p className="mb-0">
                           <span className="d-none d-sm-inline-block me-2">
-                            {/* {paginationText} */}
+                            {paginationText}
                           </span>
                         </p>
                         <p className="mb-0 mx-2">Rows per page:</p>
                         <select
                           className="w-auto form-select form-select-sm"
-                        //   defaultValue={rowsToShow}
-                        //   onChange={handleSelectChange}
+                          defaultValue={rowsToShow}
+                          onChange={handleSelectChange}
                         >
                           <option value="5">5</option>
                           <option value="10">10</option>
@@ -216,8 +239,8 @@ function Code() {
                         className="btn btn-sm btn-warning"
                         type="button"
                         data-list-pagination="prev"
-                        // onClick={handlePrevClick}
-                        // disabled={currentPage === 1}
+                        onClick={handlePrevClick}
+                        disabled={currentPage === 1}
                       >
                         <span>Previous</span>
                       </button>
@@ -226,8 +249,8 @@ function Code() {
                         type="button"
                         style={{ backgroundColor: "#2c7be5", color: "white" }}
                         data-list-pagination="next"
-                        // onClick={handleNextClick}
-                        // disabled={currentPage === totalPages}
+                        onClick={handleNextClick}
+                        disabled={currentPage === totalPages}
                       >
                         <span>Next</span>
                       </button>

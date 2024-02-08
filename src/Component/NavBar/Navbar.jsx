@@ -416,19 +416,20 @@ const Main = ({ children }) => {
                       </div>
                     </a>
                     {tableData.map((item) => (
-                    <ul
+                      <ul
                       className={`nav ${
-                        location.pathname === `/${item.codeType}` ? "" : "collapse"
-                      }`}
-                      id="Manage"
-                    >
-                      
+                        location.search.includes("CodeName=") ? "" : "collapse"
+                    }`}
+                        id="Manage"
+                      >
                         <li className="nav-item" key={item.id}>
                           <Link
                             className={`nav-link ${
-                              location.pathname === `/${item.codeType}` ? "active" : ""
+                              location.search === `?CodeName=${item.codeType}`
+                                ? "active"
+                                : ""
                             }`}
-                            to={`/${item.codeType}`}
+                            to={`/Manage?CodeName=${item.codeType}`}
                           >
                             <div className="d-flex align-items-center">
                               <span className="nav-link-text ps-1">
@@ -436,11 +437,10 @@ const Main = ({ children }) => {
                                 {/* Assuming 'codeType' is one of the properties */}
                               </span>
                             </div>
-                          </Link>{" "}
+                          </Link>
                         </li>
-                     
-                    </ul>
-                     ))}
+                      </ul>
+                    ))}
 
                     {/* ---------------------------Settings----------------- */}
 

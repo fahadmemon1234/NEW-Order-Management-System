@@ -5,6 +5,12 @@ import React, { useState, useEffect } from "react";
 import Main from "../../NavBar/Navbar";
 // ---------------------------------------------------
 
+// Bootstrap Modal
+// ---------------------------------------------------
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+// ---------------------------------------------------
+
 // Add Modal
 // ---------------------------------------------------
 import AddCodeType from "./AddCodeType";
@@ -12,8 +18,20 @@ import AddCodeType from "./AddCodeType";
 
 //DataBase
 // ---------------------------------------------------
-import { ref, onValue, update, remove } from "firebase/database";
+import { ref, onValue, update } from "firebase/database";
 import { db } from "../../Config/firebase";
+// ---------------------------------------------------
+
+
+//Notify
+// ---------------------------------------------------
+import { toast, ToastContainer } from "react-toastify";
+import "../../../assets/Css/Tostify.css";
+// ---------------------------------------------------
+
+//Modal Css
+// ---------------------------------------------------
+import "../../../assets/Css/Model.css";
 // ---------------------------------------------------
 
 function CodeType() {
@@ -95,9 +113,131 @@ function CodeType() {
 
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
 
+
+
+
+  // -------------------------------Edit------------------------
+
+  const [CodeType, setCodeType] = useState("");
+  const [CodeTypeError, setCodeTypeError] = useState("");
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+
+const [ID, setID] = useState('')
+
+  const handleEdit = (item) =>{
+    setID(item.id);
+    setCodeType(item.codeType);
+
+    setShow(true);
+  }
+
+
+  const handleInputBlur = (field, value) => {
+    switch (field) {
+      case "codeType":
+        if (value.trim() === "") {
+            // setCodeTypeError("CodeType is required");
+          toast.error('CodeType is required', {
+            position: 'top-right',
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+          });
+        } else {
+          setCodeTypeError("");
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
+
+  const handleSave = async () =>{
+    if (CodeType) {
+      // Implement your save logic here
+      console.log("Changes saved!");
+
+      
+
+      try {
+        const loggedInUID = localStorage.getItem("uid");
+        
+        const newCustomer = {
+          uid: loggedInUID,
+          codeType: CodeType,
+        };
+
+        const CustomerRef = ref(db, `CodeType/${ID}`);
+        await update(CustomerRef, newCustomer);
+
+        // Show a success toast if the product is successfully added
+        toast.success("CodeType Edit Successfully", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        
+
+        setTimeout(() => {
+          
+          setID('');
+          setCodeType("");
+
+          handleClose();
+        }, 2000);
+
+        // handleClose(); // Close the modal after successful insert
+      } catch (error) {
+        toast.error("Error adding CodeType: " + error.message, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+
+        console.log("Error adding CodeType:", error);
+      }
+    } else {
+      handleInputBlur("codeType", CodeType);
+    }
+  }
+
+
   return (
     <>
       <Main>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+
+
         <div className="card">
           <div className="card-body">
             <div
@@ -171,7 +311,7 @@ function CodeType() {
                                   type="button"
                                   className="btn btn-primary"
                                   style={{ marginRight: "10px" }}
-                                 
+                                 onClick={() => handleEdit(item)}
                                 >
                                   Edit
                                 </button>
@@ -236,6 +376,73 @@ function CodeType() {
             </div>
           </div>
         </div>
+
+
+
+
+         {/* -----------------------------------Modal--------------------------------------------- */}
+      {/* Modal */}
+      <Modal
+        show={show}
+        onHide={handleClose}
+        dialogClassName="small-Model"
+        // style={{ paddingTop: "3%" }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Edit CodeType</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="container">
+            <form>
+              <div className="row">
+                <div className="col-md-12 col-sm-12 col-lg-12">
+                  <div className="mb-3">
+                    <label
+                      htmlFor="Code"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      Code Type <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="Code"
+                      id="Code"
+                      placeholder="Enter Code Type"
+                      value={CodeType}
+                      onBlur={() =>
+                        handleInputBlur("codeType", CodeType)
+                      }
+                      onFocus={() => setCodeTypeError("")}
+                      onChange={(e) => setCodeType(e.target.value)}
+                    />
+                    {CodeTypeError && (
+                      <div style={{ color: "red" }}>{CodeTypeError}</div>
+                    )}
+                  </div>
+                </div>
+
+              
+              </div>
+
+           
+
+            </form>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleSave}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+
       </Main>
     </>
   );

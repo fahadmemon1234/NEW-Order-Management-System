@@ -6,6 +6,24 @@ import Main from "../../NavBar/Navbar";
 import { useLocation } from "react-router-dom";
 // ---------------------------------------------------
 
+// Bootstrap Modal
+// ---------------------------------------------------
+import Button from "react-bootstrap/Button";
+import SweetAlert from "react-bootstrap-sweetalert";
+import Modal from "react-bootstrap/Modal";
+// ---------------------------------------------------
+
+//Notify
+// ---------------------------------------------------
+import { toast, ToastContainer } from "react-toastify";
+import "../../../assets/Css/Tostify.css";
+// ---------------------------------------------------
+
+//Modal Css
+// ---------------------------------------------------
+import "../../../assets/Css/Model.css";
+// ---------------------------------------------------
+
 // Add Modal
 // ---------------------------------------------------
 import AddCode from "./AddCode";
@@ -101,12 +119,163 @@ function Code() {
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
 
 
+// ---------------------Edit--------------------
+
+const [Code, setCode] = useState("");
+  const [CodeError, setCodeError] = useState("");
+
+  const [IsActive, setIsActive] = useState(false);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+
+  const [ID, setID] = useState('');
+
+const handleEdit = (item) =>{
+  setID(item.id);
+setCode(item.codeValue);
+setIsActive(item.isActive);
+
+  setShow(true);
+}
 
 
 
+const handleInputBlur = (field, value) => {
+  switch (field) {
+    case "code":
+      if (value.trim() === "") {
+        // setCodeTypeError("CodeType is required");
+        toast.error(`${CodeTypeName} is required`, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else {
+        setCodeError("");
+      }
+      break;
+    default:
+      break;
+  }
+};
+
+const handleSave = async () =>{
+  if (Code) {
+    // Implement your save logic here
+    console.log("Changes saved!");
+
+    try {
+      const loggedInUID = localStorage.getItem("uid");
+     
+      const newCustomer = {
+        uid: loggedInUID,
+        codeValue: Code,
+        isActive: IsActive,
+      };
+      const CustomerRef = ref(db, `${CodeTypeName}/${ID}`);
+      await update(CustomerRef, newCustomer);
+
+
+      // Show a success toast if the product is successfully added
+      toast.success(`${CodeTypeName} Edit Successfully`, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      setTimeout(() => {
+        handleClose();
+
+        setCode("");
+        setID('');
+        setIsActive(false);
+      }, 2000);
+
+      // handleClose(); // Close the modal after successful insert
+    } catch (error) {
+      toast.error(`${CodeTypeName} Error adding: ` + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      console.log(`Error adding ${CodeTypeName}:`, error);
+    }
+  } else {
+    handleInputBlur("code", Code);
+  }
+}
+
+
+// -------------------------Delete-----------------------------
+
+const [showAlert, setShowAlert] = useState(false);
+const [showOK, setShowOK] = useState(false);
+const [id, setId] = useState(null);
+
+const handleDelete = (id) => {
+  setId(id);
+  setShowAlert(true);
+};
+
+const handleConfirmDelete = async () => {
+  try {
+    const dataRef = ref(db, `${CodeTypeName}/${id}`);
+    await remove(dataRef);
+
+    // Update the data state after deletion
+    const updatedData = tableData.filter((item) => item.id !== id);
+    setTableData(updatedData);
+
+    setShowAlert(false);
+    setShowOK(true);
+  } catch (error) {
+    console.error("Error deleting data:", error);
+  }
+};
+
+const handleCancelDelete = () => {
+  setShowAlert(false);
+};
+
+const handleOK = () => {
+  setShowOK(false);
+};
 
   return (
     <>
+
+<ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+
+
       <Main>
         <div className="card">
           <div className="card-body">
@@ -181,13 +350,14 @@ function Code() {
                                   type="button"
                                   className="btn btn-primary"
                                   style={{ marginRight: "10px" }}
+                                  onClick={()=>handleEdit(item)}
                                 >
                                   Edit
                                 </button>
                                 <button
                                   type="button"
                                   className="btn btn-danger"
-                                  
+                                  onClick={()=>handleDelete(item.id)}
                                 >
                                   Delete
                                 </button>
@@ -261,7 +431,107 @@ function Code() {
             </div>
           </div>
         </div>
+
+
+
+
+         {/* -----------------------------------Modal--------------------------------------------- */}
+      {/* Modal */}
+      <Modal
+        show={show}
+        onHide={handleClose}
+        dialogClassName="small-Model"
+        // style={{ paddingTop: "3%" }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Edit {CodeTypeName}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="container">
+            <form>
+              <div className="row">
+                <div className="col-md-12 col-sm-12 col-lg-12">
+                  <div className="mb-3">
+                    <label
+                      htmlFor="Code"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      Code Name <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="Code"
+                      id="Code"
+                      placeholder="Enter Code Value"
+                      value={Code}
+                      onBlur={() => handleInputBlur("code", Code)}
+                      onFocus={() => setCodeError("")}
+                      onChange={(e) => setCode(e.target.value)}
+                    />
+                    {CodeError && (
+                      <div style={{ color: "red" }}>{CodeError}</div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="col-md-12 col-sm-12 col-lg-12">
+                  <div className="mb-3">
+                    <label
+                      htmlFor="Code"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      IsActive
+                    </label>
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        id="flexSwitchCheckDefault"
+                        type="checkbox"
+                        checked={IsActive} // add checked attribute to reflect the state of isActive
+                        onChange={() => setIsActive(!IsActive)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleSave}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <SweetAlert
+          warning
+          show={showAlert}
+          title="Confirm Deletion"
+          showCancel
+          confirmBtnText="Yes, delete it!"
+          confirmBtnBsStyle="danger"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+          focusCancelBtn
+        >
+          Are you sure you want to delete this item?
+        </SweetAlert>
+
+        <SweetAlert show={showOK} success title="Deleted!" onConfirm={handleOK}>
+          Your item has been deleted.
+        </SweetAlert>
       </Main>
+
+
+
+     
     </>
   );
 }

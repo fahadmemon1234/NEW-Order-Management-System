@@ -310,6 +310,23 @@ function Customers() {
   return (
     <>
       <Main>
+
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+
+
+
         <div className="card">
           <div className="card-body">
             {/* Headng and btn */}

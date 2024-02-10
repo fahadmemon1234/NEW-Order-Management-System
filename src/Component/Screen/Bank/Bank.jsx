@@ -217,51 +217,51 @@ function Banks() {
     switch (field) {
       case "bankName":
         if (value.trim() === "") {
-          setBankNameError("Bank Name is required");
-          // toast.error('Item Name is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
+          // setBankNameError("Bank Name is required");
+          toast.error("Bank Name is required", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         } else {
           setBankNameError("");
         }
         break;
       case "openingBalance":
         if (value.trim() === "") {
-          setOpeningBalanceError("Opening Balance is required");
-          // toast.error('Item Name is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
+          // setOpeningBalanceError("Opening Balance is required");
+          toast.error("Opening Balance is required", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         } else {
           setOpeningBalanceError("");
         }
         break;
       case "openingBalanceDate":
         if (value.trim() === "") {
-          setOpeningBalanceDateError("Opening Balance Date is required");
-          // toast.error('Item Name is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
+          // setOpeningBalanceDateError("Opening Balance Date is required");
+          toast.error("Opening Balance Date is required", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         } else {
           setOpeningBalanceDateError("");
         }
@@ -709,8 +709,6 @@ function Banks() {
             </Button>
           </Modal.Footer>
         </Modal>
-
-
 
         <SweetAlert
           warning

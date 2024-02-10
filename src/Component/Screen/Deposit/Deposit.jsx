@@ -186,14 +186,13 @@ function Deposit() {
         Id: key,
         value: data[key].bankName,
         label: data[key].bankName, // Assuming your data structure has keys and bankName values
-        Balance: data[key].openingBalance
-        
+        Balance: data[key].openingBalance,
       }));
 
       const selectedBankData = options.find(
-        option => option.value === item.selectedBank
+        (option) => option.value === item.selectedBank
       );
-      console.log(selectedBankData)
+      console.log(selectedBankData);
       setBankAmount(selectedBankData.Balance);
       setBankID(selectedBankData.Id);
 

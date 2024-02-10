@@ -417,9 +417,11 @@ const Main = ({ children }) => {
                     </a>
                     {tableData.map((item) => (
                       <ul
-                      className={`nav ${
-                        location.search.includes("CodeName=") ? "" : "collapse"
-                    }`}
+                        className={`nav ${
+                          location.search.includes("CodeName=")
+                            ? ""
+                            : "collapse"
+                        }`}
                         id="Manage"
                       >
                         <li className="nav-item" key={item.id}>

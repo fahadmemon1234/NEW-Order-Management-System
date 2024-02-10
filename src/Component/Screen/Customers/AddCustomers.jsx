@@ -4,7 +4,7 @@ import React, { useState } from "react";
 // ---------------------------------------------------
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import InputMask from 'react-input-mask';
+import InputMask from "react-input-mask";
 // ---------------------------------------------------
 
 //DataBase
@@ -64,51 +64,51 @@ function AddCustomers() {
     switch (field) {
       case "customerName":
         if (value.trim() === "") {
-          setCustomerNameError("Customer Name is required");
-          // toast.error('Item Name is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
+          // setCustomerNameError("Customer Name is required");
+          toast.error("Customer Name is required", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         } else {
           setCustomerNameError("");
         }
         break;
       case "fullName":
         if (value.trim() === "") {
-          setFullNameError("Full Name is required");
-          // toast.error('Item Name is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
+          // setFullNameError("Full Name is required");
+          toast.error("Full Name is required", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         } else {
           setFullNameError("");
         }
         break;
       case "phoneNo":
         if (value.trim() === "") {
-          setPhoneNoError("Phone No is required");
-          // toast.error('Item Name is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
+          // setPhoneNoError("Phone No is required");
+          toast.error("Phone No is required", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         } else {
           setPhoneNoError("");
         }

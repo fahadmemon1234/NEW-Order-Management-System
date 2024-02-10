@@ -109,77 +109,74 @@ function WithDraw() {
 
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
 
+  //   ---------------------------------Edit Modal and Populate----------------------------------
 
-   //   ---------------------------------Edit Modal and Populate----------------------------------
+  const [TransactionDate, setTransactionDate] = useState("");
+  const [TransactionDateError, setTransactionDateError] = useState("");
+  const [Amount, setAmount] = useState("");
+  const [AmountError, setAmountError] = useState("");
+  const [Note, setNote] = useState("");
+  const [NoteError, setNoteError] = useState("");
+  const [selectedPaymentType, setSelectedPaymentType] = useState("0");
 
-   const [TransactionDate, setTransactionDate] = useState("");
-   const [TransactionDateError, setTransactionDateError] = useState("");
-   const [Amount, setAmount] = useState("");
-   const [AmountError, setAmountError] = useState("");
-   const [Note, setNote] = useState("");
-   const [NoteError, setNoteError] = useState("");
-   const [selectedPaymentType, setSelectedPaymentType] = useState("0");
- 
-   const [CheckOnline, setCheckOnline] = useState("");
-   const [CheckOnlineError, setCheckOnlineError] = useState("");
-   const [SelectedBank, setSelectedBank] = useState("");
- 
-   const [SelectedBankError, setSelectedBankError] = useState("");
- 
-   const [show, setShow] = useState(false);
- 
-   const [bankOptions, setBankOptions] = useState([]);
-   const [CashOnHand, setCashOnHand] = useState([]);
- 
-   const [editedItem, setEditedItem] = useState(null);
-   const [oldAmount, setoldAmount] = useState("");
- 
-   const handleClose = () => setShow(false);
- 
-   const handleShow = async (item) => {
-     debugger;
-     setEditedItem(item.id);
-     setAmount(item.amount);
-     setoldAmount(item.amount);
-     setCheckOnline(item.checkOnline);
-     setNote(item.note);
-     setSelectedPaymentType(item.paymentType);
-     setSelectedBank(item.selectedBank);
- 
-     setTransactionDate(item.transactionDate);
- 
-     try {
-       const dataRef = ref(db, "CashOnHand");
-       const snapshot = await get(dataRef);
- 
-       if (snapshot.exists()) {
-         const data = snapshot.val();
-         let totalAmount = 0;
- 
-         // Loop through the keys in the data object and add amounts where uid matches
-         for (const key in data) {
-           if (
-             Object.prototype.hasOwnProperty.call(data, key) &&
-             data[key].uid === loggedInUID
-           ) {
-             totalAmount += parseFloat(data[key].Amount);
-           }
-         }
- 
-         // Set the total amount to the 'CashOnHand' state
-         setCashOnHand(totalAmount);
-         // setUniqueNum(UniqueNum);
-       } else {
-         console.error("Data doesn't exist in the 'CashOnHand' node.");
-       }
-     } catch (error) {
-       console.error("Error fetching data from the 'CashOnHand' node:", error);
-     }
- 
+  const [CheckOnline, setCheckOnline] = useState("");
+  const [CheckOnlineError, setCheckOnlineError] = useState("");
+  const [SelectedBank, setSelectedBank] = useState("");
 
-     if(item.selectedBank != 0){
+  const [SelectedBankError, setSelectedBankError] = useState("");
 
-       // BankAmount
+  const [show, setShow] = useState(false);
+
+  const [bankOptions, setBankOptions] = useState([]);
+  const [CashOnHand, setCashOnHand] = useState([]);
+
+  const [editedItem, setEditedItem] = useState(null);
+  const [oldAmount, setoldAmount] = useState("");
+
+  const handleClose = () => setShow(false);
+
+  const handleShow = async (item) => {
+    debugger;
+    setEditedItem(item.id);
+    setAmount(item.amount);
+    setoldAmount(item.amount);
+    setCheckOnline(item.checkOnline);
+    setNote(item.note);
+    setSelectedPaymentType(item.paymentType);
+    setSelectedBank(item.selectedBank);
+
+    setTransactionDate(item.transactionDate);
+
+    try {
+      const dataRef = ref(db, "CashOnHand");
+      const snapshot = await get(dataRef);
+
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        let totalAmount = 0;
+
+        // Loop through the keys in the data object and add amounts where uid matches
+        for (const key in data) {
+          if (
+            Object.prototype.hasOwnProperty.call(data, key) &&
+            data[key].uid === loggedInUID
+          ) {
+            totalAmount += parseFloat(data[key].Amount);
+          }
+        }
+
+        // Set the total amount to the 'CashOnHand' state
+        setCashOnHand(totalAmount);
+        // setUniqueNum(UniqueNum);
+      } else {
+        console.error("Data doesn't exist in the 'CashOnHand' node.");
+      }
+    } catch (error) {
+      console.error("Error fetching data from the 'CashOnHand' node:", error);
+    }
+
+    if (item.selectedBank != 0) {
+      // BankAmount
 
       const dataRefs = ref(db, "Bank");
       const snapshots = await get(dataRefs);
@@ -190,17 +187,16 @@ function WithDraw() {
           Id: key,
           value: data[key].bankName,
           label: data[key].bankName, // Assuming your data structure has keys and bankName values
-          Balance: data[key].openingBalance
-          
+          Balance: data[key].openingBalance,
         }));
-  
+
         const selectedBankData = options.find(
-          option => option.value === item.selectedBank
+          (option) => option.value === item.selectedBank
         );
-        console.log(selectedBankData)
+        console.log(selectedBankData);
         setBankAmount(selectedBankData.Balance);
         setBankID(selectedBankData.Id);
-  
+
         // Add the "Select Bank" option to the beginning of the array
         setBankOptions([
           {
@@ -214,17 +210,14 @@ function WithDraw() {
       } else {
         console.error("Data doesn't exist in the 'Bank' node.");
       }
-     }  
-       
- 
-   
- 
-     setShow(true); // Store the editing item's ID in state
-   };
- 
-   const [BankID, setBankID] = useState("");
+    }
 
-   const handleSaveChanges = async () => {
+    setShow(true); // Store the editing item's ID in state
+  };
+
+  const [BankID, setBankID] = useState("");
+
+  const handleSaveChanges = async () => {
     if ((TransactionDate && Amount && Note) || (CheckOnline && SelectedBank)) {
       // Implement your save logic here
       // console.log('Changes saved!');
@@ -622,7 +615,7 @@ function WithDraw() {
   return (
     <>
       <Main>
-      <ToastContainer
+        <ToastContainer
           position="top-right"
           autoClose={5000}
           hideProgressBar={false}
@@ -634,7 +627,6 @@ function WithDraw() {
           pauseOnHover
           theme="colored"
         />
-
 
         <div className="card">
           <div className="card-body">
@@ -809,10 +801,7 @@ function WithDraw() {
           </div>
         </div>
 
-
-
-
- {/* -----------------------------------Modal--------------------------------------------- */}
+        {/* -----------------------------------Modal--------------------------------------------- */}
         {/* Modal */}
         <Modal
           show={show}
@@ -1100,11 +1089,6 @@ function WithDraw() {
           </Modal.Footer>
         </Modal>
 
-
-
-
-
-
         <SweetAlert
           warning
           show={showAlert}
@@ -1122,14 +1106,6 @@ function WithDraw() {
         <SweetAlert show={showOK} success title="Deleted!" onConfirm={handleOK}>
           Your item has been deleted.
         </SweetAlert>
-
-
-
-
-
-
-
-
       </Main>
     </>
   );

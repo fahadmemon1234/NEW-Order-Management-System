@@ -208,7 +208,7 @@ const SaleOrder = ({ setPrintContent }) => {
   const [showOK, setShowOK] = useState(false);
   const [id, setId] = useState(null);
 
-  const [FinalStock, setFinalStock] = useState('');
+  const [FinalStock, setFinalStock] = useState("");
 
   const handleDelete = (item) => {
     debugger;
@@ -217,17 +217,15 @@ const SaleOrder = ({ setPrintContent }) => {
     setProductID(item.ProductID);
     setShowAlert(true);
 
-
     const QTY = localStorage.getItem("Quantity");
     const Stock = localStorage.getItem("Stock");
-
 
     const EditQty = parseInt(QTY);
     const EditStock = parseInt(Stock);
 
     const Final = EditQty + EditStock;
 
-    setFinalStock(Final)
+    setFinalStock(Final);
     // const updatedSaleOrderItem = {
     //   uid: loggedInUID,
     //   totalStock: Final,
@@ -235,8 +233,6 @@ const SaleOrder = ({ setPrintContent }) => {
     // // Update the product data in Firebase
     // const SaleOrderItemRef = ref(db, `SaleOrderItem/${SaleOrderItemID}`);
     // update(SaleOrderItemRef, updatedSaleOrderItem);
-
-    
   };
 
   const handleConfirmDelete = async () => {
@@ -248,18 +244,13 @@ const SaleOrder = ({ setPrintContent }) => {
       // Update the data state after deletion
       const updatedData = tableData.filter((item) => item.id !== id);
 
-
       const datasRef = ref(db, `SaleOrderItem/${SaleOrderItemID}`);
       await remove(datasRef);
 
       setTableData(updatedData);
 
+      //---------------------- Product Update-------------
 
-//---------------------- Product Update-------------
-
-    
-  
-  
       const updatedProduct = {
         uid: loggedInUID,
         itemQty: FinalStock,
@@ -483,14 +474,6 @@ const SaleOrder = ({ setPrintContent }) => {
             {/* End Card */}
           </div>
         </div>
-
-
-
-
-
-
-
-
 
         <SweetAlert
           warning

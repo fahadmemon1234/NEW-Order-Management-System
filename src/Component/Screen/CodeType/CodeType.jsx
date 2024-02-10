@@ -22,7 +22,6 @@ import { ref, onValue, update } from "firebase/database";
 import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
-
 //Notify
 // ---------------------------------------------------
 import { toast, ToastContainer } from "react-toastify";
@@ -113,9 +112,6 @@ function CodeType() {
 
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
 
-
-
-
   // -------------------------------Edit------------------------
 
   const [CodeType, setCodeType] = useState("");
@@ -125,30 +121,29 @@ function CodeType() {
 
   const handleClose = () => setShow(false);
 
-const [ID, setID] = useState('')
+  const [ID, setID] = useState("");
 
-  const handleEdit = (item) =>{
+  const handleEdit = (item) => {
     setID(item.id);
     setCodeType(item.codeType);
 
     setShow(true);
-  }
-
+  };
 
   const handleInputBlur = (field, value) => {
     switch (field) {
       case "codeType":
         if (value.trim() === "") {
-            // setCodeTypeError("CodeType is required");
-          toast.error('CodeType is required', {
-            position: 'top-right',
+          // setCodeTypeError("CodeType is required");
+          toast.error("CodeType is required", {
+            position: "top-right",
             autoClose: 1000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: false,
             draggable: true,
             progress: undefined,
-            theme: 'colored',
+            theme: "colored",
           });
         } else {
           setCodeTypeError("");
@@ -159,17 +154,14 @@ const [ID, setID] = useState('')
     }
   };
 
-
-  const handleSave = async () =>{
+  const handleSave = async () => {
     if (CodeType) {
       // Implement your save logic here
       console.log("Changes saved!");
 
-      
-
       try {
         const loggedInUID = localStorage.getItem("uid");
-        
+
         const newCustomer = {
           uid: loggedInUID,
           codeType: CodeType,
@@ -189,11 +181,9 @@ const [ID, setID] = useState('')
           progress: undefined,
           theme: "colored",
         });
-        
 
         setTimeout(() => {
-          
-          setID('');
+          setID("");
           setCodeType("");
 
           handleClose();
@@ -217,26 +207,23 @@ const [ID, setID] = useState('')
     } else {
       handleInputBlur("codeType", CodeType);
     }
-  }
-
+  };
 
   return (
     <>
       <Main>
-
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
 
         <div className="card">
           <div className="card-body">
@@ -294,10 +281,7 @@ const [ID, setID] = useState('')
                           <th className="text-900 sort" data-sort="Action">
                             Action
                           </th>
-                          <th
-                            className="text-900 sort"
-                            data-sort="CodeType"
-                          >
+                          <th className="text-900 sort" data-sort="CodeType">
                             Code Type
                           </th>
                         </tr>
@@ -311,11 +295,10 @@ const [ID, setID] = useState('')
                                   type="button"
                                   className="btn btn-primary"
                                   style={{ marginRight: "10px" }}
-                                 onClick={() => handleEdit(item)}
+                                  onClick={() => handleEdit(item)}
                                 >
                                   Edit
                                 </button>
-                               
                               </div>
                             </td>
                             <td className="tdchild">{item.codeType}</td>
@@ -377,72 +360,59 @@ const [ID, setID] = useState('')
           </div>
         </div>
 
-
-
-
-         {/* -----------------------------------Modal--------------------------------------------- */}
-      {/* Modal */}
-      <Modal
-        show={show}
-        onHide={handleClose}
-        dialogClassName="small-Model"
-        // style={{ paddingTop: "3%" }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Edit CodeType</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="container">
-            <form>
-              <div className="row">
-                <div className="col-md-12 col-sm-12 col-lg-12">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="Code"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      Code Type <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="Code"
-                      id="Code"
-                      placeholder="Enter Code Type"
-                      value={CodeType}
-                      onBlur={() =>
-                        handleInputBlur("codeType", CodeType)
-                      }
-                      onFocus={() => setCodeTypeError("")}
-                      onChange={(e) => setCodeType(e.target.value)}
-                    />
-                    {CodeTypeError && (
-                      <div style={{ color: "red" }}>{CodeTypeError}</div>
-                    )}
+        {/* -----------------------------------Modal--------------------------------------------- */}
+        {/* Modal */}
+        <Modal
+          show={show}
+          onHide={handleClose}
+          dialogClassName="small-Model"
+          // style={{ paddingTop: "3%" }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Edit CodeType</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="container">
+              <form>
+                <div className="row">
+                  <div className="col-md-12 col-sm-12 col-lg-12">
+                    <div className="mb-3">
+                      <label
+                        htmlFor="Code"
+                        className="form-label"
+                        style={{ color: "black" }}
+                      >
+                        Code Type <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="Code"
+                        id="Code"
+                        placeholder="Enter Code Type"
+                        value={CodeType}
+                        onBlur={() => handleInputBlur("codeType", CodeType)}
+                        onFocus={() => setCodeTypeError("")}
+                        onChange={(e) => setCodeType(e.target.value)}
+                      />
+                      {CodeTypeError && (
+                        <div style={{ color: "red" }}>{CodeTypeError}</div>
+                      )}
+                    </div>
                   </div>
                 </div>
-
-              
-              </div>
-
-           
-
-            </form>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSave}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-
-
+              </form>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleSave}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Main>
     </>
   );

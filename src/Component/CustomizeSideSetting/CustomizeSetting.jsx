@@ -16,7 +16,7 @@ import Paragraph from "../../assets/img/img/icons/paragraph.svg";
 // Setting Css
 // ---------------------------------------------------
 import "./Setting.css";
-import './custom';
+import "./custom";
 // ---------------------------------------------------
 
 function CustomizeSetting() {
@@ -197,7 +197,7 @@ function CustomizeSetting() {
                         </div>
                       </div>
                     </div>
-                   
+
                     <hr />
                     <div className="d-flex justify-content-between">
                       <div className="d-flex align-items-start">

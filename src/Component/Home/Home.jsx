@@ -323,9 +323,12 @@ function Home() {
                 <div className="row g-0 h-100 align-items-center">
                   <div className="col">
                     <div className="d-flex align-items-center">
-                      <div className="fs-5 fw-normal font-sans-serif text-primary mb-1 lh-1" style={{fontWeight:'600'}}>
+                      <div
+                        className="fs-5 fw-normal font-sans-serif text-primary mb-1 lh-1"
+                        style={{ fontWeight: "600" }}
+                      >
                         {amount.map((item, index) => (
-                          <div key={index} style={{fontWeight:'500'}}>
+                          <div key={index} style={{ fontWeight: "500" }}>
                             {item.value !== null
                               ? `Rs: ${item.value.toLocaleString()} `
                               : "Rs: 0"}

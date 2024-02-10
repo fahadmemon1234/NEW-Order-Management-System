@@ -760,8 +760,7 @@ function AddSaleOrder() {
             localStorage.setItem("Stock", Stock);
             // Update the product data in Firebase
             const productRef = ref(db, `Product/${ProductID}`);
-           await update(productRef, updatedProduct);
-
+            await update(productRef, updatedProduct);
 
             const newSaleOrder = {
               ProductID: ProductID,
@@ -823,15 +822,12 @@ function AddSaleOrder() {
             const productRef = ref(db, `Product/${ProductID}`);
             await update(productRef, updatedProduct);
 
-
             const newSaleOrder = {
               ProductID: ProductID,
             };
             const SaleOrdersRef = ref(db, `SaleOrder/${orderId}`);
             update(SaleOrdersRef, newSaleOrder);
           }
-
-          
 
           const newAmountID = AmountsId.key;
 
@@ -886,7 +882,6 @@ function AddSaleOrder() {
             const productRef = ref(db, `Product/${ProductID}`);
             await update(productRef, updatedProduct);
 
-
             const newSaleOrder = {
               ProductID: ProductID,
             };
@@ -896,7 +891,7 @@ function AddSaleOrder() {
           const newAmountID = AmountsId.key;
 
           const newSaleOrder = {
-            SaleOrderItemID: newAmountID
+            SaleOrderItemID: newAmountID,
           };
           const SaleOrdersRef = ref(db, `SaleOrder/${orderId}`);
           update(SaleOrdersRef, newSaleOrder);
@@ -1326,8 +1321,6 @@ function AddSaleOrder() {
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
       } else {
-
-       
         const newSaleOrder = {
           uid: loggedInUID,
           status: "Order Delivered",
@@ -1337,8 +1330,6 @@ function AddSaleOrder() {
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
       }
-
-     
 
       setIsReadOnly(true);
       setIsDisabled(true);
@@ -1372,8 +1363,7 @@ function AddSaleOrder() {
 
       localStorage.removeItem("Stock");
 
-
-    localStorage.removeItem("Quantity");
+      localStorage.removeItem("Quantity");
 
       setIsReadOnly(true);
       setSaveOrderVisible(true);
@@ -1516,8 +1506,6 @@ function AddSaleOrder() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const id = searchParams.get("EditID");
-
- 
 
   return (
     <>

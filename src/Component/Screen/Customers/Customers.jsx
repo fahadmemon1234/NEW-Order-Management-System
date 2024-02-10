@@ -10,13 +10,12 @@ import Main from "../../NavBar/Navbar";
 import AddCustomers from "./AddCustomers";
 // --------------------------------------------------
 
-
 // Bootstrap Modal
 // ---------------------------------------------------
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SweetAlert from "react-bootstrap-sweetalert";
-import InputMask from 'react-input-mask';
+import InputMask from "react-input-mask";
 // ---------------------------------------------------
 
 //DataBase
@@ -218,51 +217,51 @@ function Customers() {
     switch (field) {
       case "customerName":
         if (value.trim() === "") {
-          setCustomerNameError("Customer Name is required");
-          // toast.error('Item Name is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
+          // setCustomerNameError("Customer Name is required");
+          toast.error("Customer Name is required", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         } else {
           setCustomerNameError("");
         }
         break;
       case "fullName":
         if (value.trim() === "") {
-          setFullNameError("Full Name is required");
-          // toast.error('Item Name is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
+          // setFullNameError("Full Name is required");
+          toast.error("Full Name is required", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         } else {
           setFullNameError("");
         }
         break;
       case "phoneNo":
         if (value.trim() === "") {
-          setPhoneNoError("Phone No is required");
-          // toast.error('Item Name is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
+          // setPhoneNoError("Phone No is required");
+          toast.error("Phone No is required", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         } else {
           setPhoneNoError("");
         }
@@ -271,7 +270,6 @@ function Customers() {
         break;
     }
   };
-
   // -------------------------Delete-----------------------------
 
   const [showAlert, setShowAlert] = useState(false);
@@ -310,22 +308,18 @@ function Customers() {
   return (
     <>
       <Main>
-
-
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-
-
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
 
         <div className="card">
           <div className="card-body">
@@ -435,12 +429,8 @@ function Customers() {
                             <td className="tdchild">{item.CodeId}</td>
                             <td className="tdchild">{item.customerName}</td>
                             <td className="tdchild">{item.fullName}</td>
-                            <td className="tdchild">
-                              {item.phoneNo}
-                            </td>
-                            <td className="tdchild">
-                              {item.city}
-                            </td>
+                            <td className="tdchild">{item.phoneNo}</td>
+                            <td className="tdchild">{item.city}</td>
                             <td className="tdchild">{item.email}</td>
                             <td className="tdchild">{item.openingBalance}</td>
                             {/* Add more table data cells as needed */}

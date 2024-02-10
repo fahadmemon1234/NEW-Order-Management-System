@@ -11,8 +11,6 @@ function PrintReceipt() {
   const loggedInUID = localStorage.getItem("uid");
   const SaleID = localStorage.getItem("ID");
 
-
-
   useEffect(() => {
     if (loggedInUID) {
       // Reference to the 'Product' node in Firebase Realtime Database
@@ -56,7 +54,6 @@ function PrintReceipt() {
 
   const componentRef = useRef();
 
-  
   //   const openPrintWindow = useReactToPrint({
   //         content: () => componentRef.current,
   //         documentTitle: "Print Receipt",
@@ -123,7 +120,7 @@ function PrintReceipt() {
                         borderBottom: "1px dashed #000",
                         paddingTop: "20px",
                         paddingBottom: "20px",
-                        fontSize:'14px'
+                        fontSize: "14px",
                       }}
                     >
                       {item.itemName}
@@ -153,7 +150,6 @@ function PrintReceipt() {
                     >{`Rs: ${item.totalPrice}`}</td>
                   </tr>
                 ))}
-                
               </tbody>
 
               <tfoot>

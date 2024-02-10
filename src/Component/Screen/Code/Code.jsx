@@ -45,7 +45,6 @@ function Code() {
   const loggedInUID = localStorage.getItem("uid");
   useEffect(() => {
     if (loggedInUID) {
-      
       // Reference to the 'Product' node in Firebase Realtime Database
       const productRef = ref(db, `${CodeTypeName}`);
 
@@ -118,10 +117,9 @@ function Code() {
 
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
 
+  // ---------------------Edit--------------------
 
-// ---------------------Edit--------------------
-
-const [Code, setCode] = useState("");
+  const [Code, setCode] = useState("");
   const [CodeError, setCodeError] = useState("");
 
   const [IsActive, setIsActive] = useState(false);
@@ -130,24 +128,58 @@ const [Code, setCode] = useState("");
 
   const handleClose = () => setShow(false);
 
-  const [ID, setID] = useState('');
+  const [ID, setID] = useState("");
 
-const handleEdit = (item) =>{
-  setID(item.id);
-setCode(item.codeValue);
-setIsActive(item.isActive);
+  const handleEdit = (item) => {
+    setID(item.id);
+    setCode(item.codeValue);
+    setIsActive(item.isActive);
 
-  setShow(true);
-}
+    setShow(true);
+  };
 
+  const handleInputBlur = (field, value) => {
+    switch (field) {
+      case "code":
+        if (value.trim() === "") {
+          // setCodeTypeError("CodeType is required");
+          toast.error(`${CodeTypeName} is required`, {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        } else {
+          setCodeError("");
+        }
+        break;
+      default:
+        break;
+    }
+  };
 
+  const handleSave = async () => {
+    if (Code) {
+      // Implement your save logic here
+      console.log("Changes saved!");
 
-const handleInputBlur = (field, value) => {
-  switch (field) {
-    case "code":
-      if (value.trim() === "") {
-        // setCodeTypeError("CodeType is required");
-        toast.error(`${CodeTypeName} is required`, {
+      try {
+        const loggedInUID = localStorage.getItem("uid");
+
+        const newCustomer = {
+          uid: loggedInUID,
+          codeValue: Code,
+          isActive: IsActive,
+        };
+        const CustomerRef = ref(db, `${CodeTypeName}/${ID}`);
+        await update(CustomerRef, newCustomer);
+
+        // Show a success toast if the product is successfully added
+        toast.success(`${CodeTypeName} Edit Successfully`, {
           position: "top-right",
           autoClose: 1000,
           hideProgressBar: false,
@@ -157,112 +189,73 @@ const handleInputBlur = (field, value) => {
           progress: undefined,
           theme: "colored",
         });
-      } else {
-        setCodeError("");
+
+        setTimeout(() => {
+          handleClose();
+
+          setCode("");
+          setID("");
+          setIsActive(false);
+        }, 2000);
+
+        // handleClose(); // Close the modal after successful insert
+      } catch (error) {
+        toast.error(`${CodeTypeName} Error adding: ` + error.message, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+
+        console.log(`Error adding ${CodeTypeName}:`, error);
       }
-      break;
-    default:
-      break;
-  }
-};
-
-const handleSave = async () =>{
-  if (Code) {
-    // Implement your save logic here
-    console.log("Changes saved!");
-
-    try {
-      const loggedInUID = localStorage.getItem("uid");
-     
-      const newCustomer = {
-        uid: loggedInUID,
-        codeValue: Code,
-        isActive: IsActive,
-      };
-      const CustomerRef = ref(db, `${CodeTypeName}/${ID}`);
-      await update(CustomerRef, newCustomer);
-
-
-      // Show a success toast if the product is successfully added
-      toast.success(`${CodeTypeName} Edit Successfully`, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-
-      setTimeout(() => {
-        handleClose();
-
-        setCode("");
-        setID('');
-        setIsActive(false);
-      }, 2000);
-
-      // handleClose(); // Close the modal after successful insert
-    } catch (error) {
-      toast.error(`${CodeTypeName} Error adding: ` + error.message, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-
-      console.log(`Error adding ${CodeTypeName}:`, error);
+    } else {
+      handleInputBlur("code", Code);
     }
-  } else {
-    handleInputBlur("code", Code);
-  }
-}
+  };
 
+  // -------------------------Delete-----------------------------
 
-// -------------------------Delete-----------------------------
+  const [showAlert, setShowAlert] = useState(false);
+  const [showOK, setShowOK] = useState(false);
+  const [id, setId] = useState(null);
 
-const [showAlert, setShowAlert] = useState(false);
-const [showOK, setShowOK] = useState(false);
-const [id, setId] = useState(null);
+  const handleDelete = (id) => {
+    setId(id);
+    setShowAlert(true);
+  };
 
-const handleDelete = (id) => {
-  setId(id);
-  setShowAlert(true);
-};
+  const handleConfirmDelete = async () => {
+    try {
+      const dataRef = ref(db, `${CodeTypeName}/${id}`);
+      await remove(dataRef);
 
-const handleConfirmDelete = async () => {
-  try {
-    const dataRef = ref(db, `${CodeTypeName}/${id}`);
-    await remove(dataRef);
+      // Update the data state after deletion
+      const updatedData = tableData.filter((item) => item.id !== id);
+      setTableData(updatedData);
 
-    // Update the data state after deletion
-    const updatedData = tableData.filter((item) => item.id !== id);
-    setTableData(updatedData);
+      setShowAlert(false);
+      setShowOK(true);
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  };
 
+  const handleCancelDelete = () => {
     setShowAlert(false);
-    setShowOK(true);
-  } catch (error) {
-    console.error("Error deleting data:", error);
-  }
-};
+  };
 
-const handleCancelDelete = () => {
-  setShowAlert(false);
-};
-
-const handleOK = () => {
-  setShowOK(false);
-};
+  const handleOK = () => {
+    setShowOK(false);
+  };
 
   return (
     <>
-
-<ToastContainer
+      <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -274,7 +267,6 @@ const handleOK = () => {
         pauseOnHover
         theme="colored"
       />
-
 
       <Main>
         <div className="card">
@@ -344,20 +336,20 @@ const handleOK = () => {
                       <tbody className="list">
                         {visibleItems.slice(0, rowsToShow).map((item) => (
                           <tr key={item.id}>
-                            <td style={{width:'19%'}}>
+                            <td style={{ width: "19%" }}>
                               <div style={{ display: "flex" }}>
                                 <button
                                   type="button"
                                   className="btn btn-primary"
                                   style={{ marginRight: "10px" }}
-                                  onClick={()=>handleEdit(item)}
+                                  onClick={() => handleEdit(item)}
                                 >
                                   Edit
                                 </button>
                                 <button
                                   type="button"
                                   className="btn btn-danger"
-                                  onClick={()=>handleDelete(item.id)}
+                                  onClick={() => handleDelete(item.id)}
                                 >
                                   Delete
                                 </button>
@@ -432,85 +424,82 @@ const handleOK = () => {
           </div>
         </div>
 
-
-
-
-         {/* -----------------------------------Modal--------------------------------------------- */}
-      {/* Modal */}
-      <Modal
-        show={show}
-        onHide={handleClose}
-        dialogClassName="small-Model"
-        // style={{ paddingTop: "3%" }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Edit {CodeTypeName}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="container">
-            <form>
-              <div className="row">
-                <div className="col-md-12 col-sm-12 col-lg-12">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="Code"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      Code Name <span style={{ color: "red" }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="Code"
-                      id="Code"
-                      placeholder="Enter Code Value"
-                      value={Code}
-                      onBlur={() => handleInputBlur("code", Code)}
-                      onFocus={() => setCodeError("")}
-                      onChange={(e) => setCode(e.target.value)}
-                    />
-                    {CodeError && (
-                      <div style={{ color: "red" }}>{CodeError}</div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="col-md-12 col-sm-12 col-lg-12">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="Code"
-                      className="form-label"
-                      style={{ color: "black" }}
-                    >
-                      IsActive
-                    </label>
-                    <div class="form-check form-switch">
+        {/* -----------------------------------Modal--------------------------------------------- */}
+        {/* Modal */}
+        <Modal
+          show={show}
+          onHide={handleClose}
+          dialogClassName="small-Model"
+          // style={{ paddingTop: "3%" }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Edit {CodeTypeName}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="container">
+              <form>
+                <div className="row">
+                  <div className="col-md-12 col-sm-12 col-lg-12">
+                    <div className="mb-3">
+                      <label
+                        htmlFor="Code"
+                        className="form-label"
+                        style={{ color: "black" }}
+                      >
+                        Code Name <span style={{ color: "red" }}>*</span>
+                      </label>
                       <input
-                        class="form-check-input"
-                        id="flexSwitchCheckDefault"
-                        type="checkbox"
-                        checked={IsActive} // add checked attribute to reflect the state of isActive
-                        onChange={() => setIsActive(!IsActive)}
+                        type="text"
+                        className="form-control"
+                        name="Code"
+                        id="Code"
+                        placeholder="Enter Code Value"
+                        value={Code}
+                        onBlur={() => handleInputBlur("code", Code)}
+                        onFocus={() => setCodeError("")}
+                        onChange={(e) => setCode(e.target.value)}
                       />
+                      {CodeError && (
+                        <div style={{ color: "red" }}>{CodeError}</div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="col-md-12 col-sm-12 col-lg-12">
+                    <div className="mb-3">
+                      <label
+                        htmlFor="Code"
+                        className="form-label"
+                        style={{ color: "black" }}
+                      >
+                        IsActive
+                      </label>
+                      <div class="form-check form-switch">
+                        <input
+                          class="form-check-input"
+                          id="flexSwitchCheckDefault"
+                          type="checkbox"
+                          checked={IsActive} // add checked attribute to reflect the state of isActive
+                          onChange={() => setIsActive(!IsActive)}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </form>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSave}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+              </form>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleSave}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
-      <SweetAlert
+        <SweetAlert
           warning
           show={showAlert}
           title="Confirm Deletion"
@@ -528,10 +517,6 @@ const handleOK = () => {
           Your item has been deleted.
         </SweetAlert>
       </Main>
-
-
-
-     
     </>
   );
 }

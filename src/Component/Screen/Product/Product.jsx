@@ -37,10 +37,6 @@ import "../../../assets/Css/Tostify.css";
 function Product() {
   const [tableData, setTableData] = useState([]);
 
-
-
-
-
   // useEffect(() => {
   //   // Reference to the 'Posting' node in Firebase Realtime Database
   //   const tasksRef = ref(db, "Product");
@@ -83,11 +79,7 @@ function Product() {
                 ...data[key],
               }));
 
-              
-
             setTableData(dataArray);
-
-            
           }
         });
       };
@@ -191,16 +183,15 @@ function Product() {
   const handleSaveChanges = async () => {
     debugger;
     console.log(editedItem);
-  
+
     if (itemName && brandCode && itemCost && sellPrice && itemQty) {
       // Implement your save logic here
       console.log("Changes saved!");
       try {
-
         const loggedInUID = localStorage.getItem("uid");
         // Construct the updated product object
         const updatedProduct = {
-          uid:loggedInUID,
+          uid: loggedInUID,
           itemName: itemName,
           brandCode: brandCode,
           measurement: measurement,
@@ -245,9 +236,7 @@ function Product() {
           theme: "colored",
         });
       }
-    }
-
-    else{
+    } else {
       handleInputBlur("ItemName", itemName);
       handleInputBlur("BrandCode", brandCode);
       handleInputBlur("itemCost", itemCost);
@@ -391,7 +380,6 @@ function Product() {
   const handleOK = () => {
     setShowOK(false);
   };
-
 
   return (
     <>

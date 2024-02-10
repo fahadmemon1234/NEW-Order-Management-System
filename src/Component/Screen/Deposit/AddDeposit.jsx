@@ -145,8 +145,7 @@ function AddDeposit() {
         if (selectedPaymentType == "Cash") {
           // var ID = "-NfqYJMNFeYTGjIJ6Crc";
 
-          const CashID = '-NoSkv0ysgg_X2lPpq-X';
-          
+          const CashID = "-NoSkv0ysgg_X2lPpq-X";
 
           var TotaCashGet = CashOnHand;
 
@@ -161,8 +160,6 @@ function AddDeposit() {
           // Update the product data in Firebase
           const TotalAmountRef = ref(db, `CashOnHand/${CashID}`);
           await update(TotalAmountRef, updatedTotalAmount);
-
-        
         } else {
           // ----------------Edit Bank Cash----------------
 
@@ -286,7 +283,7 @@ function AddDeposit() {
       case "transactionDate":
         if (typeof value === "string" && value.trim() === "") {
           setTransactionDateError("Transaction Date is required");
-          // toast.error('Item Name is required', {
+          // toast.error('Transaction Date is required', {
           //   position: 'top-right',
           //   autoClose: 2000,
           //   hideProgressBar: false,
@@ -294,7 +291,7 @@ function AddDeposit() {
           //   pauseOnHover: false,
           //   draggable: true,
           //   progress: undefined,
-          //   theme: 'light',
+          //   theme: 'colored',
           // });
         } else {
           setTransactionDateError("");
@@ -311,7 +308,7 @@ function AddDeposit() {
           //   pauseOnHover: false,
           //   draggable: true,
           //   progress: undefined,
-          //   theme: 'light',
+          //   theme: 'colored',
           // });
         } else {
           setAmountError("");
@@ -328,7 +325,7 @@ function AddDeposit() {
           //   pauseOnHover: false,
           //   draggable: true,
           //   progress: undefined,
-          //   theme: 'light',
+          //   theme: 'colored',
           // });
         } else {
           setNoteError("");
@@ -345,7 +342,7 @@ function AddDeposit() {
           //   pauseOnHover: false,
           //   draggable: true,
           //   progress: undefined,
-          //   theme: 'light',
+          //   theme: 'colored',
           // });
         } else {
           setCheckOnlineError("");
@@ -362,7 +359,7 @@ function AddDeposit() {
           //   pauseOnHover: false,
           //   draggable: true,
           //   progress: undefined,
-          //   theme: 'light',
+          //   theme: 'colored',
           // });
         } else {
           setSelectedBankError("");

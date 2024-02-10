@@ -24,8 +24,6 @@ import "../../../assets/Css/Model.css";
 // ---------------------------------------------------
 
 function CodeType() {
-
-
   const [CodeType, setCodeType] = useState("");
   const [CodeTypeError, setCodeTypeError] = useState("");
 
@@ -33,7 +31,6 @@ function CodeType() {
 
   const handleClose = () => setShow(false);
   const handleShow = async () => {
-  
     setCodeType("");
 
     setShow(true); // Store the editing item's ID in state
@@ -43,16 +40,16 @@ function CodeType() {
     switch (field) {
       case "codeType":
         if (value.trim() === "") {
-            // setCodeTypeError("CodeType is required");
-          toast.error('CodeType is required', {
-            position: 'top-right',
+          // setCodeTypeError("CodeType is required");
+          toast.error("CodeType is required", {
+            position: "top-right",
             autoClose: 1000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: false,
             draggable: true,
             progress: undefined,
-            theme: 'colored',
+            theme: "colored",
           });
         } else {
           setCodeTypeError("");
@@ -63,14 +60,10 @@ function CodeType() {
     }
   };
 
- 
-
   const handleSaveChanges = () => {
     if (CodeType) {
       // Implement your save logic here
       console.log("Changes saved!");
-
-      
 
       try {
         const loggedInUID = localStorage.getItem("uid");
@@ -92,11 +85,10 @@ function CodeType() {
           progress: undefined,
           theme: "colored",
         });
-        
 
         setTimeout(() => {
           handleClose();
-          
+
           setCodeType("");
         }, 2000);
 
@@ -175,9 +167,7 @@ function CodeType() {
                       id="Code"
                       placeholder="Enter Code Type"
                       value={CodeType}
-                      onBlur={() =>
-                        handleInputBlur("codeType", CodeType)
-                      }
+                      onBlur={() => handleInputBlur("codeType", CodeType)}
                       onFocus={() => setCodeTypeError("")}
                       onChange={(e) => setCodeType(e.target.value)}
                     />
@@ -186,12 +176,7 @@ function CodeType() {
                     )}
                   </div>
                 </div>
-
-              
               </div>
-
-           
-
             </form>
           </div>
         </Modal.Body>

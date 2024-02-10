@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 // Bootstrap Modal
 // ---------------------------------------------------
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import SweetAlert from "react-bootstrap-sweetalert";
 // ---------------------------------------------------
 
@@ -158,7 +157,6 @@ const SaleOrder = ({ setPrintContent }) => {
 
     localStorage.setItem("TotalAmount", item.Payment);
 
-
     const printWindow = window.open("/PrintReceipt", "_blank");
 
     // Ensure the window has loaded before triggering print
@@ -167,24 +165,19 @@ const SaleOrder = ({ setPrintContent }) => {
     };
   };
 
-
-
-
-
   // ------------------Edit---------------------------------
 
-  const handleEdit = (item) =>{
+  const handleEdit = (item) => {
     debugger;
     navigate(`/AddSaleOrder?EditID=${item.id}`);
 
-
     localStorage.setItem("ID", item.id);
     localStorage.setItem("customer", item.customer);
-    localStorage.setItem("orderDate", item.orderDate)
-    localStorage.setItem("name", item.name)
-    localStorage.setItem("phoneNumber", item.phoneNumber)
-    localStorage.setItem("paymentMethod", item.paymentMethod)
-    localStorage.setItem("salesMan", item.salesMan)
+    localStorage.setItem("orderDate", item.orderDate);
+    localStorage.setItem("name", item.name);
+    localStorage.setItem("phoneNumber", item.phoneNumber);
+    localStorage.setItem("paymentMethod", item.paymentMethod);
+    localStorage.setItem("salesMan", item.salesMan);
     localStorage.setItem("isSaveOrderVisible", false);
     localStorage.removeItem("ItemName");
     localStorage.removeItem("EditID");
@@ -198,7 +191,97 @@ const SaleOrder = ({ setPrintContent }) => {
     localStorage.removeItem("EditCostPrice");
     localStorage.removeItem("ProductID");
     localStorage.setItem("AddItemSection", true);
-  }
+    localStorage.removeItem("Stock");
+
+    localStorage.removeItem("Quantity");
+  };
+
+  // ------------------Delete------------------------------
+
+  // const [EditQty, setEditQTY] = useState("");
+  // const [EditStock, setEditStock] = useState("");
+
+  const [SaleOrderItemID, setSaleOrderItemID] = useState("");
+  const [ProductID, setProductID] = useState("");
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [showOK, setShowOK] = useState(false);
+  const [id, setId] = useState(null);
+
+  const [FinalStock, setFinalStock] = useState('');
+
+  const handleDelete = (item) => {
+    debugger;
+    setId(item.id);
+    setSaleOrderItemID(item.SaleOrderItemID);
+    setProductID(item.ProductID);
+    setShowAlert(true);
+
+
+    const QTY = localStorage.getItem("Quantity");
+    const Stock = localStorage.getItem("Stock");
+
+
+    const EditQty = parseInt(QTY);
+    const EditStock = parseInt(Stock);
+
+    const Final = EditQty + EditStock;
+
+    setFinalStock(Final)
+    // const updatedSaleOrderItem = {
+    //   uid: loggedInUID,
+    //   totalStock: Final,
+    // };
+    // // Update the product data in Firebase
+    // const SaleOrderItemRef = ref(db, `SaleOrderItem/${SaleOrderItemID}`);
+    // update(SaleOrderItemRef, updatedSaleOrderItem);
+
+    
+  };
+
+  const handleConfirmDelete = async () => {
+    debugger;
+    try {
+      const dataRef = ref(db, `SaleOrder/${id}`);
+      await remove(dataRef);
+
+      // Update the data state after deletion
+      const updatedData = tableData.filter((item) => item.id !== id);
+
+
+      const datasRef = ref(db, `SaleOrderItem/${SaleOrderItemID}`);
+      await remove(datasRef);
+
+      setTableData(updatedData);
+
+
+//---------------------- Product Update-------------
+
+    
+  
+  
+      const updatedProduct = {
+        uid: loggedInUID,
+        itemQty: FinalStock,
+      };
+      // Update the product data in Firebase
+      const productRef = ref(db, `Product/${ProductID}`);
+      update(productRef, updatedProduct);
+
+      setShowAlert(false);
+      setShowOK(true);
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowAlert(false);
+  };
+
+  const handleOK = () => {
+    setShowOK(false);
+  };
 
   return (
     <>
@@ -318,7 +401,7 @@ const SaleOrder = ({ setPrintContent }) => {
                                     <button
                                       type="button"
                                       className="btn btn-danger"
-                                      // onClick={() => handleDelete(item.id)}
+                                      onClick={() => handleDelete(item)}
                                     >
                                       Delete
                                     </button>
@@ -400,6 +483,32 @@ const SaleOrder = ({ setPrintContent }) => {
             {/* End Card */}
           </div>
         </div>
+
+
+
+
+
+
+
+
+
+        <SweetAlert
+          warning
+          show={showAlert}
+          title="Confirm Deletion"
+          showCancel
+          confirmBtnText="Yes, delete it!"
+          confirmBtnBsStyle="danger"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+          focusCancelBtn
+        >
+          Are you sure you want to delete this item?
+        </SweetAlert>
+
+        <SweetAlert show={showOK} success title="Deleted!" onConfirm={handleOK}>
+          Your item has been deleted.
+        </SweetAlert>
       </Main>
     </>
   );

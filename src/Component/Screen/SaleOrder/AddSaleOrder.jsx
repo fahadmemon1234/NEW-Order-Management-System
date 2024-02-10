@@ -731,6 +731,7 @@ function AddSaleOrder() {
         setTotalPrice("");
       } else {
         if (paymentMethod === "rdoCash") {
+          debugger;
           localStorage.setItem("ItemName", SelectedItem);
 
           const SaleOrderRef = ref(db, "SaleOrderItem");
@@ -750,18 +751,34 @@ function AddSaleOrder() {
           const AmountsId = push(SaleOrderRef, NewSaleOrder);
 
           if (Stock !== "" && SalePrice !== "") {
+            debugger;
             const updatedProduct = {
               uid: loggedInUID,
               itemQty: Stock,
               sellPrice: SalePrice,
             };
-
+            localStorage.setItem("Stock", Stock);
             // Update the product data in Firebase
             const productRef = ref(db, `Product/${ProductID}`);
-            await update(productRef, updatedProduct);
+           await update(productRef, updatedProduct);
+
+
+            const newSaleOrder = {
+              ProductID: ProductID,
+            };
+            const SaleOrdersRef = ref(db, `SaleOrder/${orderId}`);
+            update(SaleOrdersRef, newSaleOrder);
           }
 
+          localStorage.setItem("Quantity", Quantity);
+
           const newAmountID = AmountsId.key;
+
+          const newSaleOrder = {
+            SaleOrderItemID: newAmountID,
+          };
+          const SaleOrdersRef = ref(db, `SaleOrder/${orderId}`);
+          update(SaleOrdersRef, newSaleOrder);
 
           setAmountID(newAmountID);
           setQuantity("");
@@ -793,6 +810,7 @@ function AddSaleOrder() {
           };
 
           const AmountsId = push(SaleOrderRef, NewSaleOrder);
+          localStorage.setItem("Quantity", Quantity);
 
           if (Stock !== "" && SalePrice !== "") {
             const updatedProduct = {
@@ -800,13 +818,28 @@ function AddSaleOrder() {
               itemQty: Stock,
               sellPrice: SalePrice,
             };
-
+            localStorage.setItem("Stock", Stock);
             // Update the product data in Firebase
             const productRef = ref(db, `Product/${ProductID}`);
             await update(productRef, updatedProduct);
+
+
+            const newSaleOrder = {
+              ProductID: ProductID,
+            };
+            const SaleOrdersRef = ref(db, `SaleOrder/${orderId}`);
+            update(SaleOrdersRef, newSaleOrder);
           }
 
+          
+
           const newAmountID = AmountsId.key;
+
+          const newSaleOrder = {
+            SaleOrderItemID: newAmountID,
+          };
+          const SaleOrdersRef = ref(db, `SaleOrder/${orderId}`);
+          update(SaleOrdersRef, newSaleOrder);
 
           setAmountID(newAmountID);
 
@@ -839,6 +872,7 @@ function AddSaleOrder() {
           };
 
           const AmountsId = push(SaleOrderRef, NewSaleOrder);
+          localStorage.setItem("Quantity", Quantity);
 
           if (Stock !== "" && SalePrice !== "") {
             const updatedProduct = {
@@ -847,11 +881,25 @@ function AddSaleOrder() {
               sellPrice: SalePrice,
             };
 
+            localStorage.setItem("Stock", Stock);
             // Update the product data in Firebase
             const productRef = ref(db, `Product/${ProductID}`);
             await update(productRef, updatedProduct);
+
+
+            const newSaleOrder = {
+              ProductID: ProductID,
+            };
+            const SaleOrdersRef = ref(db, `SaleOrder/${orderId}`);
+            update(SaleOrdersRef, newSaleOrder);
           }
           const newAmountID = AmountsId.key;
+
+          const newSaleOrder = {
+            SaleOrderItemID: newAmountID
+          };
+          const SaleOrdersRef = ref(db, `SaleOrder/${orderId}`);
+          update(SaleOrdersRef, newSaleOrder);
 
           setAmountID(newAmountID);
 
@@ -1202,13 +1250,15 @@ function AddSaleOrder() {
       };
       update(SaleOrderItemRef, newSaleOrderItem);
 
+      localStorage.setItem("Quantity", Quantity);
+
       if (Stock !== "" && SalePrice !== "") {
         const updatedProduct = {
           uid: loggedInUID,
           itemQty: Stock,
           sellPrice: SalePrice,
         };
-
+        localStorage.setItem("Stock", Stock);
         // Update the product data in Firebase
         const productRef = ref(db, `Product/${ProductID}`);
         await update(productRef, updatedProduct);
@@ -1319,6 +1369,11 @@ function AddSaleOrder() {
       localStorage.removeItem("EditStock");
       localStorage.removeItem("EditCostPrice");
       localStorage.setItem("AddItemSection", false);
+
+      localStorage.removeItem("Stock");
+
+
+    localStorage.removeItem("Quantity");
 
       setIsReadOnly(true);
       setSaveOrderVisible(true);

@@ -4,11 +4,12 @@ import React, { useState, useEffect } from "react";
 // ---------------------------------------------------
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Select from "react-select";
 // ---------------------------------------------------
 
 //DataBase
 // ---------------------------------------------------
-import { ref, push } from "firebase/database";
+import { ref, push, get } from "firebase/database";
 import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
@@ -32,8 +33,9 @@ function AddProduct() {
     setItemQty("");
     setItemCost("");
     setSellPrice("");
-    setMeasurement("");
-    setBrandCode("");
+    setSelectedMeasurement(0);
+    // setBrandCode("");
+    setSelectedBrandCode(0);
     setTotalAmount("");
     setDescription("");
     setShow(true);
@@ -42,6 +44,7 @@ function AddProduct() {
   // Multiply
   const [itemCost, setItemCost] = useState("");
   const [itemQty, setItemQty] = useState("");
+
   const [totalAmount, setTotalAmount] = useState("");
 
   useEffect(() => {
@@ -58,13 +61,13 @@ function AddProduct() {
 
   // Insert
   const [itemName, setItemName] = useState("");
-  const [brandCode, setBrandCode] = useState("");
-  const [measurement, setMeasurement] = useState("");
   const [sellPrice, setSellPrice] = useState("");
+  const [SelectedBrandCode, setSelectedBrandCode] = useState("");
+  const [SelectedMeasurement, setSelectedMeasurement] = useState("");
   const [description, setDescription] = useState("");
 
   const handleSaveChanges = () => {
-    if (itemName && brandCode && itemCost && sellPrice && itemQty) {
+    if (itemName && SelectedBrandCode && itemCost && sellPrice && itemQty) {
       // Implement your save logic here
       console.log("Changes saved!");
 
@@ -74,8 +77,8 @@ function AddProduct() {
         const newProduct = {
           uid: loggedInUID,
           itemName: itemName,
-          brandCode: brandCode,
-          measurement: measurement,
+          brandCode: SelectedBrandCode,
+          measurement: SelectedMeasurement,
           itemCost: itemCost,
           sellPrice: sellPrice,
           itemQty: itemQty,
@@ -99,8 +102,8 @@ function AddProduct() {
         setTimeout(() => {
           handleClose();
           setItemName("");
-          setBrandCode("");
-          setMeasurement("");
+          setSelectedBrandCode(0);
+          setSelectedMeasurement(0);
           setItemCost("");
           setSellPrice("");
           setItemQty("");
@@ -125,7 +128,7 @@ function AddProduct() {
       }
     } else {
       handleInputBlur("ItemName", itemName);
-      handleInputBlur("BrandCode", brandCode);
+      handleInputBlur("BrandCode", SelectedBrandCode);
       handleInputBlur("itemCost", itemCost);
       handleInputBlur("SellPrice", sellPrice);
       handleInputBlur("itemQty", itemQty);
@@ -231,6 +234,148 @@ function AddProduct() {
     }
   };
 
+  // Select2 DropDown Measurement
+
+  const [MeasurementOptions, setMeasurementOptions] = useState([]);
+  const loggedInUID = localStorage.getItem("uid");
+
+  const [Measurement, setMeasurement] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataRef = ref(db, "Measurement");
+        const snapshot = await get(dataRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          debugger;
+          // Convert the data object into an array of options
+          const options = Object.keys(data).map((key) => ({
+            Id: key,
+            value: data[key].codeValue,
+            label: data[key].codeValue,
+            IsActive: data[key].isActive,
+            uid: data[key].uid,
+          }));
+
+          // console.log("All Banks:", options); // Log all banks before filtering
+
+          // Filter options based on loggedInUID
+          const userBanks = options.filter(
+            (bank) => bank.uid === loggedInUID && bank.IsActive === true
+          );
+          setMeasurement(userBanks);
+
+          // console.log("User Banks:", userBanks); // Log filtered banks
+
+          if (userBanks.length > 0) {
+            // Add the "Select Bank" option to the beginning of the array
+            setMeasurementOptions([
+              {
+                value: "0",
+                label: "Select Measurement",
+                disabled: true,
+                selected: true,
+              },
+              ...userBanks,
+            ]);
+          } else {
+            console.error(
+              "No matching Measurement for loggedInUID:",
+              loggedInUID
+            );
+            // Handle the case where no matching banks are found
+          }
+        } else {
+          console.error("Data doesn't exist in the 'Measurement' node.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [db, loggedInUID]);
+
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      border: "1px solid #ccc",
+      borderRadius: "4px",
+      minHeight: "38px",
+    }),
+  };
+
+  const handleMeasurementSelect = (selectedOption) => {
+    setSelectedMeasurement(selectedOption?.value);
+  };
+
+  // Select2 DropDown Brand Code
+
+  const [BrandCodeOptions, setBrandCodeOptions] = useState([]);
+
+  const [BrandCode, setBrandCode] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataRef = ref(db, "Brand Code");
+        const snapshot = await get(dataRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          debugger;
+          // Convert the data object into an array of options
+          const options = Object.keys(data).map((key) => ({
+            Id: key,
+            value: data[key].codeValue,
+            label: data[key].codeValue,
+            IsActive: data[key].isActive,
+            uid: data[key].uid,
+          }));
+
+          // console.log("All Banks:", options); // Log all banks before filtering
+
+          // Filter options based on loggedInUID
+          const userBanks = options.filter(
+            (bank) => bank.uid === loggedInUID && bank.IsActive === true
+          );
+          setBrandCode(userBanks);
+
+          // console.log("User Banks:", userBanks); // Log filtered banks
+
+          if (userBanks.length > 0) {
+            // Add the "Select Bank" option to the beginning of the array
+            setBrandCodeOptions([
+              {
+                value: "0",
+                label: "Select Brand Code",
+                disabled: true,
+                selected: true,
+              },
+              ...userBanks,
+            ]);
+          } else {
+            console.error(
+              "No matching Brand Code for loggedInUID:",
+              loggedInUID
+            );
+            // Handle the case where no matching banks are found
+          }
+        } else {
+          console.error("Data doesn't exist in the 'Brand Code' node.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [db, loggedInUID]);
+
+  const handleBrandCodeSelect = (selectedOption) => {
+    setSelectedBrandCode(selectedOption?.value);
+  };
+
   return (
     <>
       <ToastContainer
@@ -299,7 +444,7 @@ function AddProduct() {
                     >
                       Brand Code <span style={{ color: "red" }}>*</span>
                     </label>
-                    <select
+                    {/* <select
                       className="form-select"
                       value={brandCode}
                       onBlur={() => handleInputBlur("BrandCode", brandCode)}
@@ -312,7 +457,24 @@ function AddProduct() {
                       <option value="Qarshi">Qarshi</option>
                       <option value="Ajmal">Ajmal</option>
                       <option value="Hamdard">Hamdard</option>
-                    </select>
+                    </select> */}
+                    <Select
+                      id="brandCode"
+                      options={BrandCode}
+                      styles={{
+                        ...customStyles,
+                        menu: (provided) => ({
+                          ...provided,
+                          overflowY: "auto", // Add scrollbar when needed
+                          maxHeight: "150px", // Set the maximum height here
+                        }),
+                      }}
+                      isSearchable={true}
+                      placeholder="Select Brand Code"
+                      onChange={handleBrandCodeSelect}
+                      onBlur={() => handleInputBlur("BrandCode", SelectedBrandCode)}
+                      onFocus={() => setBrandCodeError("")}
+                    />
                     {BrandCodeError && (
                       <div style={{ color: "red" }}>{BrandCodeError}</div>
                     )}
@@ -328,7 +490,7 @@ function AddProduct() {
                       Measurement
                     </label>
                     {/* <input type="password" class="form-control" id="exampleInputPassword1"/> */}
-                    <select
+                    {/* <select
                       className="form-select"
                       value={measurement}
                       onChange={(e) => setMeasurement(e.target.value)}
@@ -338,7 +500,23 @@ function AddProduct() {
                       </option>
                       <option value="kg">kg</option>
                       <option value="gm">gm</option>
-                    </select>
+                    </select> */}
+
+                    <Select
+                      id="measurement"
+                      options={Measurement}
+                      styles={{
+                        ...customStyles,
+                        menu: (provided) => ({
+                          ...provided,
+                          overflowY: "auto", // Add scrollbar when needed
+                          maxHeight: "150px", // Set the maximum height here
+                        }),
+                      }}
+                      isSearchable={true}
+                      placeholder="Select Measurement"
+                      onChange={handleMeasurementSelect}
+                    />
                   </div>
                 </div>
               </div>

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 // Navbar Css
 // ---------------------------------------------------
 import "./navbar.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 // ---------------------------------------------------
 
 // Images
@@ -67,6 +67,26 @@ const Main = ({ children }) => {
     }
   };
 
+
+  const navigate = useNavigate();
+
+const handleLogout = () =>{
+  localStorage.clear();
+  localStorage.setItem("userlogin", false)
+
+  navigate("/");
+}
+
+
+
+
+
+// setTimeout(() => {
+//   localStorage.clear();
+//   localStorage.setItem("userlogin", false);
+//   navigate("/");
+// }, 60000);
+
   return (
     <>
       <main className="main" id="top">
@@ -108,6 +128,7 @@ const Main = ({ children }) => {
                     <Link
                       className={`nav-link ${
                         location.pathname === "/Home" ? "active" : ""
+                       
                       }`}
                       to="/Home"
                       role="button"
@@ -1979,7 +2000,7 @@ const Main = ({ children }) => {
                       <a className="dropdown-item" href="#">
                         Settings
                       </a>
-                      <a className="dropdown-item" href="/">
+                      <a className="dropdown-item" href="javascript:void(0);" onClick={handleLogout}>
                         Logout
                       </a>
                     </div>

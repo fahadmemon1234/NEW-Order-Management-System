@@ -23,25 +23,27 @@ import "../../../assets/Css/Tostify.css";
 import "../../../assets/Css/Model.css";
 // ---------------------------------------------------
 
-function CodeType() {
-  const [CodeType, setCodeType] = useState("");
-  const [CodeTypeError, setCodeTypeError] = useState("");
+function AddMeasurment() {
+  const [Code, setCode] = useState("");
+  const [CodeError, setCodeError] = useState("");
+
+  const [IsActive, setIsActive] = useState(false);
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = async () => {
-    setCodeType("");
+    setCode("");
 
     setShow(true); // Store the editing item's ID in state
   };
 
   const handleInputBlur = (field, value) => {
     switch (field) {
-      case "codeType":
+      case "code":
         if (value.trim() === "") {
           // setCodeTypeError("CodeType is required");
-          toast.error("CodeType is required", {
+          toast.error(`Measurement is required`, {
             position: "top-right",
             autoClose: 1000,
             hideProgressBar: false,
@@ -52,7 +54,7 @@ function CodeType() {
             theme: "colored",
           });
         } else {
-          setCodeTypeError("");
+          setCodeError("");
         }
         break;
       default:
@@ -61,22 +63,22 @@ function CodeType() {
   };
 
   const handleSaveChanges = () => {
-    debugger;
-    if (CodeType) {
+    if (Code) {
       // Implement your save logic here
       console.log("Changes saved!");
 
       try {
         const loggedInUID = localStorage.getItem("uid");
-        const CustomerRef = ref(db, "CodeType");
+        const CustomerRef = ref(db, `Measurement`);
         const newCustomer = {
           uid: loggedInUID,
-          codeType: CodeType,
+          codeValue: Code,
+          isActive: IsActive,
         };
         push(CustomerRef, newCustomer);
 
         // Show a success toast if the product is successfully added
-        toast.success("CodeType Added Successfully", {
+        toast.success(`Measurement Added Successfully`, {
           position: "top-right",
           autoClose: 1000,
           hideProgressBar: false,
@@ -90,12 +92,13 @@ function CodeType() {
         setTimeout(() => {
           handleClose();
 
-          setCodeType("");
+          setCode("");
+          setIsActive(false);
         }, 2000);
 
         // handleClose(); // Close the modal after successful insert
       } catch (error) {
-        toast.error("Error adding CodeType: " + error.message, {
+        toast.error(`Measurement Error adding: ` + error.message, {
           position: "top-right",
           autoClose: 1000,
           hideProgressBar: false,
@@ -106,10 +109,10 @@ function CodeType() {
           theme: "colored",
         });
 
-        console.log("Error adding CodeType:", error);
+        console.log(`Error adding Measurement:`, error);
       }
     } else {
-      handleInputBlur("codeType", CodeType);
+      handleInputBlur("code", Code);
     }
   };
 
@@ -128,14 +131,22 @@ function CodeType() {
         theme="colored"
       />
 
-      <button
+      {/* <button
         className="btn btn-primary"
         type="button"
         onClick={handleShow}
-        style={{ float: "right" }}
+        style={{ float: "right" }}d
       >
-        Add CodeType
-      </button>
+        Add Measurement
+      </button> */}
+
+      <a
+        href="#"
+        style={{ float: "right", fontSize: 13 + "px", fontWeight: "600" }}
+        onClick={handleShow}
+      >
+        Add Measurement
+      </a>
 
       {/* -----------------------------------Modal--------------------------------------------- */}
       {/* Modal */}
@@ -146,7 +157,7 @@ function CodeType() {
         // style={{ paddingTop: "3%" }}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add CodeType</Modal.Title>
+          <Modal.Title>Add Measurement</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="container">
@@ -159,22 +170,43 @@ function CodeType() {
                       className="form-label"
                       style={{ color: "black" }}
                     >
-                      Code Type <span style={{ color: "red" }}>*</span>
+                      Code Name <span style={{ color: "red" }}>*</span>
                     </label>
                     <input
                       type="text"
                       className="form-control"
                       name="Code"
                       id="Code"
-                      placeholder="Enter Code Type"
-                      value={CodeType}
-                      onBlur={() => handleInputBlur("codeType", CodeType)}
-                      onFocus={() => setCodeTypeError("")}
-                      onChange={(e) => setCodeType(e.target.value.trim())}
+                      placeholder="Enter Code Value"
+                      value={Code}
+                      onBlur={() => handleInputBlur("code", Code)}
+                      onFocus={() => setCodeError("")}
+                      onChange={(e) => setCode(e.target.value)}
                     />
-                    {CodeTypeError && (
-                      <div style={{ color: "red" }}>{CodeTypeError}</div>
+                    {CodeError && (
+                      <div style={{ color: "red" }}>{CodeError}</div>
                     )}
+                  </div>
+                </div>
+
+                <div className="col-md-12 col-sm-12 col-lg-12">
+                  <div className="mb-3">
+                    <label
+                      htmlFor="Code"
+                      className="form-label"
+                      style={{ color: "black" }}
+                    >
+                      IsActive
+                    </label>
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input"
+                        id="flexSwitchCheckDefault"
+                        type="checkbox"
+                        checked={IsActive} // add checked attribute to reflect the state of isActive
+                        onChange={() => setIsActive(!IsActive)}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -194,4 +226,4 @@ function CodeType() {
   );
 }
 
-export default CodeType;
+export default AddMeasurment;

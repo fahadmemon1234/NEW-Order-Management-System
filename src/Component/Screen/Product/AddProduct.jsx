@@ -24,6 +24,8 @@ import "../../../assets/Css/Tostify.css";
 import "../../../assets/Css/Model.css";
 // ---------------------------------------------------
 
+import AddMeasurment from "./AddMeasurment";
+
 function AddProduct() {
   const [show, setShow] = useState(false);
 
@@ -319,7 +321,7 @@ function AddProduct() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const dataRef = ref(db, "Brand Code");
+        const dataRef = ref(db, "BrandCode");
         const snapshot = await get(dataRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
@@ -472,7 +474,9 @@ function AddProduct() {
                       isSearchable={true}
                       placeholder="Select Brand Code"
                       onChange={handleBrandCodeSelect}
-                      onBlur={() => handleInputBlur("BrandCode", SelectedBrandCode)}
+                      onBlur={() =>
+                        handleInputBlur("BrandCode", SelectedBrandCode)
+                      }
                       onFocus={() => setBrandCodeError("")}
                     />
                     {BrandCodeError && (
@@ -517,6 +521,8 @@ function AddProduct() {
                       placeholder="Select Measurement"
                       onChange={handleMeasurementSelect}
                     />
+
+                    <AddMeasurment />
                   </div>
                 </div>
               </div>

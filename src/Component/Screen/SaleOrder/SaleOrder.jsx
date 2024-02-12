@@ -169,7 +169,7 @@ const SaleOrder = ({ setPrintContent }) => {
 
   const handleEdit = (item) => {
     debugger;
-    navigate(`/AddSaleOrder?EditID=${item.id}`);
+    navigate(`/AddSaleOrder?EditID=${item.id}&Type=${item.paymentMethod}`);
 
     localStorage.setItem("ID", item.id);
     localStorage.setItem("customer", item.customer);
@@ -379,35 +379,90 @@ const SaleOrder = ({ setPrintContent }) => {
                           <tr key={item.id}>
                             <td>
                               <div style={{ display: "flex" }}>
-                                {item.status === "New" && (
-                                  <>
-                                    <button
-                                      type="button"
-                                      className="btn btn-primary"
-                                      style={{ marginRight: "10px" }}
-                                      onClick={() => handleEdit(item)}
-                                    >
-                                      Edit
-                                    </button>
-                                    <button
-                                      type="button"
-                                      className="btn btn-danger"
-                                      onClick={() => handleDelete(item)}
-                                    >
-                                      Delete
-                                    </button>
-                                  </>
-                                )}
+                                {item.status === "New" &&
+                                  item.customer === "Counter Sale" && (
+                                    <>
+                                      <button
+                                        type="button"
+                                        className="btn btn-primary"
+                                        style={{ marginRight: "10px" }}
+                                        onClick={() => handleEdit(item)}
+                                      >
+                                        Edit
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="btn btn-danger"
+                                        onClick={() => handleDelete(item)}
+                                      >
+                                        Delete
+                                      </button>
+                                    </>
+                                  )}
 
-                                {item.status === "Order Delivered" && (
-                                  <button
-                                    type="button"
-                                    className="btn btn-success"
-                                    onClick={() => openPrintWindow(item)}
-                                  >
-                                    Print
-                                  </button>
-                                )}
+                                {item.status === "Order Delivered" &&
+                                  item.paymentMethod === "rdoCash" && (
+                                    <button
+                                      type="button"
+                                      className="btn btn-success"
+                                      onClick={() => openPrintWindow(item)}
+                                    >
+                                      Print Receipt
+                                    </button>
+                                  )}
+
+                                {item.status === "New" &&
+                                  item.customer !== "Counter Sale" &&
+                                  item.paymentMethod !== "rdoCash" && (
+                                    <>
+                                      <button
+                                        type="button"
+                                        className="btn btn-primary"
+                                        style={{ marginRight: "10px" }}
+                                        onClick={() => handleEdit(item)}
+                                      >
+                                        Edit
+                                      </button>
+
+                                      <button
+                                        type="button"
+                                        class="btn btn-warning"
+                                        style={{ marginRight: "10px" }}
+                                      >
+                                        Delivered
+                                      </button>
+
+                                      <button
+                                        type="button"
+                                        className="btn btn-danger"
+                                        onClick={() => handleDelete(item)}
+                                        style={{ marginRight: "10px" }}
+                                      >
+                                        Delete
+                                      </button>
+
+                                      <button
+                                        type="button"
+                                        className="btn btn-success"
+                                        onClick={() => alert("Sale Order")}
+                                      >
+                                        Print Order
+                                      </button>
+                                    </>
+                                  )}
+                                {item.status === "Order Delivered" &&
+                                  item.customer !== "Counter Sale" &&
+                                  item.paymentMethod !== "rdoCash" && (
+                                    <>
+                                      <button
+                                        type="button"
+                                        className="btn btn-success"
+                                        onClick={() => alert("Sale Order")}
+                                      >
+                                        Print Order
+                                      </button>
+                                    </>
+                                  )}
                               </div>
                             </td>
                             <td className="tdchild">{item.orderDate}</td>

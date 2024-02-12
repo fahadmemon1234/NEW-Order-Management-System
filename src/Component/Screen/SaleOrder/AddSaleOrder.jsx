@@ -923,6 +923,14 @@ function AddSaleOrder() {
       }
 
       localStorage.setItem("AddItemSection", true);
+
+
+debugger;
+if(Type !== "rdoCash"){
+
+console.log(FinalPrice);
+}
+     
     } catch (error) {
       toast.error("Error adding SaleOrder: " + error.message, {
         position: "top-right",
@@ -1505,7 +1513,31 @@ function AddSaleOrder() {
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const id = searchParams.get("EditID");
+  const Type = searchParams.get("Type");
+
+  useEffect(() => {
+if(Type !== "rdoCash"){
+ var lblDiscount = document.getElementById('txtDiscount');
+ lblDiscount.style.display = 'none'
+
+ var lblPayment = document.getElementById('txtPayment');
+ lblPayment.style.display = 'none';
+
+ var SaveClose = document.getElementById('btnSaveClose');
+ SaveClose.style.display = 'none';
+ 
+}
+else{
+  var lblDiscount = document.getElementById('txtDiscount');
+  lblDiscount.style.display = 'block'
+ 
+  var lblPayment = document.getElementById('txtPayment');
+  lblPayment.style.display = 'block';
+ 
+  var SaveClose = document.getElementById('btnSaveClose');
+  SaveClose.style.display = 'block';
+}
+  },[])
 
   return (
     <>
@@ -2704,11 +2736,12 @@ function AddSaleOrder() {
                             fontWeight: "600",
                             float: "right",
                           }}
+                          id="hdnTotal"
                         >
                           Total: {FinalPrice.toLocaleString()}
                         </h5>
 
-                        <div className="mb-3" style={{ paddingTop: "40px" }}>
+                        <div className="mb-3" style={{ paddingTop: "40px" }} id="txtDiscount">
                           <label
                             htmlFor="Discount"
                             className="form-label"
@@ -2727,7 +2760,7 @@ function AddSaleOrder() {
                           />
                         </div>
 
-                        <div className="mb-3" style={{ paddingTop: "10px" }}>
+                        <div className="mb-3" style={{ paddingTop: "10px" }} id="txtPayment">
                           <label
                             htmlFor="Payment"
                             className="form-label"
@@ -2749,6 +2782,7 @@ function AddSaleOrder() {
                         <Button
                           variant="primary"
                           style={{ float: "right", marginTop: 10 + "px" }}
+                          id="btnSaveClose"
                           onClick={handleSaleOrderTotalAmount}
                         >
                           Save & Close

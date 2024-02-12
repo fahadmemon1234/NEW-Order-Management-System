@@ -77,7 +77,7 @@ function Login() {
       setError(error.message);
       console.log("Error logging in:", error.message);
 
-      toast.error("Email or password incorrect", {
+      toast.error("Network Error", {
         position: "top-right",
         autoClose: 1000,
         hideProgressBar: false,

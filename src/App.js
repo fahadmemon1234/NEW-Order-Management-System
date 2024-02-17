@@ -9,15 +9,12 @@ import Customers from "./Component/Screen/Customers/Customers";
 import SaleOrder from "./Component/Screen/SaleOrder/SaleOrder";
 import AddSaleOrder from "./Component/Screen/SaleOrder/AddSaleOrder";
 import PrintReceipt from "./Component/Screen/SaleOrder/PrintReceipt";
-import { Route, Routes, Navigate  } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import CodeType from "./Component/Screen/CodeType/CodeType";
 import Code from "./Component/Screen/Code/Code";
-
-
-
+import Deliever from "./Component/Screen/SaleOrder/DelieverySaleOrder";
 
 function App() {
-
   const userLoggedIn = localStorage.getItem("userlogin") === "true";
 
   return (
@@ -50,19 +47,18 @@ function App() {
         {/* ----------Settings--------------------------- */}
         {/* <Route path="/CodeType" element={<CodeType />}></Route> */}
 
-
-
-
-
         <Route
           path="/Home"
           element={userLoggedIn ? <Home /> : <Navigate to="/" />}
         />
 
+        {/* ----------Product--------------------------- */}
         <Route
           path="/Product"
           element={userLoggedIn ? <Product /> : <Navigate to="/" />}
         />
+
+        {/* ----------Banking--------------------------- */}
         <Route
           path="/Banks"
           element={userLoggedIn ? <Banks /> : <Navigate to="/" />}
@@ -75,6 +71,8 @@ function App() {
           path="/WithDraw"
           element={userLoggedIn ? <WithDraw /> : <Navigate to="/" />}
         />
+
+        {/* ----------Sales--------------------------- */}
         <Route
           path="/Customers"
           element={userLoggedIn ? <Customers /> : <Navigate to="/" />}
@@ -91,13 +89,22 @@ function App() {
           path="/PrintReceipt"
           element={userLoggedIn ? <PrintReceipt /> : <Navigate to="/" />}
         />
-        <Route
-          path="/CodeType"
-          element={userLoggedIn ? <CodeType /> : <Navigate to="/" />}
-        />
+
         <Route
           path="/Manage"
           element={userLoggedIn ? <Code /> : <Navigate to="/" />}
+        />
+
+        {/* ----------Manage--------------------------- */}
+        <Route
+          path="/Deliever"
+          element={userLoggedIn ? <Deliever /> : <Navigate to="/" />}
+        />
+
+        {/* ----------Settings--------------------------- */}
+        <Route
+          path="/CodeType"
+          element={userLoggedIn ? <CodeType /> : <Navigate to="/" />}
         />
       </Routes>
     </>

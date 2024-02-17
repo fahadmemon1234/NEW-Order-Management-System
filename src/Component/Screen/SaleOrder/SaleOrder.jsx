@@ -274,6 +274,23 @@ const SaleOrder = ({ setPrintContent }) => {
     setShowOK(false);
   };
 
+
+
+  // ---------------------Delivered--------------------
+
+
+  const handleDelivered = (item) =>{
+    navigate(`/Deliever?ID=${item.id}`);
+    
+    localStorage.setItem("ID", item.id);
+    localStorage.setItem("customer", item.customer);
+    localStorage.setItem("orderDate", item.orderDate);
+    localStorage.setItem("name", item.name);
+    localStorage.setItem("phoneNumber", item.phoneNumber);
+    localStorage.setItem("paymentMethod", item.paymentMethod);
+    localStorage.setItem("salesMan", item.salesMan);
+  }
+
   return (
     <>
       <Main>
@@ -428,6 +445,7 @@ const SaleOrder = ({ setPrintContent }) => {
                                         type="button"
                                         class="btn btn-warning"
                                         style={{ marginRight: "10px" }}
+                                        onClick={() => handleDelivered(item)}
                                       >
                                         Delivered
                                       </button>

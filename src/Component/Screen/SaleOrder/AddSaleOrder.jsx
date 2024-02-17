@@ -925,11 +925,7 @@ function AddSaleOrder() {
       localStorage.setItem("AddItemSection", true);
 
 
-debugger;
-if(Type !== "rdoCash"){
 
-console.log(FinalPrice);
-}
      
     } catch (error) {
       toast.error("Error adding SaleOrder: " + error.message, {

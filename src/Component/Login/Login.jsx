@@ -25,11 +25,37 @@ function Login() {
   const [, setError] = useState(null);
 
   const handleLogin = async (e) => {
+    debugger;
     e.preventDefault();
     const auth = getAuth(app);
+    var validRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+      email
+    );
 
     try {
-      if (email && password) {
+      if (!validRegex) {
+        toast.error("Email is not valid", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (password === "") {
+        toast.error("Password cannot be empty", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (email !== "" && password !== "") {
         const userCredential = await signInWithEmailAndPassword(
           auth,
           email,
@@ -62,7 +88,7 @@ function Login() {
           window.location.replace("/Home");
         }, 2000);
       } else {
-        toast.error("Please fill in both Email and Password", {
+        toast.error("Please fill in both Email and Password Correctly!", {
           position: "top-right",
           autoClose: 1000,
           hideProgressBar: false,

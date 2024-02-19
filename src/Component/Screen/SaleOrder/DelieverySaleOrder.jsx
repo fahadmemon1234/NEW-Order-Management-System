@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 // Main Page Connect
 // ---------------------------------------------------
@@ -47,6 +47,8 @@ function Deliever() {
   const [OrderID, setOrderID] = useState("");
   const [CustomerName, setCustomerName] = useState("");
   const [SaleOrderDate, setSaleOrderDate] = useState("");
+  const [DeliveredDate, setDeliveredDate] = useState("");
+  const deliveredDateInputRef = useRef(null);
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -220,6 +222,69 @@ function Deliever() {
     total -= discountValue;
 
     return total;
+  };
+
+  const handleDeliver = () => {
+    try{
+
+    
+    debugger;
+
+    const isEmpty = Object.values(shipQuantities).some(quantity => quantity === "");
+
+    if (isEmpty === false) {
+      toast.error("Please Enter Ship Quantity!", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+    } else if (DeliveredDate === "") {
+      toast.error("Please Enter Delivery Date", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      deliveredDateInputRef.current.focus();
+    }
+
+    else{
+
+      // const loggedInUID = localStorage.getItem("uid");
+      // const SaleOrderRef = ref(db, "DelieverySaleOrder");
+      // const newSaleOrder = {
+      //   uid: loggedInUID,
+      //   discount: discount,
+      //   Payment: payment,
+      //   SaleOrderID: AmountID,
+      // };
+      // push(SaleOrderRef, newSaleOrder);
+
+    }
+  }
+  catch (error) {
+    toast.error("Error adding Delivery: " + error.message, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  }
   };
 
   return (
@@ -409,9 +474,11 @@ function Deliever() {
                             type="date"
                             className="form-control"
                             name="DeliveredDate"
-                            value={"03/04/2023"}
+                            value={DeliveredDate}
                             id="Payment"
                             placeholder="Delivered Date"
+                            onChange={(e) => setDeliveredDate(e.target.value)}
+                            ref={deliveredDateInputRef}
                           />
                         </div>
 
@@ -513,6 +580,7 @@ function Deliever() {
                           variant="primary"
                           style={{ marginTop: 10 + "px" }}
                           id="btnSaveClose"
+                          onClick={handleDeliver}
                         >
                           Delieverd
                         </Button>

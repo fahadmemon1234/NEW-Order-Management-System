@@ -158,7 +158,9 @@ function Deliever() {
   );
 
   //  ---------------Total---------
-  const [shipQuantities, setShipQuantities] = useState({}); // State to manage ship quantities for each item
+  const [shipQuantities, setShipQuantities] = useState({});
+  const [displayValue, setdisplayValue] = useState([]);
+  // State to manage ship quantities for each item
 
   const handleShipQuantityChange = (itemId, e, item) => {
     const value = parseInt(e.target.value);
@@ -168,6 +170,7 @@ function Deliever() {
           ...prevState,
           [itemId]: value, // Update ship quantity for the specific item
         }));
+        setdisplayValue((prevState) => [...prevState, value]);
       } else {
         // Display error toast if ship quantity exceeds available quantity
         toast.error("Ship quantity cannot exceed the available quantity", {
@@ -225,15 +228,61 @@ function Deliever() {
   };
 
   const handleDeliver = () => {
-    try{
+    try {
+      debugger;
+      // console.log(displayValue)
+      // const isEmpty = Object.values(shipQuantities).some(quantity => quantity === 0);
 
-    
-    debugger;
+      const item = [];
 
-    const isEmpty = Object.values(shipQuantities).some(quantity => quantity === "");
+      $("table tbody tr").each(function () {
+        const itemId = parseInt($(this).find("#txtshipQuantities").val()); // Assuming the input field ID contains the item ID
+        if (!isNaN(itemId)) {
+          // Check if itemId is a valid number
+          item.push(itemId);
+        }
+      });
 
-    if (isEmpty === false) {
-      toast.error("Please Enter Ship Quantity!", {
+      // Filter out empty strings and NaN values from the array
+      const filteredItem = item.filter((val) => val !== "" && !isNaN(val));
+
+      if (filteredItem.length === 0) {
+        toast.error("Please Enter Ship Quantity!", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (DeliveredDate === "") {
+        toast.error("Please Enter Delivery Date", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+
+        deliveredDateInputRef.current.focus();
+      } else {
+        // const loggedInUID = localStorage.getItem("uid");
+        // const SaleOrderRef = ref(db, "DelieverySaleOrder");
+        // const newSaleOrder = {
+        //   uid: loggedInUID,
+        //   discount: discount,
+        //   Payment: payment,
+        //   SaleOrderID: AmountID,
+        // };
+        // push(SaleOrderRef, newSaleOrder);
+      }
+    } catch (error) {
+      toast.error("Error adding Delivery: " + error.message, {
         position: "top-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -243,48 +292,7 @@ function Deliever() {
         progress: undefined,
         theme: "colored",
       });
-
-    } else if (DeliveredDate === "") {
-      toast.error("Please Enter Delivery Date", {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-
-      deliveredDateInputRef.current.focus();
     }
-
-    else{
-
-      // const loggedInUID = localStorage.getItem("uid");
-      // const SaleOrderRef = ref(db, "DelieverySaleOrder");
-      // const newSaleOrder = {
-      //   uid: loggedInUID,
-      //   discount: discount,
-      //   Payment: payment,
-      //   SaleOrderID: AmountID,
-      // };
-      // push(SaleOrderRef, newSaleOrder);
-
-    }
-  }
-  catch (error) {
-    toast.error("Error adding Delivery: " + error.message, {
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-  }
   };
 
   return (
@@ -392,6 +400,7 @@ function Deliever() {
                               <td className="tdchild">
                                 <input
                                   type="number"
+                                  id={`txtshipQuantities`}
                                   className="form-control"
                                   value={shipQuantities[item.id] || ""} // Get ship quantity for the specific item
                                   onChange={(e) =>

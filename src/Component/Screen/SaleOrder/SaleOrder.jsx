@@ -368,7 +368,7 @@ const SaleOrder = ({ setPrintContent }) => {
                     <table className="table table-bordered table-striped fs-10 mb-0">
                       <thead className="bg-200">
                         <tr>
-                          <th className="text-900 sort" data-sort="Action">
+                          <th className="text-900 sort" data-sort="Action" style={{width:'50%'}}>
                             Action
                           </th>
                           <th className="text-900 sort" data-sort="ItemName">
@@ -380,7 +380,7 @@ const SaleOrder = ({ setPrintContent }) => {
                           >
                             Customer Name
                           </th>
-                          <th className="text-900 sort" data-sort="ItemCost">
+                          <th className="text-900 sort" data-sort="ItemCost" style={{width:'150px'}}>
                             Status
                           </th>
                           <th className="text-900 sort" data-sort="SalePrice">

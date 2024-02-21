@@ -44,6 +44,8 @@ import "../../../assets/Css/Tostify.css";
 // ---------------------------------------------------
 
 function Deliever() {
+  const navigate = useNavigate();
+
   const [OrderID, setOrderID] = useState("");
   const [CustomerName, setCustomerName] = useState("");
   const [SaleOrderDate, setSaleOrderDate] = useState("");
@@ -163,6 +165,7 @@ function Deliever() {
   // State to manage ship quantities for each item
 
   const handleShipQuantityChange = (itemId, e, item) => {
+    debugger;
     const value = parseInt(e.target.value);
     if (!isNaN(value) && value >= 0) {
       if (value <= item.quantity) {
@@ -204,6 +207,7 @@ function Deliever() {
   const [TransportCharges, setTransportCharges] = useState("");
   const [LabourCharges, setLabourCharges] = useState("");
   const [Discount, setDiscount] = useState("");
+  const [Total, setTotal] = useState("");
 
   const calculateTotal = () => {
     let total = 0;
@@ -211,6 +215,7 @@ function Deliever() {
       const item = visibleItems.find((item) => item.id === itemId);
       if (item) {
         total += calculateTotalPrice(item);
+        setTotal(total);
       }
     }
 
@@ -270,16 +275,70 @@ function Deliever() {
         });
 
         deliveredDateInputRef.current.focus();
+      } else if (SaleOrderDate > DeliveredDate) {
+        toast.error("Sale order date cannot be after the delivery date.", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       } else {
-        // const loggedInUID = localStorage.getItem("uid");
-        // const SaleOrderRef = ref(db, "DelieverySaleOrder");
-        // const newSaleOrder = {
-        //   uid: loggedInUID,
-        //   discount: discount,
-        //   Payment: payment,
-        //   SaleOrderID: AmountID,
-        // };
-        // push(SaleOrderRef, newSaleOrder);
+        const loggedInUID = localStorage.getItem("uid");
+        const SaleOrderRef = ref(db, "DelieverySaleOrder");
+        const newSaleOrder = {
+          uid: loggedInUID,
+          OrderID: OrderID,
+          CustomerName: CustomerName,
+          SaleOrderDate: SaleOrderDate,
+          TransportCharges: TransportCharges,
+          LabourCharges: LabourCharges,
+          Discount: Discount,
+          Total: Total,
+        };
+        push(SaleOrderRef, newSaleOrder);
+
+        //--------------- Update SaleOrder----------
+
+        const newDelivery = {
+          uid: loggedInUID,
+          status: "Order Delivered",
+          Payment: Total,
+        };
+        const DeliveryRef = ref(db, `SaleOrder/${ID}`);
+        update(DeliveryRef, newDelivery);
+
+        // Show a success toast if the product is successfully added
+        toast.success("Order Delivered Successfully", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+
+        setTimeout(() => {
+          navigate("/SaleOrder");
+          setDiscount("");
+          setTransportCharges("");
+          setDeliveredDate("");
+          setLabourCharges("");
+          setShipQuantities("");
+        }, 1000);
+
+        // Remove items from localStorage
+        localStorage.removeItem("ID");
+        localStorage.removeItem("customer");
+        localStorage.removeItem("paymentMethod");
+        localStorage.removeItem("name");
+        localStorage.removeItem("phoneNumber");
+        localStorage.removeItem("orderDate");
       }
     } catch (error) {
       toast.error("Error adding Delivery: " + error.message, {

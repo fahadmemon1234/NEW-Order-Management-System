@@ -13,6 +13,8 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import CodeType from "./Component/Screen/CodeType/CodeType";
 import Code from "./Component/Screen/Code/Code";
 import Deliever from "./Component/Screen/SaleOrder/DelieverySaleOrder";
+import SaleInvoice from "./Component/Screen/SaleInvoice/SaleInvoice";
+import SaleReturn from "./Component/Screen/SaleReturn/SaleReturn";
 
 function App() {
   const userLoggedIn = localStorage.getItem("userlogin") === "true";
@@ -93,6 +95,16 @@ function App() {
         <Route
           path="/Manage"
           element={userLoggedIn ? <Code /> : <Navigate to="/" />}
+        />
+
+        <Route
+          path="/SaleInvoice"
+          element={userLoggedIn ? <SaleInvoice /> : <Navigate to="/" />}
+        />
+
+        <Route
+          path="/SaleReturn"
+          element={userLoggedIn ? <SaleReturn /> : <Navigate to="/" />}
         />
 
         {/* ----------Manage--------------------------- */}

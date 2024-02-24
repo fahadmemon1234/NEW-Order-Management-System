@@ -164,39 +164,54 @@ function Deliever() {
   const [displayValue, setdisplayValue] = useState([]);
   // State to manage ship quantities for each item
 
-  const handleShipQuantityChange = (itemId, e, item) => {
-    debugger;
-    const value = parseInt(e.target.value);
-    if (!isNaN(value) && value >= 0) {
-      if (value <= item.quantity) {
-        setShipQuantities((prevState) => ({
-          ...prevState,
-          [itemId]: value, // Update ship quantity for the specific item
-        }));
-        setdisplayValue((prevState) => [...prevState, value]);
-      } else {
-        // Display error toast if ship quantity exceeds available quantity
-        toast.error("Ship quantity cannot exceed the available quantity", {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      }
-    } else {
-      // Handle invalid input here
-      // For now, just set the ship quantity to 0
+const handleShipQuantityChange = (itemId, e, item) => {
+  const value = parseInt(e.target.value);
+  if (!isNaN(value) && value >= 0) {
+    if (value <= item.quantity) {
       setShipQuantities((prevState) => ({
         ...prevState,
-        [itemId]: 0, // Set ship quantity to 0 for the specific item
+        [itemId]: value, // Update ship quantity for the specific item
       }));
-      // Show toast error for invalid input
+      setdisplayValue((prevState) => [...prevState, value]);
+    } else {
+      // Display error toast if ship quantity exceeds available quantity
+      toast.error("Ship quantity cannot exceed the available quantity", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
-  };
+  } else {
+    // Handle invalid input here
+    // For now, just set the ship quantity to 0
+    setShipQuantities((prevState) => ({
+      ...prevState,
+      [itemId]: 0, // Set ship quantity to 0 for the specific item
+    }));
+    // Show toast error for invalid input
+    toast.error("Invalid input. Please enter a valid quantity", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  }
+};
+
+
+
+
+
+
 
   const calculateTotalPrice = (item) => {
     const price = item.totalPrice;
@@ -293,6 +308,7 @@ function Deliever() {
           uid: loggedInUID,
           OrderID: OrderID,
           CustomerName: CustomerName,
+          // ShipQuantity: ShipQuantity,
           SaleOrderDate: SaleOrderDate,
           TransportCharges: TransportCharges,
           LabourCharges: LabourCharges,

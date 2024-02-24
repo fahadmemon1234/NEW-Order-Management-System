@@ -67,25 +67,20 @@ const Main = ({ children }) => {
     }
   };
 
-
   const navigate = useNavigate();
 
-const handleLogout = () =>{
-  localStorage.clear();
-  localStorage.setItem("userlogin", false)
+  const handleLogout = () => {
+    localStorage.clear();
+    localStorage.setItem("userlogin", false);
 
-  navigate("/");
-}
+    navigate("/");
+  };
 
-
-
-
-
-// setTimeout(() => {
-//   localStorage.clear();
-//   localStorage.setItem("userlogin", false);
-//   navigate("/");
-// }, 60000);
+  // setTimeout(() => {
+  //   localStorage.clear();
+  //   localStorage.setItem("userlogin", false);
+  //   navigate("/");
+  // }, 60000);
 
   return (
     <>
@@ -128,7 +123,6 @@ const handleLogout = () =>{
                     <Link
                       className={`nav-link ${
                         location.pathname === "/Home" ? "active" : ""
-                       
                       }`}
                       to="/Home"
                       role="button"
@@ -363,7 +357,9 @@ const handleLogout = () =>{
                       className={`nav ${
                         location.pathname === "/Customers" ||
                         location.pathname === "/SaleOrder" ||
-                        location.pathname === "/AddSaleOrder"
+                        location.pathname === "/AddSaleOrder" ||
+                        location.pathname === "/SaleInvoice" ||
+                        location.pathname === "/SaleReturn"
                           ? ""
                           : "collapse"
                       }`}
@@ -397,6 +393,36 @@ const handleLogout = () =>{
                           <div className="d-flex align-items-center">
                             <span className="nav-link-text ps-1">
                               Sale Order
+                            </span>
+                          </div>
+                        </Link>{" "}
+                      </li>
+
+                      <li className="nav-item">
+                        <Link
+                          className={`nav-link ${
+                            location.pathname === "/SaleInvoice" ? "active" : ""
+                          }`}
+                          to="/SaleInvoice"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                              Sale Invoice
+                            </span>
+                          </div>
+                        </Link>{" "}
+                      </li>
+
+                      <li className="nav-item">
+                        <Link
+                          className={`nav-link ${
+                            location.pathname === "/SaleReturn" ? "active" : ""
+                          }`}
+                          to="/SaleReturn"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                              Sale Return
                             </span>
                           </div>
                         </Link>{" "}
@@ -2000,7 +2026,11 @@ const handleLogout = () =>{
                       <a className="dropdown-item" href="#">
                         Settings
                       </a>
-                      <a className="dropdown-item" href="javascript:void(0);" onClick={handleLogout}>
+                      <a
+                        className="dropdown-item"
+                        href="javascript:void(0);"
+                        onClick={handleLogout}
+                      >
                         Logout
                       </a>
                     </div>

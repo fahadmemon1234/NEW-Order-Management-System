@@ -160,20 +160,14 @@ function Deliever() {
   );
 
   //  ---------------Total---------
-  const [shipQuantities, setShipQuantities] = useState({});
-  const [displayValue, setdisplayValue] = useState([]);
+  const [shipQuantities, setShipQuantities] = useState([]);
   // State to manage ship quantities for each item
+  const handleShipQuantityChange = (newQuantity, itemId) => {
+    // Find the item in the visibleItems array
+    const item = visibleItems.find((item) => item.id === itemId);
 
-const handleShipQuantityChange = (itemId, e, item) => {
-  const value = parseInt(e.target.value);
-  if (!isNaN(value) && value >= 0) {
-    if (value <= item.quantity) {
-      setShipQuantities((prevState) => ({
-        ...prevState,
-        [itemId]: value, // Update ship quantity for the specific item
-      }));
-      setdisplayValue((prevState) => [...prevState, value]);
-    } else {
+    // Check if the new quantity exceeds the available quantity
+    if (parseInt(newQuantity) > item.quantity) {
       // Display error toast if ship quantity exceeds available quantity
       toast.error("Ship quantity cannot exceed the available quantity", {
         position: "top-right",
@@ -185,37 +179,26 @@ const handleShipQuantityChange = (itemId, e, item) => {
         progress: undefined,
         theme: "colored",
       });
+      return; // Exit the function early if there's an error
     }
-  } else {
-    // Handle invalid input here
-    // For now, just set the ship quantity to 0
-    setShipQuantities((prevState) => ({
-      ...prevState,
-      [itemId]: 0, // Set ship quantity to 0 for the specific item
-    }));
-    // Show toast error for invalid input
-    toast.error("Invalid input. Please enter a valid quantity", {
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-  }
-};
 
-
-
-
-
-
+    // Copy the shipQuantities array to avoid mutating state directly
+    const updatedShipQuantities = [...shipQuantities];
+    // Find the index of the item in the visibleItems array
+    const itemIndex = visibleItems.findIndex((item) => item.id === itemId);
+    // Update the ship quantity for the corresponding item
+    updatedShipQuantities[itemIndex] = newQuantity;
+    // Update the state with the new ship quantities
+    setShipQuantities(updatedShipQuantities);
+  };
 
   const calculateTotalPrice = (item) => {
+    debugger;
     const price = item.totalPrice;
-    const shipQuantity = shipQuantities[item.id] || 0; // Get ship quantity for the specific item, default to 0
+    const itemIndex = visibleItems.findIndex(
+      (visibleItem) => visibleItem.id === item.id
+    );
+    const shipQuantity = shipQuantities[itemIndex] || 0;
     return price * shipQuantity;
   };
 
@@ -225,26 +208,28 @@ const handleShipQuantityChange = (itemId, e, item) => {
   const [Total, setTotal] = useState("");
 
   const calculateTotal = () => {
-    let total = 0;
-    for (const itemId in shipQuantities) {
-      const item = visibleItems.find((item) => item.id === itemId);
-      if (item) {
-        total += calculateTotalPrice(item);
-        setTotal(total);
-      }
-    }
+    // let total = 0;
+    // debugger;
+    // for (const itemId in shipQuantities) {
+    //   debugger;
+    //   const item = visibleItems.find((item) => item.id === itemId);
+    //   if (item) {
+    //     total += calculateTotalPrice(item);
+    //     setTotal(total);
+    //   }
+    // }
 
-    // Use state variables for transport charges, labour charges, and discount
-    const transportChargesValue = parseFloat(TransportCharges) || 0;
-    const labourChargesValue = parseFloat(LabourCharges) || 0;
-    const discountValue = parseFloat(Discount) || 0;
+    // // Use state variables for transport charges, labour charges, and discount
+    // const transportChargesValue = parseFloat(TransportCharges) || 0;
+    // const labourChargesValue = parseFloat(LabourCharges) || 0;
+    // const discountValue = parseFloat(Discount) || 0;
 
-    // Subtract transport charges, labour charges, and discount from the total
-    total -= transportChargesValue;
-    total -= labourChargesValue;
-    total -= discountValue;
+    // // Subtract transport charges, labour charges, and discount from the total
+    // total -= transportChargesValue;
+    // total -= labourChargesValue;
+    // total -= discountValue;
 
-    return total;
+    // return total;
   };
 
   const handleDeliver = () => {
@@ -308,7 +293,7 @@ const handleShipQuantityChange = (itemId, e, item) => {
           uid: loggedInUID,
           OrderID: OrderID,
           CustomerName: CustomerName,
-          // ShipQuantity: ShipQuantity,
+          ShipQuantity: shipQuantities,
           SaleOrderDate: SaleOrderDate,
           TransportCharges: TransportCharges,
           LabourCharges: LabourCharges,
@@ -468,28 +453,33 @@ const handleShipQuantityChange = (itemId, e, item) => {
                           </tr>
                         </thead>
                         <tbody className="list">
-                          {visibleItems.slice(0, rowsToShow).map((item) => (
-                            <tr key={item.id}>
-                              <td className="tdchild">{item.itemName}</td>
-                              <td className="tdchild">{item.quantity}</td>
-                              <td className="tdchild">
-                                <input
-                                  type="number"
-                                  id={`txtshipQuantities`}
-                                  className="form-control"
-                                  value={shipQuantities[item.id] || ""} // Get ship quantity for the specific item
-                                  onChange={(e) =>
-                                    handleShipQuantityChange(item.id, e, item)
-                                  } // Pass the item id to handleShipQuantityChange
-                                />
-                              </td>
-                              <td className="tdchild">{item.totalPrice}</td>
-                              <td className="tdchild">
-                                {calculateTotalPrice(item)}
-                              </td>
-                              {/* Add more table data cells as needed */}
-                            </tr>
-                          ))}
+                          {visibleItems
+                            .slice(0, rowsToShow)
+                            .map((item, index) => (
+                              <tr key={item.id}>
+                                <td className="tdchild">{item.itemName}</td>
+                                <td className="tdchild">{item.quantity}</td>
+                                <td className="tdchild">
+                                  <input
+                                    type="number"
+                                    id={`txtshipQuantities_${item.id}`}
+                                    className="form-control"
+                                    value={shipQuantities[index]} // Get ship quantity for the specific item
+                                    onChange={(e) =>
+                                      handleShipQuantityChange(
+                                        e.target.value,
+                                        item.id
+                                      )
+                                    }
+                                  />
+                                </td>
+                                <td className="tdchild">{item.totalPrice}</td>
+                                <td className="tdchild">
+                                  {calculateTotalPrice(item)}
+                                </td>
+                                {/* Add more table data cells as needed */}
+                              </tr>
+                            ))}
                         </tbody>
                       </table>
                     </div>

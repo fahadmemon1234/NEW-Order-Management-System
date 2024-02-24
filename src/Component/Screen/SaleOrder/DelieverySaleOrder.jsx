@@ -165,7 +165,7 @@ function Deliever() {
   const handleShipQuantityChange = (newQuantity, itemId) => {
     // Find the item in the visibleItems array
     const item = visibleItems.find((item) => item.id === itemId);
-
+debugger;
     // Check if the new quantity exceeds the available quantity
     if (parseInt(newQuantity) > item.quantity) {
       // Display error toast if ship quantity exceeds available quantity
@@ -179,7 +179,15 @@ function Deliever() {
         progress: undefined,
         theme: "colored",
       });
-      return; // Exit the function early if there's an error
+
+      setShipQuantities((prevShipQuantities) => {
+        const updatedShipQuantities = [...prevShipQuantities];
+        const itemIndex = visibleItems.findIndex((item) => item.id === itemId);
+        updatedShipQuantities[itemIndex] = "";
+        return updatedShipQuantities;
+      });
+
+      return;
     }
 
     // Copy the shipQuantities array to avoid mutating state directly
@@ -207,30 +215,71 @@ function Deliever() {
   const [Discount, setDiscount] = useState("");
   const [Total, setTotal] = useState("");
 
-  const calculateTotal = () => {
-    // let total = 0;
-    // debugger;
-    // for (const itemId in shipQuantities) {
-    //   debugger;
-    //   const item = visibleItems.find((item) => item.id === itemId);
-    //   if (item) {
-    //     total += calculateTotalPrice(item);
-    //     setTotal(total);
-    //   }
-    // }
+  // const calculateTotal = () => {
+  //   debugger;
 
-    // // Use state variables for transport charges, labour charges, and discount
-    // const transportChargesValue = parseFloat(TransportCharges) || 0;
-    // const labourChargesValue = parseFloat(LabourCharges) || 0;
-    // const discountValue = parseFloat(Discount) || 0;
+  //   // Calculate the totalTxtTotal
+  //   const totalTxtTotal = visibleItems
+  //     .slice(0, rowsToShow) // Consider only the visible items
+  //     .map((item) => calculateTotalPrice(item)) // Map each item to its total price
+  //     .reduce((acc, totalPrice) => acc + totalPrice, 0); // Sum up all total prices
 
-    // // Subtract transport charges, labour charges, and discount from the total
-    // total -= transportChargesValue;
-    // total -= labourChargesValue;
-    // total -= discountValue;
+  //   // Set the total using setTotal
+  //   setTotal(totalTxtTotal);
 
-    // return total;
-  };
+  //   // Define a variable to accumulate the total
+  //   //     debugger;
+  //   //     let total = 0;
+
+  //   //     for (const itemId in shipQuantities) {
+  //   //       debugger;
+  //   //       const itemIdString = String(itemId); // Convert itemId to string if necessary
+  //   // const item = visibleItems.find((item) => String(item.id) === itemIdString);
+
+  //   //       if (item) {
+  //   //         total += calculateTotalPrice(item);
+  //   //       }
+  //   //     }
+
+  //   //     // Now 'total' contains the accumulated total
+  //   //     console.log(total); // You can output the total to the console or use it elsewhere in your code
+
+  //   // let total = 0;
+  //   // debugger;
+  //   // for (const itemId in shipQuantities) {
+  //   //   debugger;
+  //   //   const item = visibleItems.find((item) => item.id === itemId);
+  //   //   if (item) {
+  //   //     total += calculateTotalPrice(item);
+  //   //     setTotal(total);
+  //   //   }
+  //   // }
+
+  //   // // Use state variables for transport charges, labour charges, and discount
+  //   // const transportChargesValue = parseFloat(TransportCharges) || 0;
+  //   // const labourChargesValue = parseFloat(LabourCharges) || 0;
+  //   // const discountValue = parseFloat(Discount) || 0;
+
+  //   // // Subtract transport charges, labour charges, and discount from the total
+  //   // total -= transportChargesValue;
+  //   // total -= labourChargesValue;
+  //   // total -= discountValue;
+
+  //   // return total;
+  // };
+
+  useEffect(() => {
+    debugger;
+    // Calculate the totalTxtTotal
+    const totalTxtTotal = visibleItems
+
+      .slice(0, rowsToShow)
+      .map((item) => calculateTotalPrice(item))
+      .reduce((acc, totalPrice) => acc + totalPrice, 0);
+
+    // Set the total using setTotal
+    setTotal(totalTxtTotal);
+  }, [visibleItems, rowsToShow]); // Only re-run this effect if visibleItems or rowsToShow change
 
   const handleDeliver = () => {
     try {
@@ -474,7 +523,7 @@ function Deliever() {
                                   />
                                 </td>
                                 <td className="tdchild">{item.totalPrice}</td>
-                                <td className="tdchild">
+                                <td className="tdchild" id="txtTotal">
                                   {calculateTotalPrice(item)}
                                 </td>
                                 {/* Add more table data cells as needed */}
@@ -643,7 +692,7 @@ function Deliever() {
                             type="number"
                             className="form-control"
                             name="Total"
-                            value={calculateTotal()}
+                            value={Total}
                             id="Total"
                             readOnly
                             placeholder="Total"

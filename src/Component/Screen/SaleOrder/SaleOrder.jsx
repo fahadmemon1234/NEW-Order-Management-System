@@ -11,11 +11,6 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import Main from "../../NavBar/Navbar";
 // ---------------------------------------------------
 
-// Add Modal
-// ---------------------------------------------------
-import PrintReceipts from "./PrintReceipt";
-// --------------------------------------------------
-
 //DataBase
 // ---------------------------------------------------
 import { ref, onValue, update, remove } from "firebase/database";
@@ -274,14 +269,11 @@ const SaleOrder = ({ setPrintContent }) => {
     setShowOK(false);
   };
 
-
-
   // ---------------------Delivered--------------------
 
-
-  const handleDelivered = (item) =>{
+  const handleDelivered = (item) => {
     navigate(`/Deliever?ID=${item.id}`);
-    
+
     localStorage.setItem("ID", item.id);
     localStorage.setItem("customer", item.customer);
     localStorage.setItem("orderDate", item.orderDate);
@@ -289,7 +281,7 @@ const SaleOrder = ({ setPrintContent }) => {
     localStorage.setItem("phoneNumber", item.phoneNumber);
     localStorage.setItem("paymentMethod", item.paymentMethod);
     localStorage.setItem("salesMan", item.salesMan);
-  }
+  };
 
   return (
     <>
@@ -368,7 +360,11 @@ const SaleOrder = ({ setPrintContent }) => {
                     <table className="table table-bordered table-striped fs-10 mb-0">
                       <thead className="bg-200">
                         <tr>
-                          <th className="text-900 sort" data-sort="Action" style={{width:'50%'}}>
+                          <th
+                            className="text-900 sort"
+                            data-sort="Action"
+                            style={{ width: "50%" }}
+                          >
                             Action
                           </th>
                           <th className="text-900 sort" data-sort="ItemName">
@@ -380,7 +376,11 @@ const SaleOrder = ({ setPrintContent }) => {
                           >
                             Customer Name
                           </th>
-                          <th className="text-900 sort" data-sort="ItemCost" style={{width:'150px'}}>
+                          <th
+                            className="text-900 sort"
+                            data-sort="ItemCost"
+                            style={{ width: "150px" }}
+                          >
                             Status
                           </th>
                           <th className="text-900 sort" data-sort="SalePrice">

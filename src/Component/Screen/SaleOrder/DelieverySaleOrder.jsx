@@ -10,10 +10,10 @@ import { useLocation } from "react-router-dom";
 // Bootstrap Modal
 // ---------------------------------------------------
 import Button from "react-bootstrap/Button";
-import SweetAlert from "react-bootstrap-sweetalert";
-import Select from "react-select";
-import InputMask from "react-input-mask";
-import $ from "jquery";
+// import SweetAlert from "react-bootstrap-sweetalert";
+// import Select from "react-select";
+// import InputMask from "react-input-mask";
+// import $ from "jquery";
 import { useNavigate } from "react-router-dom";
 // ---------------------------------------------------
 

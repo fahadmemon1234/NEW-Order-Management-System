@@ -1381,30 +1381,101 @@ function AddSaleOrder() {
     }
   };
 
-  // Customer DropDown Populate
-  // useEffect(() => {
-  //   // Fetch customer data or set it from localStorage
-  //   const customerData = localStorage.getItem("customer");
+  // ---------------------------Save----------------------------
 
-  //   // Check if customerData is a valid JSON
-  //   try {
+  const handleSave = () => {
+    try {
 
-  //     // setCustomerName([{ value: customerData, label: customerData }]);
-  //     setSelectedCustomer({ value: customerData, label: customerData });
-  //   } catch (error) {
-  //     toast.error("Error adding: " + error.message, {
-  //       position: "top-right",
-  //       autoClose: 1000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: false,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: "colored",
-  //     });
+      const loggedInUID = localStorage.getItem("uid");
+      debugger;
+      const SaleOrderRef = ref(db, "SaleOrderTotalAmount");
+      const newSaleOrder = {
+        uid: loggedInUID,
+        discount: discount,
+        Payment: payment,
+        SaleOrderID: AmountID,
+      };
+      push(SaleOrderRef, newSaleOrder);
 
-  //   }
-  // }, []);
+      if (paymentMethod === "rdoCash") {
+        const newSaleOrder = {
+          uid: loggedInUID,
+          status: "New",
+          Payment: payment,
+          paymentMethod: "rdoCash",
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        update(SaleOrderRef, newSaleOrder);
+      } else if (paymentMethod === "rdoCredit") {
+        const newSaleOrder = {
+          uid: loggedInUID,
+          status: "New",
+          Payment: payment,
+          paymentMethod: "rdoCredit",
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        update(SaleOrderRef, newSaleOrder);
+      } else {
+        const newSaleOrder = {
+          uid: loggedInUID,
+          status: "New",
+          Payment: payment,
+          paymentMethod: "rdoCashCredit",
+        };
+        const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
+        update(SaleOrderRef, newSaleOrder);
+      }
+
+      setIsReadOnly(true);
+      setIsDisabled(true);
+
+      setDiscount("");
+
+      setTimeout(() => {
+        navigate("/SaleOrder");
+      }, 1000);
+
+      // Remove items from localStorage
+      localStorage.removeItem("ID");
+      localStorage.removeItem("customer");
+      localStorage.removeItem("orderDate");
+      localStorage.removeItem("name");
+      localStorage.removeItem("phoneNumber");
+      localStorage.removeItem("paymentMethod");
+      localStorage.removeItem("salesMan");
+      localStorage.removeItem("isSaveOrderVisible");
+      localStorage.removeItem("ItemName");
+      localStorage.removeItem("EditID");
+      localStorage.removeItem("EdititemName");
+      localStorage.removeItem("EditQuantity");
+      localStorage.removeItem("EditMeasurement");
+      localStorage.removeItem("EditSalePrice");
+      localStorage.removeItem("EditDescription");
+      localStorage.removeItem("EditTotal");
+      localStorage.removeItem("EditStock");
+      localStorage.removeItem("EditCostPrice");
+      localStorage.setItem("AddItemSection", false);
+
+      localStorage.removeItem("Stock");
+
+      localStorage.removeItem("Quantity");
+
+      setIsReadOnly(true);
+      setSaveOrderVisible(true);
+
+    } catch (error) {
+      toast.error("Error adding SaleOrder: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
 
   // ----------------------Delete-----------------------------
 
@@ -2781,14 +2852,27 @@ function AddSaleOrder() {
                             />
                           </div>
 
-                          <Button
-                            variant="primary"
-                            style={{ float: "right", marginTop: 10 + "px" }}
-                            id="btnSaveClose"
-                            onClick={handleSaleOrderTotalAmount}
-                          >
-                            Save & Close
-                          </Button>
+                          {paymentMethod === "rdoCash" && (
+                            <Button
+                              variant="primary"
+                              style={{ float: "right", marginTop: 10 + "px" }}
+                              id="btnSaveClose"
+                              onClick={handleSaleOrderTotalAmount}
+                            >
+                              Save & Close
+                            </Button>
+                          )}
+
+                          {paymentMethod !== "rdoCash" && (
+                            <Button
+                              variant="primary"
+                              style={{ float: "right", marginTop: 10 + "px" }}
+                              id="btnSaveClose"
+                              onClick={handleSave}
+                            >
+                              Save & Close
+                            </Button>
+                          )}
                         </>
                       </div>
                     </div>

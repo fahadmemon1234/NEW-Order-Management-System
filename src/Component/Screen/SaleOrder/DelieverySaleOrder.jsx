@@ -165,7 +165,7 @@ function Deliever() {
   const handleShipQuantityChange = (newQuantity, itemId) => {
     // Find the item in the visibleItems array
     const item = visibleItems.find((item) => item.id === itemId);
-debugger;
+    debugger;
     // Check if the new quantity exceeds the available quantity
     if (parseInt(newQuantity) > item.quantity) {
       // Display error toast if ship quantity exceeds available quantity
@@ -215,92 +215,81 @@ debugger;
   const [Discount, setDiscount] = useState("");
   const [Total, setTotal] = useState("");
 
-  // const calculateTotal = () => {
-  //   debugger;
-
-  //   // Calculate the totalTxtTotal
-  //   const totalTxtTotal = visibleItems
-  //     .slice(0, rowsToShow) // Consider only the visible items
-  //     .map((item) => calculateTotalPrice(item)) // Map each item to its total price
-  //     .reduce((acc, totalPrice) => acc + totalPrice, 0); // Sum up all total prices
-
-  //   // Set the total using setTotal
-  //   setTotal(totalTxtTotal);
-
-  //   // Define a variable to accumulate the total
-  //   //     debugger;
-  //   //     let total = 0;
-
-  //   //     for (const itemId in shipQuantities) {
-  //   //       debugger;
-  //   //       const itemIdString = String(itemId); // Convert itemId to string if necessary
-  //   // const item = visibleItems.find((item) => String(item.id) === itemIdString);
-
-  //   //       if (item) {
-  //   //         total += calculateTotalPrice(item);
-  //   //       }
-  //   //     }
-
-  //   //     // Now 'total' contains the accumulated total
-  //   //     console.log(total); // You can output the total to the console or use it elsewhere in your code
-
-  //   // let total = 0;
-  //   // debugger;
-  //   // for (const itemId in shipQuantities) {
-  //   //   debugger;
-  //   //   const item = visibleItems.find((item) => item.id === itemId);
-  //   //   if (item) {
-  //   //     total += calculateTotalPrice(item);
-  //   //     setTotal(total);
-  //   //   }
-  //   // }
-
-  //   // // Use state variables for transport charges, labour charges, and discount
-  //   // const transportChargesValue = parseFloat(TransportCharges) || 0;
-  //   // const labourChargesValue = parseFloat(LabourCharges) || 0;
-  //   // const discountValue = parseFloat(Discount) || 0;
-
-  //   // // Subtract transport charges, labour charges, and discount from the total
-  //   // total -= transportChargesValue;
-  //   // total -= labourChargesValue;
-  //   // total -= discountValue;
-
-  //   // return total;
-  // };
-
   useEffect(() => {
-    debugger;
     // Calculate the totalTxtTotal
     const totalTxtTotal = visibleItems
-
       .slice(0, rowsToShow)
       .map((item) => calculateTotalPrice(item))
       .reduce((acc, totalPrice) => acc + totalPrice, 0);
 
+    // Calculate transport charges value
+    const transportChargesValue = parseFloat(TransportCharges) || 0;
+
+    // Calculate labor charges value
+    const labourChargesValue = parseFloat(LabourCharges) || 0;
+
+    // Calculate discount value
+    const discountValue = parseFloat(Discount) || 0;
+
+    // Calculate the total after subtracting transport charges, labor charges, and discount
+    const totalAfterCharges =
+      totalTxtTotal -
+      transportChargesValue -
+      labourChargesValue -
+      discountValue;
+
     // Set the total using setTotal
-    setTotal(totalTxtTotal);
-  }, [visibleItems, rowsToShow]); // Only re-run this effect if visibleItems or rowsToShow change
+    setTotal(totalAfterCharges);
+
+    if (transportChargesValue > totalTxtTotal) {
+      // Show toast message
+      toast.error("Total exceeds the sum of transport charges", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      setTransportCharges("");
+    } else if (labourChargesValue > totalTxtTotal) {
+      // Show toast message
+      toast.error("Total exceeds the sum of labour charges", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      setLabourCharges("");
+    } else if (discountValue > totalTxtTotal) {
+      toast.error("Total exceeds the sum of Discount", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      setDiscount("");
+    }
+  }, [visibleItems, rowsToShow, TransportCharges, LabourCharges, Discount]);
 
   const handleDeliver = () => {
     try {
       debugger;
-      // console.log(displayValue)
-      // const isEmpty = Object.values(shipQuantities).some(quantity => quantity === 0);
 
-      const item = [];
-
-      $("table tbody tr").each(function () {
-        const itemId = parseInt($(this).find("#txtshipQuantities").val()); // Assuming the input field ID contains the item ID
-        if (!isNaN(itemId)) {
-          // Check if itemId is a valid number
-          item.push(itemId);
-        }
-      });
-
-      // Filter out empty strings and NaN values from the array
-      const filteredItem = item.filter((val) => val !== "" && !isNaN(val));
-
-      if (filteredItem.length === 0) {
+      if (shipQuantities.some((quantity) => quantity === "")) {
         toast.error("Please Enter Ship Quantity!", {
           position: "top-right",
           autoClose: 1000,
@@ -336,6 +325,7 @@ debugger;
           theme: "colored",
         });
       } else {
+        debugger;
         const loggedInUID = localStorage.getItem("uid");
         const SaleOrderRef = ref(db, "DelieverySaleOrder");
         const newSaleOrder = {
@@ -344,6 +334,7 @@ debugger;
           CustomerName: CustomerName,
           ShipQuantity: shipQuantities,
           SaleOrderDate: SaleOrderDate,
+          DeliveredDate: DeliveredDate,
           TransportCharges: TransportCharges,
           LabourCharges: LabourCharges,
           Discount: Discount,

@@ -1385,7 +1385,6 @@ function AddSaleOrder() {
 
   const handleSave = () => {
     try {
-
       const loggedInUID = localStorage.getItem("uid");
       debugger;
       const SaleOrderRef = ref(db, "SaleOrderTotalAmount");
@@ -1462,7 +1461,6 @@ function AddSaleOrder() {
 
       setIsReadOnly(true);
       setSaveOrderVisible(true);
-
     } catch (error) {
       toast.error("Error adding SaleOrder: " + error.message, {
         position: "top-right",

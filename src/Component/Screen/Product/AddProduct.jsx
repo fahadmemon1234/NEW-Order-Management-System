@@ -297,16 +297,20 @@ function AddProduct() {
     };
 
     fetchData();
+
+    const intervalId = setInterval(fetchData, 2000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId);
   }, [db, loggedInUID]);
 
-  const customStyles = {
-    control: (provided) => ({
-      ...provided,
-      border: "1px solid #ccc",
-      borderRadius: "4px",
-      minHeight: "38px",
-    }),
-  };
+  // const customStyles = {
+  //   control: (provided) => ({
+  //     ...provided,
+  //     border: "1px solid #ccc",
+  //     borderRadius: "4px",
+  //     minHeight: "38px",
+  //   }),
+  // };
 
   const handleMeasurementSelect = (selectedOption) => {
     setSelectedMeasurement(selectedOption?.value);
@@ -464,11 +468,9 @@ function AddProduct() {
                       id="brandCode"
                       options={BrandCode}
                       styles={{
-                        ...customStyles,
                         menu: (provided) => ({
                           ...provided,
                           overflowY: "auto", // Add scrollbar when needed
-                          maxHeight: "150px", // Set the maximum height here
                         }),
                       }}
                       isSearchable={true}
@@ -510,11 +512,9 @@ function AddProduct() {
                       id="measurement"
                       options={Measurement}
                       styles={{
-                        ...customStyles,
                         menu: (provided) => ({
                           ...provided,
                           overflowY: "auto", // Add scrollbar when needed
-                          maxHeight: "150px", // Set the maximum height here
                         }),
                       }}
                       isSearchable={true}

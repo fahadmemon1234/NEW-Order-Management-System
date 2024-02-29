@@ -8,7 +8,7 @@ import Modal from "react-bootstrap/Modal";
 
 //DataBase
 // ---------------------------------------------------
-import { ref, push } from "firebase/database";
+import { ref, push, get } from "firebase/database";
 import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
@@ -95,6 +95,7 @@ function AddMeasurment() {
           setCode("");
           setIsActive(false);
         }, 2000);
+
 
         // handleClose(); // Close the modal after successful insert
       } catch (error) {

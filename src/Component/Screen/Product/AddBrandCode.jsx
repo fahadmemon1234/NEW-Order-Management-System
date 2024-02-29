@@ -23,7 +23,7 @@ import "../../../assets/Css/Tostify.css";
 import "../../../assets/Css/Model.css";
 // ---------------------------------------------------
 
-function AddMeasurment() {
+function AddBrandCode() {
   const [Code, setCode] = useState("");
   const [CodeError, setCodeError] = useState("");
 
@@ -43,7 +43,7 @@ function AddMeasurment() {
       case "code":
         if (value.trim() === "") {
           // setCodeTypeError("CodeType is required");
-          toast.error(`Measurement is required`, {
+          toast.error(`Brand Code is required`, {
             position: "top-right",
             autoClose: 1000,
             hideProgressBar: false,
@@ -69,7 +69,7 @@ function AddMeasurment() {
 
       try {
         const loggedInUID = localStorage.getItem("uid");
-        const CustomerRef = ref(db, `Measurement`);
+        const CustomerRef = ref(db, `BrandCode`);
         const newCustomer = {
           uid: loggedInUID,
           codeValue: Code,
@@ -78,7 +78,7 @@ function AddMeasurment() {
         push(CustomerRef, newCustomer);
 
         // Show a success toast if the product is successfully added
-        toast.success(`Measurement Added Successfully`, {
+        toast.success(`Brand Code Added Successfully`, {
           position: "top-right",
           autoClose: 1000,
           hideProgressBar: false,
@@ -98,7 +98,7 @@ function AddMeasurment() {
 
         // handleClose(); // Close the modal after successful insert
       } catch (error) {
-        toast.error(`Measurement Error adding: ` + error.message, {
+        toast.error(`Brand Code Error adding: ` + error.message, {
           position: "top-right",
           autoClose: 1000,
           hideProgressBar: false,
@@ -109,7 +109,7 @@ function AddMeasurment() {
           theme: "colored",
         });
 
-        console.log(`Error adding Measurement:`, error);
+        console.log(`Error adding Brand Code:`, error);
       }
     } else {
       handleInputBlur("code", Code);
@@ -145,7 +145,7 @@ function AddMeasurment() {
         style={{ float: "right", fontSize: 13 + "px", fontWeight: "600" }}
         onClick={handleShow}
       >
-        Add Measurement
+        Add Brand Code
       </a>
 
       {/* -----------------------------------Modal--------------------------------------------- */}
@@ -157,7 +157,7 @@ function AddMeasurment() {
         // style={{ paddingTop: "3%" }}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add Measurement</Modal.Title>
+          <Modal.Title>Add Brand Code</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="container">
@@ -226,4 +226,4 @@ function AddMeasurment() {
   );
 }
 
-export default AddMeasurment;
+export default AddBrandCode;

@@ -25,6 +25,7 @@ import "../../../assets/Css/Model.css";
 // ---------------------------------------------------
 
 import AddMeasurment from "./AddMeasurment";
+import AddBrandCode from "./AddBrandCode";
 
 function AddProduct() {
   const [show, setShow] = useState(false);
@@ -303,15 +304,6 @@ function AddProduct() {
     return () => clearInterval(intervalId);
   }, [db, loggedInUID]);
 
-  // const customStyles = {
-  //   control: (provided) => ({
-  //     ...provided,
-  //     border: "1px solid #ccc",
-  //     borderRadius: "4px",
-  //     minHeight: "38px",
-  //   }),
-  // };
-
   const handleMeasurementSelect = (selectedOption) => {
     setSelectedMeasurement(selectedOption?.value);
   };
@@ -376,6 +368,10 @@ function AddProduct() {
     };
 
     fetchData();
+
+    const intervalId = setInterval(fetchData, 2000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId);
   }, [db, loggedInUID]);
 
   const handleBrandCodeSelect = (selectedOption) => {
@@ -450,27 +446,18 @@ function AddProduct() {
                     >
                       Brand Code <span style={{ color: "red" }}>*</span>
                     </label>
-                    {/* <select
-                      className="form-select"
-                      value={brandCode}
-                      onBlur={() => handleInputBlur("BrandCode", brandCode)}
-                      onFocus={() => setBrandCodeError("")}
-                      onChange={(e) => setBrandCode(e.target.value)}
-                    >
-                      <option value="" selected disabled>
-                        Select One
-                      </option>
-                      <option value="Qarshi">Qarshi</option>
-                      <option value="Ajmal">Ajmal</option>
-                      <option value="Hamdard">Hamdard</option>
-                    </select> */}
+
                     <Select
                       id="brandCode"
                       options={BrandCode}
                       styles={{
-                        menu: (provided) => ({
+                        menu: (provided, state) => ({
                           ...provided,
                           overflowY: "auto", // Add scrollbar when needed
+                          maxHeight:
+                            state.selectProps.menuIsOpen && BrandCode.length > 5
+                              ? "none"
+                              : "150px", // Set a maximum height when the menu is open and items are greater than 5
                         }),
                       }}
                       isSearchable={true}
@@ -481,6 +468,7 @@ function AddProduct() {
                       }
                       onFocus={() => setBrandCodeError("")}
                     />
+                    <AddBrandCode />
                     {BrandCodeError && (
                       <div style={{ color: "red" }}>{BrandCodeError}</div>
                     )}
@@ -495,26 +483,19 @@ function AddProduct() {
                     >
                       Measurement
                     </label>
-                    {/* <input type="password" class="form-control" id="exampleInputPassword1"/> */}
-                    {/* <select
-                      className="form-select"
-                      value={measurement}
-                      onChange={(e) => setMeasurement(e.target.value)}
-                    >
-                      <option value="" disabled selected>
-                        Select One
-                      </option>
-                      <option value="kg">kg</option>
-                      <option value="gm">gm</option>
-                    </select> */}
 
                     <Select
                       id="measurement"
                       options={Measurement}
                       styles={{
-                        menu: (provided) => ({
+                        menu: (provided, state) => ({
                           ...provided,
                           overflowY: "auto", // Add scrollbar when needed
+                          maxHeight:
+                            state.selectProps.menuIsOpen &&
+                            Measurement.length > 5
+                              ? "none"
+                              : "150px", // Set a maximum height when the menu is open and items are greater than 5
                         }),
                       }}
                       isSearchable={true}

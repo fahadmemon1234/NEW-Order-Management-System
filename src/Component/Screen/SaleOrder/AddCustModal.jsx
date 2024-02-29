@@ -169,7 +169,6 @@ function AddCustModal() {
           setProvince("");
           setPostalCode("");
           setOpeningBalance("");
-          window.location.reload();
         }, 2000);
 
         // handleClose(); // Close the modal after successful insert

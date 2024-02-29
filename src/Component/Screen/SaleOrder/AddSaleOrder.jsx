@@ -96,6 +96,10 @@ function AddSaleOrder() {
     };
 
     fetchData();
+
+    const intervalId = setInterval(fetchData, 2000);
+
+    return () => clearInterval(intervalId);
   }, [db, loggedInUID]);
 
   // Get the current date in the format "YYYY-MM-DD"
@@ -503,6 +507,10 @@ function AddSaleOrder() {
     };
 
     fetchData();
+
+    const intervalId = setInterval(fetchData, 2000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId);
   }, [db, loggedInUID]);
 
   const [Exists, setExists] = useState("");
@@ -1801,14 +1809,7 @@ function AddSaleOrder() {
                             }
                             isSearchable={true}
                           />
-
-                          {/* <a
-                        href="#"
-                        style={{ float: "right", fontSize: 13 + "px" }}
-                       
-                      >
-                        Add Customer
-                      </a> */}
+                          
                           <AddCustModal />
                         </div>
 

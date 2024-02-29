@@ -4,11 +4,12 @@ import React, { useState, useEffect } from "react";
 // ---------------------------------------------------
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Select from "react-select";
 // ---------------------------------------------------
 
 //DataBase
 // ---------------------------------------------------
-import { ref, push } from "firebase/database";
+import { ref, push, get } from "firebase/database";
 import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
@@ -23,6 +24,9 @@ import "../../../assets/Css/Tostify.css";
 import "../../../assets/Css/Model.css";
 // ---------------------------------------------------
 
+import AddMeasurment from "../Product/AddMeasurment";
+import AddBrandCode from "../Product/AddBrandCode";
+
 function AddProductModal() {
   const [show, setShow] = useState(false);
 
@@ -32,8 +36,9 @@ function AddProductModal() {
     setItemQty("");
     setItemCost("");
     setSellPrice("");
-    setMeasurement("");
-    setBrandCode("");
+    setSelectedMeasurement(0);
+    // setBrandCode("");
+    setSelectedBrandCode(0);
     setTotalAmount("");
     setDescription("");
     setShow(true);
@@ -42,6 +47,7 @@ function AddProductModal() {
   // Multiply
   const [itemCost, setItemCost] = useState("");
   const [itemQty, setItemQty] = useState("");
+
   const [totalAmount, setTotalAmount] = useState("");
 
   useEffect(() => {
@@ -58,13 +64,13 @@ function AddProductModal() {
 
   // Insert
   const [itemName, setItemName] = useState("");
-  const [brandCode, setBrandCode] = useState("");
-  const [measurement, setMeasurement] = useState("");
   const [sellPrice, setSellPrice] = useState("");
+  const [SelectedBrandCode, setSelectedBrandCode] = useState("");
+  const [SelectedMeasurement, setSelectedMeasurement] = useState("");
   const [description, setDescription] = useState("");
 
   const handleSaveChanges = () => {
-    if (itemName && brandCode && itemCost && sellPrice && itemQty) {
+    if (itemName && SelectedBrandCode && itemCost && sellPrice && itemQty) {
       // Implement your save logic here
       console.log("Changes saved!");
 
@@ -74,8 +80,8 @@ function AddProductModal() {
         const newProduct = {
           uid: loggedInUID,
           itemName: itemName,
-          brandCode: brandCode,
-          measurement: measurement,
+          brandCode: SelectedBrandCode,
+          measurement: SelectedMeasurement,
           itemCost: itemCost,
           sellPrice: sellPrice,
           itemQty: itemQty,
@@ -99,14 +105,13 @@ function AddProductModal() {
         setTimeout(() => {
           handleClose();
           setItemName("");
-          setBrandCode("");
-          setMeasurement("");
+          setSelectedBrandCode(0);
+          setSelectedMeasurement(0);
           setItemCost("");
           setSellPrice("");
           setItemQty("");
           setTotalAmount("");
           setDescription("");
-          window.location.reload();
         }, 2000);
 
         // handleClose(); // Close the modal after successful insert
@@ -126,7 +131,7 @@ function AddProductModal() {
       }
     } else {
       handleInputBlur("ItemName", itemName);
-      handleInputBlur("BrandCode", brandCode);
+      handleInputBlur("BrandCode", SelectedBrandCode);
       handleInputBlur("itemCost", itemCost);
       handleInputBlur("SellPrice", sellPrice);
       handleInputBlur("itemQty", itemQty);
@@ -232,6 +237,147 @@ function AddProductModal() {
     }
   };
 
+  // Select2 DropDown Measurement
+
+  const [MeasurementOptions, setMeasurementOptions] = useState([]);
+  const loggedInUID = localStorage.getItem("uid");
+
+  const [Measurement, setMeasurement] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataRef = ref(db, "Measurement");
+        const snapshot = await get(dataRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          debugger;
+          // Convert the data object into an array of options
+          const options = Object.keys(data).map((key) => ({
+            Id: key,
+            value: data[key].codeValue,
+            label: data[key].codeValue,
+            IsActive: data[key].isActive,
+            uid: data[key].uid,
+          }));
+
+          // console.log("All Banks:", options); // Log all banks before filtering
+
+          // Filter options based on loggedInUID
+          const userBanks = options.filter(
+            (bank) => bank.uid === loggedInUID && bank.IsActive === true
+          );
+          setMeasurement(userBanks);
+
+          // console.log("User Banks:", userBanks); // Log filtered banks
+
+          if (userBanks.length > 0) {
+            // Add the "Select Bank" option to the beginning of the array
+            setMeasurementOptions([
+              {
+                value: "0",
+                label: "Select Measurement",
+                disabled: true,
+                selected: true,
+              },
+              ...userBanks,
+            ]);
+          } else {
+            console.error(
+              "No matching Measurement for loggedInUID:",
+              loggedInUID
+            );
+            // Handle the case where no matching banks are found
+          }
+        } else {
+          console.error("Data doesn't exist in the 'Measurement' node.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
+    const intervalId = setInterval(fetchData, 2000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId);
+  }, [db, loggedInUID]);
+
+  const handleMeasurementSelect = (selectedOption) => {
+    setSelectedMeasurement(selectedOption?.value);
+  };
+
+  // Select2 DropDown Brand Code
+
+  const [BrandCodeOptions, setBrandCodeOptions] = useState([]);
+
+  const [BrandCode, setBrandCode] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataRef = ref(db, "BrandCode");
+        const snapshot = await get(dataRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          debugger;
+          // Convert the data object into an array of options
+          const options = Object.keys(data).map((key) => ({
+            Id: key,
+            value: data[key].codeValue,
+            label: data[key].codeValue,
+            IsActive: data[key].isActive,
+            uid: data[key].uid,
+          }));
+
+          // console.log("All Banks:", options); // Log all banks before filtering
+
+          // Filter options based on loggedInUID
+          const userBanks = options.filter(
+            (bank) => bank.uid === loggedInUID && bank.IsActive === true
+          );
+          setBrandCode(userBanks);
+
+          // console.log("User Banks:", userBanks); // Log filtered banks
+
+          if (userBanks.length > 0) {
+            // Add the "Select Bank" option to the beginning of the array
+            setBrandCodeOptions([
+              {
+                value: "0",
+                label: "Select Brand Code",
+                disabled: true,
+                selected: true,
+              },
+              ...userBanks,
+            ]);
+          } else {
+            console.error(
+              "No matching Brand Code for loggedInUID:",
+              loggedInUID
+            );
+            // Handle the case where no matching banks are found
+          }
+        } else {
+          console.error("Data doesn't exist in the 'Brand Code' node.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
+    const intervalId = setInterval(fetchData, 2000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId);
+  }, [db, loggedInUID]);
+
+  const handleBrandCodeSelect = (selectedOption) => {
+    setSelectedBrandCode(selectedOption?.value);
+  };
+
   return (
     <>
       <ToastContainer
@@ -246,14 +392,6 @@ function AddProductModal() {
         pauseOnHover
         theme="colored"
       />
-      {/* <button
-        className="btn btn-primary"
-        type="button"
-        onClick={handleShow}
-        style={{ float: "right" }}
-      >
-        Add Product
-      </button> */}
 
       <a
         href="#"
@@ -308,20 +446,29 @@ function AddProductModal() {
                     >
                       Brand Code <span style={{ color: "red" }}>*</span>
                     </label>
-                    <select
-                      className="form-select"
-                      value={brandCode}
-                      onBlur={() => handleInputBlur("BrandCode", brandCode)}
+
+                    <Select
+                      id="brandCode"
+                      options={BrandCode}
+                      styles={{
+                        menu: (provided, state) => ({
+                          ...provided,
+                          overflowY: "auto", // Add scrollbar when needed
+                          maxHeight:
+                            state.selectProps.menuIsOpen && BrandCode.length > 5
+                              ? "none"
+                              : "150px", // Set a maximum height when the menu is open and items are greater than 5
+                        }),
+                      }}
+                      isSearchable={true}
+                      placeholder="Select Brand Code"
+                      onChange={handleBrandCodeSelect}
+                      onBlur={() =>
+                        handleInputBlur("BrandCode", SelectedBrandCode)
+                      }
                       onFocus={() => setBrandCodeError("")}
-                      onChange={(e) => setBrandCode(e.target.value)}
-                    >
-                      <option value="" selected disabled>
-                        Select One
-                      </option>
-                      <option value="Qarshi">Qarshi</option>
-                      <option value="Ajmal">Ajmal</option>
-                      <option value="Hamdard">Hamdard</option>
-                    </select>
+                    />
+                    <AddBrandCode />
                     {BrandCodeError && (
                       <div style={{ color: "red" }}>{BrandCodeError}</div>
                     )}
@@ -336,18 +483,27 @@ function AddProductModal() {
                     >
                       Measurement
                     </label>
-                    {/* <input type="password" class="form-control" id="exampleInputPassword1"/> */}
-                    <select
-                      className="form-select"
-                      value={measurement}
-                      onChange={(e) => setMeasurement(e.target.value)}
-                    >
-                      <option value="" disabled selected>
-                        Select One
-                      </option>
-                      <option value="kg">kg</option>
-                      <option value="gm">gm</option>
-                    </select>
+
+                    <Select
+                      id="measurement"
+                      options={Measurement}
+                      styles={{
+                        menu: (provided, state) => ({
+                          ...provided,
+                          overflowY: "auto", // Add scrollbar when needed
+                          maxHeight:
+                            state.selectProps.menuIsOpen &&
+                            Measurement.length > 5
+                              ? "none"
+                              : "150px", // Set a maximum height when the menu is open and items are greater than 5
+                        }),
+                      }}
+                      isSearchable={true}
+                      placeholder="Select Measurement"
+                      onChange={handleMeasurementSelect}
+                    />
+
+                    <AddMeasurment />
                   </div>
                 </div>
               </div>

@@ -1384,6 +1384,7 @@ function AddSaleOrder() {
   // ---------------------------Save----------------------------
 
   const handleSave = () => {
+    debugger;
     try {
       const loggedInUID = localStorage.getItem("uid");
       debugger;
@@ -1786,9 +1787,14 @@ function AddSaleOrder() {
                               }),
                             }}
                             options={customerName}
-                            value={customerName.find(
-                              (option) => option.value === selectedCustomer
-                            )}
+                            value={
+                              Array.isArray(customerName)
+                                ? customerName.find(
+                                    (option) =>
+                                      option.value === selectedCustomer
+                                  )
+                                : null
+                            }
                             placeholder="Select Customer"
                             onChange={(selectedOption) =>
                               setSelectedCustomer(selectedOption)
@@ -1882,9 +1888,14 @@ function AddSaleOrder() {
                                 maxHeight: "160px", // Set the maximum height here
                               }),
                             }}
-                            value={customerName.find(
-                              (option) => option.value === selectedCustomer
-                            )}
+                            value={
+                              Array.isArray(customerName)
+                                ? customerName.find(
+                                    (option) =>
+                                      option.value === selectedCustomer
+                                  )
+                                : null
+                            }
                             placeholder="Select Customer"
                             onChange={(selectedOption) =>
                               setSelectedCustomer(selectedOption)
@@ -2071,9 +2082,12 @@ function AddSaleOrder() {
                             }}
                             options={customerName}
                             value={
-                              customerName.find(
-                                (option) => option.value === selectedCustomer
-                              ) || null
+                              Array.isArray(customerName)
+                                ? customerName.find(
+                                    (option) =>
+                                      option.value === selectedCustomer
+                                  )
+                                : null
                             }
                             placeholder="Select Customer"
                             onChange={(selectedOption) =>

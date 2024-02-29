@@ -425,6 +425,10 @@ function AddWithDraw() {
     };
 
     fetchData();
+
+    const intervalId = setInterval(fetchData, 2000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId);
   }, [db, loggedInUID]);
 
   const customStyles = {

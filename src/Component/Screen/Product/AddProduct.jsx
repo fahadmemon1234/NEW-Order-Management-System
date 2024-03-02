@@ -69,171 +69,163 @@ function AddProduct() {
   const [SelectedMeasurement, setSelectedMeasurement] = useState("");
   const [description, setDescription] = useState("");
 
-  const handleSaveChanges = () => {
-    if (itemName && SelectedBrandCode && itemCost && sellPrice && itemQty) {
-      // Implement your save logic here
-      console.log("Changes saved!");
-
-      try {
-        const loggedInUID = localStorage.getItem("uid");
-        const productsRef = ref(db, "Product");
-        const newProduct = {
-          uid: loggedInUID,
-          itemName: itemName,
-          brandCode: SelectedBrandCode,
-          measurement: SelectedMeasurement,
-          itemCost: itemCost,
-          sellPrice: sellPrice,
-          itemQty: itemQty,
-          total: totalAmount,
-          description: description,
-        };
-        push(productsRef, newProduct);
-
-        // Show a success toast if the product is successfully added
-        toast.success("Product Added Successfully", {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-
-        setTimeout(() => {
-          handleClose();
-          setItemName("");
-          setSelectedBrandCode(0);
-          setSelectedMeasurement(0);
-          setItemCost("");
-          setSellPrice("");
-          setItemQty("");
-          setTotalAmount("");
-          setDescription("");
-        }, 2000);
-
-        // handleClose(); // Close the modal after successful insert
-      } catch (error) {
-        toast.error("Error adding product: " + error.message, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-
-        console.log("Error adding product:", error);
+  const checkExistingItem = async () => {
+    const productsRef = ref(db, "Product");
+    const snapshot = await get(productsRef);
+    const existingProducts = snapshot.val();
+    console.log("existingProducts:", existingProducts); // Add this line to check existingProducts
+    console.log("itemName:", itemName); // Add this line to check itemName
+    for (const key in existingProducts) {
+      if (existingProducts[key].itemName === itemName) {
+        return true; // Item with the same name already exists
       }
-    } else {
-      handleInputBlur("ItemName", itemName);
-      handleInputBlur("BrandCode", SelectedBrandCode);
-      handleInputBlur("itemCost", itemCost);
-      handleInputBlur("SellPrice", sellPrice);
-      handleInputBlur("itemQty", itemQty);
     }
+    return false; // Item with the same name does not exist
   };
 
-  // Validation
-  const [ItemNameError, setItemNameError] = useState("");
-  const [BrandCodeError, setBrandCodeError] = useState("");
-  const [itemCostError, setItemCostError] = useState("");
-  const [SellPriceError, setSellPriceError] = useState("");
-  const [itemQtyError, setItemQtyError] = useState("");
+  const handleSaveChanges = async () => {
+    try {
+      if (itemName && SelectedBrandCode && itemCost && sellPrice && itemQty) {
+        // Implement your save logic here
+        // console.log("Changes saved!");
 
-  const handleInputBlur = (field, value) => {
-    switch (field) {
-      case "ItemName":
-        if (value.trim() === "") {
-          setItemNameError("Item Name is required");
-          // toast.error('Item Name is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
+        const itemExists = await checkExistingItem();
+
+        if (itemExists) {
+          toast.error("This item already exists.", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          // You can show an error message or handle the situation accordingly
+          return;
         } else {
-          setItemNameError("");
+          const loggedInUID = localStorage.getItem("uid");
+          const productsRef = ref(db, "Product");
+          const newProduct = {
+            uid: loggedInUID,
+            itemName: itemName,
+            brandCode: SelectedBrandCode,
+            measurement: SelectedMeasurement,
+            itemCost: itemCost,
+            sellPrice: sellPrice,
+            itemQty: itemQty,
+            total: totalAmount,
+            description: description,
+          };
+          push(productsRef, newProduct);
+
+          // Show a success toast if the product is successfully added
+          toast.success("Product Added Successfully", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+
+          setTimeout(() => {
+            handleClose();
+            setItemName("");
+            setSelectedBrandCode(0);
+            setSelectedMeasurement(0);
+            setItemCost("");
+            setSellPrice("");
+            setItemQty("");
+            setTotalAmount("");
+            setDescription("");
+          }, 2000);
         }
-        break;
-      case "BrandCode":
-        if (value === "") {
-          setBrandCodeError("Brand Code is required");
-          // toast.error('Brand Code is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
-        } else {
-          setBrandCodeError("");
-        }
-        break;
-      case "itemCost":
-        if (value.trim() === "") {
-          setItemCostError("Item Cost is required");
-          // toast.error('Item Cost is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
-        } else {
-          setItemCostError("");
-        }
-        break;
-      case "SellPrice":
-        if (value.trim() === "") {
-          setSellPriceError("Sell Price is required");
-          // toast.error('Sell Price is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
-        } else {
-          setSellPriceError("");
-        }
-        break;
-      case "itemQty":
-        if (value.trim() === "") {
-          setItemQtyError("Item Quantity is required");
-          // toast.error('Item Quantity is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
-        } else {
-          setItemQtyError("");
-        }
-        break;
-      default:
-        break;
+
+        // handleClose(); // Close the modal after successful insert
+      } else if (!itemName) {
+        toast.error("Item Name is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (!SelectedBrandCode) {
+        toast.error("Please select a brand code", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (!itemCost) {
+        toast.error("Item Cost is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (!sellPrice) {
+        toast.error("Sell Price is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (!itemQty) {
+        toast.error("Item Quantity is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else {
+        toast.error("Unexpected error occurred", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    } catch (error) {
+      toast.error("Error adding product: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      console.log("Error adding product:", error);
     }
   };
 
@@ -425,14 +417,9 @@ function AddProduct() {
                       className="form-control"
                       id="ItemName"
                       value={itemName}
-                      onBlur={() => handleInputBlur("ItemName", itemName)}
-                      onFocus={() => setItemNameError("")}
                       onChange={(e) => setItemName(e.target.value)}
                       placeholder="Enter Item Name"
                     />
-                    {ItemNameError && (
-                      <div style={{ color: "red" }}>{ItemNameError}</div>
-                    )}
                   </div>
                 </div>
               </div>
@@ -463,15 +450,8 @@ function AddProduct() {
                       isSearchable={true}
                       placeholder="Select Brand Code"
                       onChange={handleBrandCodeSelect}
-                      onBlur={() =>
-                        handleInputBlur("BrandCode", SelectedBrandCode)
-                      }
-                      onFocus={() => setBrandCodeError("")}
                     />
                     <AddBrandCode />
-                    {BrandCodeError && (
-                      <div style={{ color: "red" }}>{BrandCodeError}</div>
-                    )}
                   </div>
                 </div>
                 <div className="col-md-6 col-sm-6 col-lg-6">
@@ -524,13 +504,8 @@ function AddProduct() {
                       id="itemCost"
                       placeholder="Enter Item Cost"
                       value={itemCost}
-                      onBlur={() => handleInputBlur("itemCost", itemCost)}
-                      onFocus={() => setItemCostError("")}
                       onChange={(e) => setItemCost(e.target.value)}
                     />
-                    {itemCostError && (
-                      <div style={{ color: "red" }}>{itemCostError}</div>
-                    )}
                   </div>
                 </div>
                 <div className="col-md-6 col-sm-6 col-lg-6">
@@ -548,13 +523,8 @@ function AddProduct() {
                       id="SellPrice"
                       placeholder="Enter Sell Price"
                       value={sellPrice}
-                      onBlur={() => handleInputBlur("SellPrice", sellPrice)}
-                      onFocus={() => setSellPriceError("")}
                       onChange={(e) => setSellPrice(e.target.value)}
                     />
-                    {SellPriceError && (
-                      <div style={{ color: "red" }}>{SellPriceError}</div>
-                    )}
                   </div>
                 </div>
               </div>
@@ -575,13 +545,8 @@ function AddProduct() {
                       id="itemQty"
                       placeholder="Enter Quantity"
                       value={itemQty}
-                      onBlur={() => handleInputBlur("itemQty", itemQty)}
-                      onFocus={() => setItemQtyError("")}
                       onChange={(e) => setItemQty(e.target.value)}
                     />
-                    {itemQtyError && (
-                      <div style={{ color: "red" }}>{itemQtyError}</div>
-                    )}
                   </div>
                 </div>
                 <div className="col-md-6 col-sm-6 col-lg-6">

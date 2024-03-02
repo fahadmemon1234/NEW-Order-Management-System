@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import SweetAlert from "react-bootstrap-sweetalert";
+import Select from "react-select";
 // ---------------------------------------------------
 
 // Main Page Connect
@@ -19,7 +20,7 @@ import AddProduct from "./AddProduct";
 
 //DataBase
 // ---------------------------------------------------
-import { ref, onValue, update, remove } from "firebase/database";
+import { ref, onValue, update, remove, get } from "firebase/database";
 import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
@@ -34,30 +35,11 @@ import { toast, ToastContainer } from "react-toastify";
 import "../../../assets/Css/Tostify.css";
 // ---------------------------------------------------
 
+import AddMeasurment from "./AddMeasurment";
+import AddBrandCode from "./AddBrandCode";
+
 function Product() {
   const [tableData, setTableData] = useState([]);
-
-  // useEffect(() => {
-  //   // Reference to the 'Posting' node in Firebase Realtime Database
-  //   const tasksRef = ref(db, "Product");
-
-  //   // Attach an event listener for data changes
-  //   const fetchData = () => {
-  //     onValue(tasksRef, (snapshot) => {
-  //       const data = snapshot.val();
-  //       if (data) {
-  //         // Convert the object of tasks into an array
-  //         const dataArray = Object.keys(data).map((key) => ({
-  //           id: key,
-  //           ...data[key],
-  //         }));
-  //         setTableData(dataArray);
-  //       }
-  //     });
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   const loggedInUID = localStorage.getItem("uid");
 
@@ -155,8 +137,6 @@ function Product() {
   //   ---------------------------------Edit Modal and Populate----------------------------------
 
   const [itemName, setItemName] = useState("");
-  const [brandCode, setBrandCode] = useState("");
-  const [measurement, setMeasurement] = useState("");
   const [sellPrice, setSellPrice] = useState("");
   const [description, setDescription] = useState("");
 
@@ -180,37 +160,88 @@ function Product() {
     setShow(true);
   };
 
+  const checkExistingItem = async () => {
+    const productsRef = ref(db, "Product");
+    const snapshot = await get(productsRef);
+    const existingProducts = snapshot.val();
+    console.log("existingProducts:", existingProducts); // Add this line to check existingProducts
+    console.log("itemName:", itemName); // Add this line to check itemName
+    for (const key in existingProducts) {
+      if (existingProducts[key].itemName === itemName) {
+        return true; // Item with the same name already exists
+      }
+    }
+    return false; // Item with the same name does not exist
+  };
+
+  const [SelectedBrandCode, setSelectedBrandCode] = useState("");
+  const [SelectedMeasurement, setSelectedMeasurement] = useState("");
+
   const handleSaveChanges = async () => {
-    debugger;
-    console.log(editedItem);
+    try {
+      debugger;
+      console.log(editedItem);
 
-    if (itemName && brandCode && itemCost && sellPrice && itemQty) {
-      // Implement your save logic here
-      console.log("Changes saved!");
-      try {
-        const loggedInUID = localStorage.getItem("uid");
-        // Construct the updated product object
-        const updatedProduct = {
-          uid: loggedInUID,
-          itemName: itemName,
-          brandCode: brandCode,
-          measurement: measurement,
-          itemCost: itemCost,
-          sellPrice: sellPrice,
-          itemQty: itemQty,
-          total: totalAmount,
-          description: description,
-          // Add other properties as needed
-        };
+      if (itemName && SelectedBrandCode && itemCost && sellPrice && itemQty) {
+        // Implement your save logic here
+        console.log("Changes saved!");
 
-        // Update the product data in Firebase
-        const productRef = ref(db, `Product/${editedItem}`);
-        await update(productRef, updatedProduct);
+        const itemExists = await checkExistingItem();
 
-        // Show a success toast if the product is successfully added
-        toast.success("Product Edit Successfully", {
+        if (itemExists) {
+          toast.error("This item already exists.", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          // You can show an error message or handle the situation accordingly
+          return;
+        } else {
+          const loggedInUID = localStorage.getItem("uid");
+          // Construct the updated product object
+          const updatedProduct = {
+            uid: loggedInUID,
+            itemName: itemName,
+            brandCode: SelectedBrandCode,
+            measurement: SelectedMeasurement,
+            itemCost: itemCost,
+            sellPrice: sellPrice,
+            itemQty: itemQty,
+            total: totalAmount,
+            description: description,
+            // Add other properties as needed
+          };
+
+          // Update the product data in Firebase
+          const productRef = ref(db, `Product/${editedItem}`);
+          await update(productRef, updatedProduct);
+
+          // Show a success toast if the product is successfully added
+          toast.success("Product Edit Successfully", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+
+          // Close the modal
+          setTimeout(() => {
+            handleClose();
+          }, 2000);
+        }
+      } else if (!itemName) {
+        toast.error("Item Name is required", {
           position: "top-right",
-          autoClose: 1000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: false,
@@ -218,16 +249,54 @@ function Product() {
           progress: undefined,
           theme: "colored",
         });
-
-        // Close the modal
-        setTimeout(() => {
-          handleClose();
-        }, 2000);
-      } catch (error) {
-        console.log("Error updating data:", error);
-        toast.error("Error adding product: " + error.message, {
+      } else if (!SelectedBrandCode) {
+        toast.error("Please select a brand code", {
           position: "top-right",
-          autoClose: 1000,
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (!itemCost) {
+        toast.error("Item Cost is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (!sellPrice) {
+        toast.error("Sell Price is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (!itemQty) {
+        toast.error("Item Quantity is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else {
+        toast.error("Unexpected error occurred", {
+          position: "top-right",
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: false,
@@ -236,114 +305,158 @@ function Product() {
           theme: "colored",
         });
       }
-    } else {
-      handleInputBlur("ItemName", itemName);
-      handleInputBlur("BrandCode", brandCode);
-      handleInputBlur("itemCost", itemCost);
-      handleInputBlur("SellPrice", sellPrice);
-      handleInputBlur("itemQty", itemQty);
+    } catch (error) {
+      console.log("Error updating data:", error);
+      toast.error("Error adding product: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
 
-  //   ---------------------------------Validation----------------------------------
+  // Select2 DropDown Measurement
 
-  // Validation
-  const [ItemNameError, setItemNameError] = useState("");
-  const [BrandCodeError, setBrandCodeError] = useState("");
-  const [itemCostError, setItemCostError] = useState("");
-  const [SellPriceError, setSellPriceError] = useState("");
-  const [itemQtyError, setItemQtyError] = useState("");
+  const [MeasurementOptions, setMeasurementOptions] = useState([]);
+  const [Measurement, setMeasurement] = useState([]);
 
-  const handleInputBlur = (field, value) => {
-    switch (field) {
-      case "ItemName":
-        if (value.trim() === "") {
-          setItemNameError("Item Name is required");
-          // toast.error('Item Name is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataRef = ref(db, "Measurement");
+        const snapshot = await get(dataRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          debugger;
+          // Convert the data object into an array of options
+          const options = Object.keys(data).map((key) => ({
+            Id: key,
+            value: data[key].codeValue,
+            label: data[key].codeValue,
+            IsActive: data[key].isActive,
+            uid: data[key].uid,
+          }));
+
+          // console.log("All Banks:", options); // Log all banks before filtering
+
+          // Filter options based on loggedInUID
+          const userBanks = options.filter(
+            (bank) => bank.uid === loggedInUID && bank.IsActive === true
+          );
+          setMeasurement(userBanks);
+
+          // console.log("User Banks:", userBanks); // Log filtered banks
+
+          if (userBanks.length > 0) {
+            // Add the "Select Bank" option to the beginning of the array
+            setMeasurementOptions([
+              {
+                value: "0",
+                label: "Select Measurement",
+                disabled: true,
+                selected: true,
+              },
+              ...userBanks,
+            ]);
+          } else {
+            console.error(
+              "No matching Measurement for loggedInUID:",
+              loggedInUID
+            );
+            // Handle the case where no matching banks are found
+          }
         } else {
-          setItemNameError("");
+          console.error("Data doesn't exist in the 'Measurement' node.");
         }
-        break;
-      case "BrandCode":
-        if (value === "") {
-          setBrandCodeError("Brand Code is required");
-          // toast.error('Brand Code is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
+    const intervalId = setInterval(fetchData, 2000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId);
+  }, [db, loggedInUID]);
+
+  const handleMeasurementSelect = (selectedOption) => {
+    setSelectedMeasurement(selectedOption?.value);
+  };
+
+  // Select2 DropDown Brand Code
+
+  const [BrandCodeOptions, setBrandCodeOptions] = useState([]);
+
+  const [BrandCode, setBrandCode] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataRef = ref(db, "BrandCode");
+        const snapshot = await get(dataRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          debugger;
+          // Convert the data object into an array of options
+          const options = Object.keys(data).map((key) => ({
+            Id: key,
+            value: data[key].codeValue,
+            label: data[key].codeValue,
+            IsActive: data[key].isActive,
+            uid: data[key].uid,
+          }));
+
+          // console.log("All Banks:", options); // Log all banks before filtering
+
+          // Filter options based on loggedInUID
+          const userBanks = options.filter(
+            (bank) => bank.uid === loggedInUID && bank.IsActive === true
+          );
+          setBrandCode(userBanks);
+
+          // console.log("User Banks:", userBanks); // Log filtered banks
+
+          if (userBanks.length > 0) {
+            // Add the "Select Bank" option to the beginning of the array
+            setBrandCodeOptions([
+              {
+                value: "0",
+                label: "Select Brand Code",
+                disabled: true,
+                selected: true,
+              },
+              ...userBanks,
+            ]);
+          } else {
+            console.error(
+              "No matching Brand Code for loggedInUID:",
+              loggedInUID
+            );
+            // Handle the case where no matching banks are found
+          }
         } else {
-          setBrandCodeError("");
+          console.error("Data doesn't exist in the 'Brand Code' node.");
         }
-        break;
-      case "itemCost":
-        if (value.trim() === "") {
-          setItemCostError("Item Cost is required");
-          // toast.error('Item Cost is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
-        } else {
-          setItemCostError("");
-        }
-        break;
-      case "SellPrice":
-        if (value.trim() === "") {
-          setSellPriceError("Sell Price is required");
-          // toast.error('Sell Price is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
-        } else {
-          setSellPriceError("");
-        }
-        break;
-      case "itemQty":
-        if (value.trim() === "") {
-          setItemQtyError("Item Quantity is required");
-          // toast.error('Item Quantity is required', {
-          //   position: 'top-right',
-          //   autoClose: 2000,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: false,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: 'light',
-          // });
-        } else {
-          setItemQtyError("");
-        }
-        break;
-      default:
-        break;
-    }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
+    const intervalId = setInterval(fetchData, 2000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId);
+  }, [db, loggedInUID]);
+
+  const handleBrandCodeSelect = (selectedOption) => {
+    setSelectedBrandCode(selectedOption?.value);
   };
 
   // -------------------------Delete-----------------------------
@@ -594,14 +707,9 @@ function Product() {
                         className="form-control"
                         id="ItemName"
                         value={itemName}
-                        onBlur={() => handleInputBlur("ItemName", itemName)}
-                        onFocus={() => setItemNameError("")}
                         onChange={(e) => setItemName(e.target.value)}
                         placeholder="Enter Item Name"
                       />
-                      {ItemNameError && (
-                        <div style={{ color: "red" }}>{ItemNameError}</div>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -615,23 +723,33 @@ function Product() {
                       >
                         Brand Code <span style={{ color: "red" }}>*</span>
                       </label>
-                      <select
-                        className="form-select"
-                        value={brandCode}
-                        onBlur={() => handleInputBlur("BrandCode", brandCode)}
-                        onFocus={() => setBrandCodeError("")}
-                        onChange={(e) => setBrandCode(e.target.value)}
-                      >
-                        <option value="" selected disabled>
-                          Select One
-                        </option>
-                        <option value="Qarshi">Qarshi</option>
-                        <option value="Ajmal">Ajmal</option>
-                        <option value="Hamdard">Hamdard</option>
-                      </select>
-                      {BrandCodeError && (
-                        <div style={{ color: "red" }}>{BrandCodeError}</div>
-                      )}
+
+                      <Select
+                        id="brandCode"
+                        options={BrandCode}
+                        styles={{
+                          menu: (provided, state) => ({
+                            ...provided,
+                            overflowY: "auto", // Add scrollbar when needed
+                            maxHeight:
+                              state.selectProps.menuIsOpen &&
+                              BrandCode.length > 5
+                                ? "none"
+                                : "150px", // Set a maximum height when the menu is open and items are greater than 5
+                          }),
+                        }}
+                        value={
+                          Array.isArray(BrandCode)
+                            ? BrandCode.find(
+                                (option) => option.value === SelectedBrandCode
+                              )
+                            : null
+                        }
+                        isSearchable={true}
+                        placeholder="Select Brand Code"
+                        onChange={handleBrandCodeSelect}
+                      />
+                      <AddBrandCode />
                     </div>
                   </div>
                   <div className="col-md-6 col-sm-6 col-lg-6">
@@ -643,18 +761,34 @@ function Product() {
                       >
                         Measurement
                       </label>
-                      {/* <input type="password" class="form-control" id="exampleInputPassword1"/> */}
-                      <select
-                        className="form-select"
-                        value={measurement}
-                        onChange={(e) => setMeasurement(e.target.value)}
-                      >
-                        <option value="" disabled selected>
-                          Select One
-                        </option>
-                        <option value="kg">kg</option>
-                        <option value="gm">gm</option>
-                      </select>
+
+                      <Select
+                        id="measurement"
+                        options={Measurement}
+                        styles={{
+                          menu: (provided, state) => ({
+                            ...provided,
+                            overflowY: "auto", // Add scrollbar when needed
+                            maxHeight:
+                              state.selectProps.menuIsOpen &&
+                              Measurement.length > 5
+                                ? "none"
+                                : "150px", // Set a maximum height when the menu is open and items are greater than 5
+                          }),
+                        }}
+                        value={
+                          Array.isArray(Measurement)
+                            ? Measurement.find(
+                                (option) => option.value === SelectedMeasurement
+                              )
+                            : null
+                        }
+                        isSearchable={true}
+                        placeholder="Select Measurement"
+                        onChange={handleMeasurementSelect}
+                      />
+
+                      <AddMeasurment />
                     </div>
                   </div>
                 </div>
@@ -675,13 +809,8 @@ function Product() {
                         id="itemCost"
                         placeholder="Enter Item Cost"
                         value={itemCost}
-                        onBlur={() => handleInputBlur("itemCost", itemCost)}
-                        onFocus={() => setItemCostError("")}
                         onChange={(e) => setItemCost(e.target.value)}
                       />
-                      {itemCostError && (
-                        <div style={{ color: "red" }}>{itemCostError}</div>
-                      )}
                     </div>
                   </div>
                   <div className="col-md-6 col-sm-6 col-lg-6">
@@ -699,13 +828,8 @@ function Product() {
                         id="SellPrice"
                         placeholder="Enter Sell Price"
                         value={sellPrice}
-                        onBlur={() => handleInputBlur("SellPrice", sellPrice)}
-                        onFocus={() => setSellPriceError("")}
                         onChange={(e) => setSellPrice(e.target.value)}
                       />
-                      {SellPriceError && (
-                        <div style={{ color: "red" }}>{SellPriceError}</div>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -726,13 +850,8 @@ function Product() {
                         id="itemQty"
                         placeholder="Enter Quantity"
                         value={itemQty}
-                        onBlur={() => handleInputBlur("itemQty", itemQty)}
-                        onFocus={() => setItemQtyError("")}
                         onChange={(e) => setItemQty(e.target.value)}
                       />
-                      {itemQtyError && (
-                        <div style={{ color: "red" }}>{itemQtyError}</div>
-                      )}
                     </div>
                   </div>
                   <div className="col-md-6 col-sm-6 col-lg-6">

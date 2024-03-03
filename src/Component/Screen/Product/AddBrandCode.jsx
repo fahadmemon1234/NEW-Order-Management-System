@@ -8,7 +8,7 @@ import Modal from "react-bootstrap/Modal";
 
 //DataBase
 // ---------------------------------------------------
-import { ref, push } from "firebase/database";
+import { ref, push, get } from "firebase/database";
 import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
@@ -62,57 +62,91 @@ function AddBrandCode() {
     }
   };
 
-  const handleSaveChanges = () => {
-    if (Code) {
-      // Implement your save logic here
-      console.log("Changes saved!");
-
-      try {
-        const loggedInUID = localStorage.getItem("uid");
-        const CustomerRef = ref(db, `BrandCode`);
-        const newCustomer = {
-          uid: loggedInUID,
-          codeValue: Code,
-          isActive: IsActive,
-        };
-        push(CustomerRef, newCustomer);
-
-        // Show a success toast if the product is successfully added
-        toast.success(`Brand Code Added Successfully`, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-
-        setTimeout(() => {
-          handleClose();
-
-          setCode("");
-          setIsActive(false);
-        }, 2000);
-
-        // handleClose(); // Close the modal after successful insert
-      } catch (error) {
-        toast.error(`Brand Code Error adding: ` + error.message, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-
-        console.log(`Error adding Brand Code:`, error);
+  const checkExistingItem = async () => {
+    const productsRef = ref(db, "BrandCode");
+    const snapshot = await get(productsRef);
+    const existingProducts = snapshot.val();
+    for (const key in existingProducts) {
+      if (existingProducts[key].codeValue === Code) {
+        return true; // Item with the same name already exists
       }
-    } else {
-      handleInputBlur("code", Code);
+    }
+    return false; // Item with the same name does not exist
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      if (Code) {
+        const itemExists = await checkExistingItem();
+
+        if (itemExists) {
+          toast.error("Brand Code already exists.", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          // You can show an error message or handle the situation accordingly
+          return;
+        } else {
+          const loggedInUID = localStorage.getItem("uid");
+          const CustomerRef = ref(db, `BrandCode`);
+          const newCustomer = {
+            uid: loggedInUID,
+            codeValue: Code,
+            isActive: IsActive,
+          };
+          push(CustomerRef, newCustomer);
+
+          // Show a success toast if the product is successfully added
+          toast.success(`Brand Code Added Successfully`, {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+
+          setTimeout(() => {
+            handleClose();
+
+            setCode("");
+            setIsActive(false);
+          }, 2000);
+        }
+        // handleClose(); // Close the modal after successful insert
+      } else {
+        toast.error("Brand Code is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    } catch (error) {
+      toast.error(`Brand Code Error adding: ` + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      console.log(`Error adding Brand Code:`, error);
     }
   };
 
@@ -179,13 +213,8 @@ function AddBrandCode() {
                       id="Code"
                       placeholder="Enter Code Value"
                       value={Code}
-                      onBlur={() => handleInputBlur("code", Code)}
-                      onFocus={() => setCodeError("")}
                       onChange={(e) => setCode(e.target.value)}
                     />
-                    {CodeError && (
-                      <div style={{ color: "red" }}>{CodeError}</div>
-                    )}
                   </div>
                 </div>
 

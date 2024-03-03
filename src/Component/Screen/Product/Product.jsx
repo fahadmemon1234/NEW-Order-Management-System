@@ -150,7 +150,9 @@ function Product() {
     setEditedItem(item.id);
     setItemName(item.itemName);
     setBrandCode(item.brandCode);
+    setSelectedBrandCode(item.brandCode);
     setMeasurement(item.measurement);
+    setSelectedMeasurement(item.measurement);
     setSellPrice(item.sellPrice);
     setDescription(item.description);
     setItemCost(item.itemCost);

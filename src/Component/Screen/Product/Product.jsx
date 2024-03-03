@@ -160,20 +160,6 @@ function Product() {
     setShow(true);
   };
 
-  const checkExistingItem = async () => {
-    const productsRef = ref(db, "Product");
-    const snapshot = await get(productsRef);
-    const existingProducts = snapshot.val();
-    console.log("existingProducts:", existingProducts); // Add this line to check existingProducts
-    console.log("itemName:", itemName); // Add this line to check itemName
-    for (const key in existingProducts) {
-      if (existingProducts[key].itemName === itemName) {
-        return true; // Item with the same name already exists
-      }
-    }
-    return false; // Item with the same name does not exist
-  };
-
   const [SelectedBrandCode, setSelectedBrandCode] = useState("");
   const [SelectedMeasurement, setSelectedMeasurement] = useState("");
 
@@ -186,58 +172,41 @@ function Product() {
         // Implement your save logic here
         console.log("Changes saved!");
 
-        const itemExists = await checkExistingItem();
+        const loggedInUID = localStorage.getItem("uid");
+        // Construct the updated product object
+        const updatedProduct = {
+          uid: loggedInUID,
+          itemName: itemName,
+          brandCode: SelectedBrandCode,
+          measurement: SelectedMeasurement,
+          itemCost: itemCost,
+          sellPrice: sellPrice,
+          itemQty: itemQty,
+          total: totalAmount,
+          description: description,
+          // Add other properties as needed
+        };
 
-        if (itemExists) {
-          toast.error("This item already exists.", {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-          // You can show an error message or handle the situation accordingly
-          return;
-        } else {
-          const loggedInUID = localStorage.getItem("uid");
-          // Construct the updated product object
-          const updatedProduct = {
-            uid: loggedInUID,
-            itemName: itemName,
-            brandCode: SelectedBrandCode,
-            measurement: SelectedMeasurement,
-            itemCost: itemCost,
-            sellPrice: sellPrice,
-            itemQty: itemQty,
-            total: totalAmount,
-            description: description,
-            // Add other properties as needed
-          };
+        // Update the product data in Firebase
+        const productRef = ref(db, `Product/${editedItem}`);
+        await update(productRef, updatedProduct);
 
-          // Update the product data in Firebase
-          const productRef = ref(db, `Product/${editedItem}`);
-          await update(productRef, updatedProduct);
+        // Show a success toast if the product is successfully added
+        toast.success("Product Edit Successfully", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
 
-          // Show a success toast if the product is successfully added
-          toast.success("Product Edit Successfully", {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-
-          // Close the modal
-          setTimeout(() => {
-            handleClose();
-          }, 2000);
-        }
+        // Close the modal
+        setTimeout(() => {
+          handleClose();
+        }, 2000);
       } else if (!itemName) {
         toast.error("Item Name is required", {
           position: "top-right",

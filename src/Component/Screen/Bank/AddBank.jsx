@@ -8,7 +8,7 @@ import Modal from "react-bootstrap/Modal";
 
 //DataBase
 // ---------------------------------------------------
-import { ref, push } from "firebase/database";
+import { ref, push, get } from "firebase/database";
 import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
@@ -40,12 +40,9 @@ function AddBank() {
   };
 
   const [BankName, setBankName] = useState("");
-  const [BankNameError, setBankNameError] = useState("");
   const [BankTitle, setBankTitle] = useState("");
   const [OpeningBalance, setOpeningBalance] = useState("");
-  const [OpeningBalanceError, setOpeningBalanceError] = useState("");
   const [OpeningBalanceDate, setOpeningBalanceDate] = useState("");
-  const [OpeningBalanceDateError, setOpeningBalanceDateError] = useState("");
   const [BankAccountNo, setBankAccountNo] = useState("");
   const [BankAddress, setBankAddress] = useState("");
   const [BranchName, setBranchName] = useState("");
@@ -60,84 +57,26 @@ function AddBank() {
     return newId;
   };
 
-  const handleSaveChanges = () => {
-    if (BankName && OpeningBalance && OpeningBalanceDate) {
-      // Implement your save logic here
-      console.log("Changes saved!");
-
-      try {
-        const loggedInUID = localStorage.getItem("uid");
-        const openingBalanceNumeric = parseFloat(OpeningBalance);
-
-        const BankRef = ref(db, "Bank");
-        const newAutoId = generateId();
-        const newBank = {
-          uid: loggedInUID,
-          bankId: newAutoId,
-          bankName: BankName,
-          bankTitle: BankTitle,
-          openingBalance: openingBalanceNumeric,
-          openingBalanceDate: OpeningBalanceDate,
-          bankAccountNumber: BankAccountNo,
-          bankAddress: BankAddress,
-          branchName: BranchName,
-        };
-        push(BankRef, newBank);
-
-        // Show a success toast if the product is successfully added
-        toast.success("Bank Added Successfully", {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-
-        setTimeout(() => {
-          handleClose();
-
-          setBankName("");
-          setBankTitle("");
-          setOpeningBalance("");
-          setOpeningBalanceDate("");
-          setBankAddress("");
-          setBankAccountNo("");
-          setBranchName("");
-        }, 2000);
-
-        // handleClose(); // Close the modal after successful insert
-      } catch (error) {
-        toast.error("Error adding Bank: " + error.message, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-
-        console.log("Error adding Bank:", error);
+  const checkExistingItem = async () => {
+    const productsRef = ref(db, "Bank");
+    const snapshot = await get(productsRef);
+    const existingProducts = snapshot.val();
+    for (const key in existingProducts) {
+      if (existingProducts[key].bankName === BankName) {
+        return true; // Item with the same name already exists
       }
-    } else {
-      handleInputBlur("bankName", BankName);
-      handleInputBlur("openingBalance", OpeningBalance);
-      handleInputBlur("openingBalanceDate", OpeningBalanceDate);
     }
+    return false; // Item with the same name does not exist
   };
 
-  const handleInputBlur = (field, value) => {
-    switch (field) {
-      case "bankName":
-        if (value.trim() === "") {
-          // setBankNameError("Bank Name is required");
-          toast.error("Bank Name is required", {
+  const handleSaveChanges = async () => {
+    try {
+      if (BankName && OpeningBalance && OpeningBalanceDate) {
+        const itemExists = await checkExistingItem();
+        if (itemExists) {
+          toast.error("Bank already exists.", {
             position: "top-right",
-            autoClose: 2000,
+            autoClose: 1000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: false,
@@ -146,15 +85,28 @@ function AddBank() {
             theme: "colored",
           });
         } else {
-          setBankNameError("");
-        }
-        break;
-      case "openingBalance":
-        if (value.trim() === "") {
-          // setOpeningBalanceError("Opening Balance is required");
-          toast.error("Opening Balance is required", {
+          const loggedInUID = localStorage.getItem("uid");
+          const openingBalanceNumeric = parseFloat(OpeningBalance);
+
+          const BankRef = ref(db, "Bank");
+          const newAutoId = generateId();
+          const newBank = {
+            uid: loggedInUID,
+            bankId: newAutoId,
+            bankName: BankName,
+            bankTitle: BankTitle,
+            openingBalance: openingBalanceNumeric,
+            openingBalanceDate: OpeningBalanceDate,
+            bankAccountNumber: BankAccountNo,
+            bankAddress: BankAddress,
+            branchName: BranchName,
+          };
+          push(BankRef, newBank);
+
+          // Show a success toast if the product is successfully added
+          toast.success("Bank Added Successfully", {
             position: "top-right",
-            autoClose: 2000,
+            autoClose: 1000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: false,
@@ -162,29 +114,78 @@ function AddBank() {
             progress: undefined,
             theme: "colored",
           });
-        } else {
-          setOpeningBalanceError("");
+
+          setTimeout(() => {
+            handleClose();
+
+            setBankName("");
+            setBankTitle("");
+            setOpeningBalance("");
+            setOpeningBalanceDate("");
+            setBankAddress("");
+            setBankAccountNo("");
+            setBranchName("");
+          }, 2000);
         }
-        break;
-      case "openingBalanceDate":
-        if (value.trim() === "") {
-          // setOpeningBalanceDateError("Opening Balance Date is required");
-          toast.error("Opening Balance Date is required", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-        } else {
-          setOpeningBalanceDateError("");
-        }
-        break;
-      default:
-        break;
+        // handleClose(); // Close the modal after successful insert
+      } else if (!BankName) {
+        toast.error("Bank Name is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (!OpeningBalance) {
+        toast.error("Opening Balance is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (!OpeningBalanceDate) {
+        toast.error("Opening Balance Date is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else {
+        toast.error("Unexpected error occurred", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    } catch (error) {
+      toast.error("Error adding Bank: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      console.log("Error adding Bank:", error);
     }
   };
 
@@ -242,13 +243,8 @@ function AddBank() {
                       id="BankName"
                       placeholder="Enter Bank Name"
                       value={BankName}
-                      onBlur={() => handleInputBlur("bankName", BankName)}
-                      onFocus={() => setBankNameError("")}
                       onChange={(e) => setBankName(e.target.value)}
                     />
-                    {BankNameError && (
-                      <div style={{ color: "red" }}>{BankNameError}</div>
-                    )}
                   </div>
                 </div>
 
@@ -335,15 +331,8 @@ function AddBank() {
                       id="OpeningBalance"
                       placeholder="Enter Opening Balance"
                       value={OpeningBalance}
-                      onBlur={() =>
-                        handleInputBlur("openingBalance", OpeningBalance)
-                      }
-                      onFocus={() => setOpeningBalanceError("")}
                       onChange={(e) => setOpeningBalance(e.target.value)}
                     />
-                    {OpeningBalanceError && (
-                      <div style={{ color: "red" }}>{OpeningBalanceError}</div>
-                    )}
                   </div>
                 </div>
 
@@ -364,20 +353,8 @@ function AddBank() {
                       id="OpeningBalanceDate"
                       placeholder="Enter Opening Balance Date"
                       value={OpeningBalanceDate}
-                      onBlur={() =>
-                        handleInputBlur(
-                          "openingBalanceDate",
-                          OpeningBalanceDate
-                        )
-                      }
-                      onFocus={() => setOpeningBalanceDateError("")}
                       onChange={(e) => setOpeningBalanceDate(e.target.value)}
                     />
-                    {OpeningBalanceDateError && (
-                      <div style={{ color: "red" }}>
-                        {OpeningBalanceDateError}
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

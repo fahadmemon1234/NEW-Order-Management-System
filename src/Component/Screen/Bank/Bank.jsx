@@ -151,10 +151,8 @@ function Banks() {
 
   const handleSaveChanges = async () => {
     debugger;
-    if (BankName && OpeningBalance && OpeningBalanceDate) {
-      // Implement your save logic here
-      console.log("Changes saved!");
-      try {
+    try {
+      if (BankName && OpeningBalance && OpeningBalanceDate) {
         const openingBalanceNumeric = parseFloat(OpeningBalance);
         const loggedInUID = localStorage.getItem("uid");
         const newAutoId = generateId();
@@ -193,11 +191,43 @@ function Banks() {
         setTimeout(() => {
           handleClose();
         }, 2000);
-      } catch (error) {
-        console.error("Error updating data:", error);
-        toast.error("Error adding Bank: " + error.message, {
+      } else if (!BankName) {
+        toast.error("Bank Name is required", {
           position: "top-right",
-          autoClose: 1000,
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (!OpeningBalance) {
+        toast.error("Opening Balance is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (!OpeningBalanceDate) {
+        toast.error("Opening Balance Date is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else {
+        toast.error("Unexpected error occurred", {
+          position: "top-right",
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: false,
@@ -206,68 +236,18 @@ function Banks() {
           theme: "colored",
         });
       }
-    } else {
-      handleInputBlur("bankName", BankName);
-      handleInputBlur("openingBalance", OpeningBalance);
-      handleInputBlur("openingBalanceDate", OpeningBalanceDate);
-    }
-  };
-
-  const handleInputBlur = (field, value) => {
-    switch (field) {
-      case "bankName":
-        if (value.trim() === "") {
-          // setBankNameError("Bank Name is required");
-          toast.error("Bank Name is required", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-        } else {
-          setBankNameError("");
-        }
-        break;
-      case "openingBalance":
-        if (value.trim() === "") {
-          // setOpeningBalanceError("Opening Balance is required");
-          toast.error("Opening Balance is required", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-        } else {
-          setOpeningBalanceError("");
-        }
-        break;
-      case "openingBalanceDate":
-        if (value.trim() === "") {
-          // setOpeningBalanceDateError("Opening Balance Date is required");
-          toast.error("Opening Balance Date is required", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-        } else {
-          setOpeningBalanceDateError("");
-        }
-        break;
-      default:
-        break;
+    } catch (error) {
+      console.error("Error updating data:", error);
+      toast.error("Error adding Bank: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
 
@@ -533,13 +513,8 @@ function Banks() {
                         id="BankName"
                         placeholder="Enter Bank Name"
                         value={BankName}
-                        onBlur={() => handleInputBlur("bankName", BankName)}
-                        onFocus={() => setBankNameError("")}
                         onChange={(e) => setBankName(e.target.value)}
                       />
-                      {BankNameError && (
-                        <div style={{ color: "red" }}>{BankNameError}</div>
-                      )}
                     </div>
                   </div>
 
@@ -626,17 +601,8 @@ function Banks() {
                         id="OpeningBalance"
                         placeholder="Enter Opening Balance"
                         value={OpeningBalance}
-                        onBlur={() =>
-                          handleInputBlur("openingBalance", OpeningBalance)
-                        }
-                        onFocus={() => setOpeningBalanceError("")}
                         onChange={(e) => setOpeningBalance(e.target.value)}
                       />
-                      {OpeningBalanceError && (
-                        <div style={{ color: "red" }}>
-                          {OpeningBalanceError}
-                        </div>
-                      )}
                     </div>
                   </div>
 
@@ -657,20 +623,8 @@ function Banks() {
                         id="OpeningBalanceDate"
                         placeholder="Enter Opening Balance Date"
                         value={OpeningBalanceDate}
-                        onBlur={() =>
-                          handleInputBlur(
-                            "openingBalanceDate",
-                            OpeningBalanceDate
-                          )
-                        }
-                        onFocus={() => setOpeningBalanceDateError("")}
                         onChange={(e) => setOpeningBalanceDate(e.target.value)}
                       />
-                      {OpeningBalanceDateError && (
-                        <div style={{ color: "red" }}>
-                          {OpeningBalanceDateError}
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>

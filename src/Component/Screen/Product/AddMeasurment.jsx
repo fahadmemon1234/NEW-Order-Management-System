@@ -8,7 +8,7 @@ import Modal from "react-bootstrap/Modal";
 
 //DataBase
 // ---------------------------------------------------
-import { ref, push } from "firebase/database";
+import { ref, push, get } from "firebase/database";
 import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
@@ -38,12 +38,25 @@ function AddMeasurment() {
     setShow(true); // Store the editing item's ID in state
   };
 
-  const handleInputBlur = (field, value) => {
-    switch (field) {
-      case "code":
-        if (value.trim() === "") {
-          // setCodeTypeError("CodeType is required");
-          toast.error(`Measurement is required`, {
+  const checkExistingItem = async () => {
+    const productsRef = ref(db, "Measurement");
+    const snapshot = await get(productsRef);
+    const existingProducts = snapshot.val();
+    for (const key in existingProducts) {
+      if (existingProducts[key].codeValue === Code) {
+        return true; // Item with the same name already exists
+      }
+    }
+    return false; // Item with the same name does not exist
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      if (Code) {
+        const itemExists = await checkExistingItem();
+
+        if (itemExists) {
+          toast.error(`Measurement is already exists.`, {
             position: "top-right",
             autoClose: 1000,
             hideProgressBar: false,
@@ -54,33 +67,38 @@ function AddMeasurment() {
             theme: "colored",
           });
         } else {
-          setCodeError("");
+          const loggedInUID = localStorage.getItem("uid");
+          const CustomerRef = ref(db, `Measurement`);
+          const newCustomer = {
+            uid: loggedInUID,
+            codeValue: Code,
+            isActive: IsActive,
+          };
+          push(CustomerRef, newCustomer);
+
+          // Show a success toast if the product is successfully added
+          toast.success(`Measurement Added Successfully`, {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+
+          setTimeout(() => {
+            handleClose();
+
+            setCode("");
+            setIsActive(false);
+          }, 2000);
         }
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleSaveChanges = () => {
-    if (Code) {
-      // Implement your save logic here
-      console.log("Changes saved!");
-
-      try {
-        const loggedInUID = localStorage.getItem("uid");
-        const CustomerRef = ref(db, `Measurement`);
-        const newCustomer = {
-          uid: loggedInUID,
-          codeValue: Code,
-          isActive: IsActive,
-        };
-        push(CustomerRef, newCustomer);
-
-        // Show a success toast if the product is successfully added
-        toast.success(`Measurement Added Successfully`, {
+      } else {
+        toast.error("Measurment is required", {
           position: "top-right",
-          autoClose: 1000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: false,
@@ -88,31 +106,20 @@ function AddMeasurment() {
           progress: undefined,
           theme: "colored",
         });
-
-        setTimeout(() => {
-          handleClose();
-
-          setCode("");
-          setIsActive(false);
-        }, 2000);
-
-        // handleClose(); // Close the modal after successful insert
-      } catch (error) {
-        toast.error(`Measurement Error adding: ` + error.message, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-
-        console.log(`Error adding Measurement:`, error);
       }
-    } else {
-      handleInputBlur("code", Code);
+    } catch (error) {
+      toast.error(`Measurement Error adding: ` + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      console.log(`Error adding Measurement:`, error);
     }
   };
 
@@ -130,15 +137,6 @@ function AddMeasurment() {
         pauseOnHover
         theme="colored"
       />
-
-      {/* <button
-        className="btn btn-primary"
-        type="button"
-        onClick={handleShow}
-        style={{ float: "right" }}d
-      >
-        Add Measurement
-      </button> */}
 
       <a
         href="#"
@@ -179,13 +177,8 @@ function AddMeasurment() {
                       id="Code"
                       placeholder="Enter Code Value"
                       value={Code}
-                      onBlur={() => handleInputBlur("code", Code)}
-                      onFocus={() => setCodeError("")}
                       onChange={(e) => setCode(e.target.value)}
                     />
-                    {CodeError && (
-                      <div style={{ color: "red" }}>{CodeError}</div>
-                    )}
                   </div>
                 </div>
 

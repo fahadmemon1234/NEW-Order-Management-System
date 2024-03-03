@@ -38,30 +38,6 @@ function AddBrandCode() {
     setShow(true); // Store the editing item's ID in state
   };
 
-  const handleInputBlur = (field, value) => {
-    switch (field) {
-      case "code":
-        if (value.trim() === "") {
-          // setCodeTypeError("CodeType is required");
-          toast.error(`Brand Code is required`, {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-        } else {
-          setCodeError("");
-        }
-        break;
-      default:
-        break;
-    }
-  };
-
   const checkExistingItem = async () => {
     const productsRef = ref(db, "BrandCode");
     const snapshot = await get(productsRef);

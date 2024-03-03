@@ -138,6 +138,7 @@ const SaleOrder = ({ setPrintContent }) => {
 
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
 
+  // --------------Reciept Print-------------------------
   const openPrintWindow = (item) => {
     debugger;
 
@@ -159,6 +160,61 @@ const SaleOrder = ({ setPrintContent }) => {
       printWindow.print();
     };
   };
+
+
+
+  // ------------Invoice Print---------------------------------
+
+  // const printCard = () => {
+  //   const printButton = document.getElementById("printButton");
+  //   const headButton = document.getElementById("head");
+  //   printButton.style.display = "none";
+  //   headButton.style.display = "none";
+
+  //   // Specify styles for A4 paper size and margins
+  //   const style = `
+  //     @page {
+  //       size: A4;
+  //       margin: 0;
+  //     }
+  //     @media print {
+  //       body {
+  //         margin: 0;
+  //         padding: 0;
+          
+       
+  //       }
+  //       .card {
+  //         margin: 0;
+  //         padding: 0;
+  //       }
+  //     }
+  //   `;
+
+  //   // Create a style element and append it to the document head
+  //   const styleElement = document.createElement("style");
+  //   styleElement.innerHTML = style;
+  //   document.head.appendChild(styleElement);
+
+  //   // Print the invoice card
+  //   window.print();
+
+  //   // Remove the style element after printing is done
+  //   styleElement.remove();
+
+  //   // Show the print button after printing is done (you may want to delay this)
+  //   printButton.style.display = "block";
+  // };
+
+const openPrintInvoice = () =>{
+  const printWindow = window.open("/Invoice", "_blank");
+
+  // Ensure the window has loaded before triggering print
+  printWindow.onload = () => {
+    printWindow.print();
+  };
+}
+
 
   // ------------------Edit---------------------------------
 
@@ -462,7 +518,7 @@ const SaleOrder = ({ setPrintContent }) => {
                                       <button
                                         type="button"
                                         className="btn btn-success"
-                                        onClick={() => alert("Sale Order")}
+                                        onClick={() => openPrintInvoice()}
                                       >
                                         Print Order
                                       </button>

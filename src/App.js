@@ -16,6 +16,7 @@ import Deliever from "./Component/Screen/SaleOrder/DelieverySaleOrder";
 import SaleInvoice from "./Component/Screen/SaleInvoice/SaleInvoice";
 import SaleReturn from "./Component/Screen/SaleReturn/SaleReturn";
 import Invoice from "./Component/Screen/SaleOrder/Invoice";
+import CustomerPayment from "./Component/Screen/CustomerPayment/CustomerPayment";
 
 function App() {
   const userLoggedIn = localStorage.getItem("userlogin") === "true";
@@ -111,6 +112,11 @@ function App() {
         <Route
           path="/SaleReturn"
           element={userLoggedIn ? <SaleReturn /> : <Navigate to="/" />}
+        />
+
+        <Route
+          path="/CustomerPayment"
+          element={userLoggedIn ? <CustomerPayment /> : <Navigate to="/" />}
         />
 
         {/* ----------Manage--------------------------- */}

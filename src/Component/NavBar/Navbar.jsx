@@ -359,7 +359,8 @@ const Main = ({ children }) => {
                         location.pathname === "/SaleOrder" ||
                         location.pathname === "/AddSaleOrder" ||
                         location.pathname === "/SaleInvoice" ||
-                        location.pathname === "/SaleReturn"
+                        location.pathname === "/SaleReturn" ||
+                        location.pathname === "/CustomerPayment"
                           ? ""
                           : "collapse"
                       }`}
@@ -423,6 +424,20 @@ const Main = ({ children }) => {
                           <div className="d-flex align-items-center">
                             <span className="nav-link-text ps-1">
                               Sale Return
+                            </span>
+                          </div>
+                        </Link>{" "}
+                      </li>
+                      <li className="nav-item">
+                      <Link
+                          className={`nav-link ${
+                            location.pathname === "/CustomerPayment" ? "active" : ""
+                          }`}
+                          to="/CustomerPayment"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                            Customer Payment
                             </span>
                           </div>
                         </Link>{" "}

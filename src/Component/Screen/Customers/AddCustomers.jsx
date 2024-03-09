@@ -60,73 +60,15 @@ function AddCustomers() {
     setShow(true); // Store the editing item's ID in state
   };
 
-  const handleInputBlur = (field, value) => {
-    switch (field) {
-      case "customerName":
-        if (value.trim() === "") {
-          // setCustomerNameError("Customer Name is required");
-          toast.error("Customer Name is required", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-        } else {
-          setCustomerNameError("");
-        }
-        break;
-      case "fullName":
-        if (value.trim() === "") {
-          // setFullNameError("Full Name is required");
-          toast.error("Full Name is required", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-        } else {
-          setFullNameError("");
-        }
-        break;
-      case "phoneNo":
-        if (value.trim() === "") {
-          // setPhoneNoError("Phone No is required");
-          toast.error("Phone No is required", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-        } else {
-          setPhoneNoError("");
-        }
-        break;
-      default:
-        break;
-    }
-  };
-
   const handleSaveChanges = () => {
-    if (CustomerName && FullName && PhoneNo) {
-      // Implement your save logic here
-      console.log("Changes saved!");
+    try {
+      if (CustomerName && FullName && PhoneNo) {
+        // Implement your save logic here
+        console.log("Changes saved!");
 
-      const randomNumber = Math.floor(Math.random() * 100000); // Example: Generate a random number
-      setCode(randomNumber.toString());
+        const randomNumber = Math.floor(Math.random() * 100000); // Example: Generate a random number
+        setCode(randomNumber.toString());
 
-      try {
         const loggedInUID = localStorage.getItem("uid");
         const CustomerRef = ref(db, "Customer");
         const newCustomer = {
@@ -172,10 +114,10 @@ function AddCustomers() {
         }, 2000);
 
         // handleClose(); // Close the modal after successful insert
-      } catch (error) {
-        toast.error("Error adding Customer: " + error.message, {
+      } else if (!CustomerName) {
+        toast.error("Customer Name is required", {
           position: "top-right",
-          autoClose: 1000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: false,
@@ -183,13 +125,42 @@ function AddCustomers() {
           progress: undefined,
           theme: "colored",
         });
-
-        console.log("Error adding Customer:", error);
+      } else if (!FullName) {
+        toast.error("Full Name is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (!PhoneNo) {
+        toast.error("Phone No is required", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       }
-    } else {
-      handleInputBlur("customerName", CustomerName);
-      handleInputBlur("fullName", FullName);
-      handleInputBlur("phoneNo", PhoneNo);
+    } catch (error) {
+      toast.error("Error adding Customer: " + error.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      console.log("Error adding Customer:", error);
     }
   };
 
@@ -268,15 +239,8 @@ function AddCustomers() {
                       id="CustomerName"
                       placeholder="Enter Customer Name"
                       value={CustomerName}
-                      onBlur={() =>
-                        handleInputBlur("customerName", CustomerName)
-                      }
-                      onFocus={() => setCustomerNameError("")}
                       onChange={(e) => setCustomerName(e.target.value)}
                     />
-                    {CustomerNameError && (
-                      <div style={{ color: "red" }}>{CustomerNameError}</div>
-                    )}
                   </div>
                 </div>
               </div>
@@ -298,13 +262,8 @@ function AddCustomers() {
                       id="FullName"
                       placeholder="Enter Full Name"
                       value={FullName}
-                      onBlur={() => handleInputBlur("fullName", FullName)}
-                      onFocus={() => setFullNameError("")}
                       onChange={(e) => setFullName(e.target.value)}
                     />
-                    {FullNameError && (
-                      <div style={{ color: "red" }}>{FullNameError}</div>
-                    )}
                   </div>
                 </div>
 
@@ -317,17 +276,6 @@ function AddCustomers() {
                     >
                       Phone No <span style={{ color: "red" }}>*</span>
                     </label>
-                    {/* <input
-                      type="number"
-                      className="form-control"
-                      name="PhoneNo"
-                      id="PhoneNo"
-                      placeholder="Enter Phone No"
-                      value={PhoneNo}
-                      onBlur={() => handleInputBlur('phoneNo', PhoneNo)}
-                      onFocus={() => setPhoneNoError('')}
-                      onChange={e => setPhoneNo(e.target.value)}
-                    /> */}
 
                     <InputMask
                       value={PhoneNo}
@@ -337,13 +285,7 @@ function AddCustomers() {
                       onChange={(e) => setPhoneNo(e.target.value)}
                       mask="999-9999999"
                       placeholder="+92 999-9999999"
-                      onBlur={() => handleInputBlur("phoneNo", PhoneNo)}
-                      onFocus={() => setPhoneNoError("")}
                     />
-
-                    {PhoneNoError && (
-                      <div style={{ color: "red" }}>{PhoneNoError}</div>
-                    )}
                   </div>
                 </div>
               </div>

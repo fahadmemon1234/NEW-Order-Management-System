@@ -465,6 +465,25 @@ function Product() {
     setShowOK(false);
   };
 
+  // Search
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  // Filter items based on search query
+  const filteredItems = visibleItems.filter(
+    (item) =>
+      item.itemName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.itemQty.toString().includes(searchQuery) ||
+      item.brandCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.measurement.toString().includes(searchQuery.toLowerCase())
+  );
+
+  
+
   return (
     <>
       <Main>
@@ -516,6 +535,8 @@ function Product() {
                       placeholder="Search"
                       aria-label="Search"
                       aria-describedby="search-addon"
+                      value={searchQuery}
+                      onChange={handleSearch}
                     />
                   </div>
                 </div>
@@ -568,7 +589,7 @@ function Product() {
                         </tr>
                       </thead>
                       <tbody className="list">
-                        {visibleItems.slice(0, rowsToShow).map((item) => (
+                        {filteredItems.slice(0, rowsToShow).map((item) => (
                           <tr key={item.id}>
                             <td>
                               <div style={{ display: "flex" }}>

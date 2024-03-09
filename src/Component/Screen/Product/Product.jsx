@@ -29,6 +29,7 @@ import { db } from "../../Config/firebase";
 import "../../../assets/Css/Model.css";
 // ----------------------------------------------------
 
+
 //Notify
 // ---------------------------------------------------
 import { toast, ToastContainer } from "react-toastify";
@@ -508,10 +509,10 @@ function Product() {
   );
 
   
-
   return (
     <>
       <Main>
+
         <ToastContainer
           position="top-right"
           autoClose={5000}

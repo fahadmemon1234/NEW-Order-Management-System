@@ -29,11 +29,8 @@ function AddCustomers() {
   const [code, setCode] = useState(randomNumber);
 
   const [CustomerName, setCustomerName] = useState("");
-  const [CustomerNameError, setCustomerNameError] = useState("");
   const [FullName, setFullName] = useState("");
-  const [FullNameError, setFullNameError] = useState("");
   const [PhoneNo, setPhoneNo] = useState("");
-  const [PhoneNoError, setPhoneNoError] = useState("");
   const [Email, setEmail] = useState("");
   const [AddressLine1, setAddressLine1] = useState("");
   const [AddressLine2, setAddressLine2] = useState("");

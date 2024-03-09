@@ -360,7 +360,8 @@ const Main = ({ children }) => {
                         location.pathname === "/AddSaleOrder" ||
                         location.pathname === "/SaleInvoice" ||
                         location.pathname === "/SaleReturn" ||
-                        location.pathname === "/CustomerPayment"
+                        location.pathname === "/CustomerPayment" ||
+                        location.pathname === "/CustomerChequeDetail"
                           ? ""
                           : "collapse"
                       }`}
@@ -441,9 +442,26 @@ const Main = ({ children }) => {
                             </span>
                           </div>
                         </Link>{" "}
+                        
+                      </li>
+
+                      <li className="nav-item">
+                      <Link
+                          className={`nav-link ${
+                            location.pathname === "/CustomerChequeDetail" ? "active" : ""
+                          }`}
+                          to="/CustomerChequeDetail"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                            Customer Cheque Detail
+                            </span>
+                          </div>
+                        </Link>{" "}
+                        
                       </li>
                     </ul>
-
+                    
                     {/* ---------------------------Manage----------------- */}
 
                     <a

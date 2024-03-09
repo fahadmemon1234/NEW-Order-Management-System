@@ -302,7 +302,7 @@ function AddProduct() {
 
   // Select2 DropDown Brand Code
 
-  const [BrandCodeOptions, setBrandCodeOptions] = useState([]);
+  const [, setBrandCodeOptions] = useState([]);
 
   const [BrandCode, setBrandCode] = useState([]);
 

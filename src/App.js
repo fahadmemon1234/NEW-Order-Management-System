@@ -17,6 +17,7 @@ import SaleInvoice from "./Component/Screen/SaleInvoice/SaleInvoice";
 import SaleReturn from "./Component/Screen/SaleReturn/SaleReturn";
 import Invoice from "./Component/Screen/SaleOrder/Invoice";
 import CustomerPayment from "./Component/Screen/CustomerPayment/CustomerPayment";
+import CustomerChequeDetail from "./Component/Screen/CustomerChequeDetail/CustomerChequeDetail";
 
 function App() {
   const userLoggedIn = localStorage.getItem("userlogin") === "true";
@@ -117,6 +118,13 @@ function App() {
         <Route
           path="/CustomerPayment"
           element={userLoggedIn ? <CustomerPayment /> : <Navigate to="/" />}
+        />
+
+        <Route
+          path="/CustomerChequeDetail"
+          element={
+            userLoggedIn ? <CustomerChequeDetail /> : <Navigate to="/" />
+          }
         />
 
         {/* ----------Manage--------------------------- */}

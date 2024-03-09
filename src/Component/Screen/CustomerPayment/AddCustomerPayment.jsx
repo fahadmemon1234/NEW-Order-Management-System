@@ -177,6 +177,157 @@ function AddCustomerPayment() {
   //     }
   //   };
 
+  // Select2 DropDown Brand Code
+  const loggedInUID = localStorage.getItem("uid");
+
+  const [SelectedCustomer, setSelectedCustomer] = useState("");
+
+  const [CustomerOptions, setCustomerOptions] = useState([]);
+
+  const [CustomerName, setCustomerName] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataRef = ref(db, "Customer");
+        const snapshot = await get(dataRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          debugger;
+          // Convert the data object into an array of options
+          const options = Object.keys(data).map((key) => ({
+            Id: key,
+            value: data[key].customerName,
+            label: data[key].customerName,
+            uid: data[key].uid,
+          }));
+
+          // console.log("All Banks:", options); // Log all banks before filtering
+
+          // Filter options based on loggedInUID
+          const userBanks = options.filter((bank) => bank.uid === loggedInUID);
+          setCustomerName(userBanks);
+
+          // console.log("User Banks:", userBanks); // Log filtered banks
+
+          if (userBanks.length > 0) {
+            // Add the "Select Bank" option to the beginning of the array
+            setCustomerOptions([
+              {
+                value: "0",
+                label: "Select Customer Name",
+                disabled: true,
+                selected: true,
+              },
+              ...userBanks,
+            ]);
+          } else {
+            console.error(
+              "No matching Customer Name for loggedInUID:",
+              loggedInUID
+            );
+            // Handle the case where no matching banks are found
+          }
+        } else {
+          console.error("Data doesn't exist in the 'Customer Name' node.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
+    const intervalId = setInterval(fetchData, 2000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId);
+  }, [db, loggedInUID]);
+
+  const handleCustomer = (selectedOption) => {
+    setSelectedCustomer(selectedOption?.value);
+  };
+
+  //  Show DropDown Bank DB
+  const [bankAmount, setBankAmount] = useState("Rs: 0"); // Initialize bankAmount state
+
+  const [BankID, setBankID] = useState("");
+  const [bankOptions, setBankOptions] = useState([]);
+  const [bank, setbank] = useState([]);
+  const [SelectedBank, setSelectedBank] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataRef = ref(db, "Bank");
+        const snapshot = await get(dataRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          debugger;
+          // Convert the data object into an array of options
+          const options = Object.keys(data).map((key) => ({
+            Id: key,
+            value: data[key].bankName,
+            label: data[key].bankName,
+            Balance: data[key].openingBalance,
+            uid: data[key].uid,
+          }));
+
+          // console.log("All Banks:", options); // Log all banks before filtering
+
+          // Filter options based on loggedInUID
+          const userBanks = options.filter((bank) => bank.uid === loggedInUID);
+          setbank(userBanks);
+
+          // console.log("User Banks:", userBanks); // Log filtered banks
+
+          if (userBanks.length > 0) {
+            // Add the "Select Bank" option to the beginning of the array
+            setBankOptions([
+              {
+                value: "0",
+                label: "Select Bank",
+                disabled: true,
+                selected: true,
+              },
+              ...userBanks,
+            ]);
+          } else {
+            console.error("No matching banks for loggedInUID:", loggedInUID);
+            // Handle the case where no matching banks are found
+          }
+        } else {
+          console.error("Data doesn't exist in the 'Bank' node.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
+    const intervalId = setInterval(fetchData, 2000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId);
+  }, [db, loggedInUID]);
+
+  const handleBankSelect = (selectedOption) => {
+    setSelectedBank(selectedOption?.value);
+    const selectedBankData = bankOptions.find(
+      (option) => option.value === selectedOption?.value
+    );
+    if (selectedBankData.Balance != undefined) {
+      var balanceString = selectedBankData.Balance;
+
+      // Extract the numeric part using parseInt
+      var balanceNumeric = parseFloat(balanceString);
+
+      setBankAmount(balanceNumeric);
+      setBankID(`${selectedBankData.Id}`);
+    } else if (selectedBankData.Balance == undefined) {
+      setBankAmount("Rs: 0");
+    }
+  };
+
   return (
     <>
       <ToastContainer
@@ -241,7 +392,20 @@ function AddCustomerPayment() {
                     <Select
                       id="CustomerName"
                       isSearchable={true}
+                      options={CustomerName}
+                      onChange={handleCustomer}
                       placeholder="Select Customer"
+                      styles={{
+                        menu: (provided, state) => ({
+                          ...provided,
+                          overflowY: "auto", // Add scrollbar when needed
+                          maxHeight:
+                            state.selectProps.menuIsOpen &&
+                            CustomerName.length > 5
+                              ? "none"
+                              : "150px", // Set a maximum height when the menu is open and items are greater than 5
+                        }),
+                      }}
                     />
                   </div>
                 </div>
@@ -298,10 +462,25 @@ function AddCustomerPayment() {
                           Bank <span style={{ color: "red" }}>*</span>
                         </label>
                         <Select
-                          id="Bank"
+                          id="BankName"
+                          options={bank}
+                          styles={{
+                            menu: (provided, state) => ({
+                              ...provided,
+                              overflowY: "auto", // Add scrollbar when needed
+                              maxHeight:
+                                state.selectProps.menuIsOpen && bank.length > 5
+                                  ? "none"
+                                  : "150px", // Set a maximum height when the menu is open and items are greater than 5
+                            }),
+                          }}
                           isSearchable={true}
                           placeholder="Select Bank"
+                          onChange={handleBankSelect}
                         />
+                        <h6 style={{ float: "right", paddingTop:'5px' }}>
+                          {`Rs: ` + bankAmount.toLocaleString()}
+                        </h6>
                       </div>
                     </div>
 

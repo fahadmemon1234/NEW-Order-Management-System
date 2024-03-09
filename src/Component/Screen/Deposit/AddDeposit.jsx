@@ -142,7 +142,7 @@ function AddDeposit() {
         push(DepositRef, newDeposit);
 
         // ----------------Edit Cash On Hand----------------
-        if (selectedPaymentType == "Cash") {
+        if (selectedPaymentType === "Cash") {
           // var ID = "-NfqYJMNFeYTGjIJ6Crc";
 
           const CashID = "-NoSkv0ysgg_X2lPpq-X";
@@ -445,7 +445,7 @@ function AddDeposit() {
     const selectedBankData = bankOptions.find(
       (option) => option.value === selectedOption?.value
     );
-    if (selectedBankData.Balance != undefined) {
+    if (selectedBankData.Balance !== undefined) {
       var balanceString = selectedBankData.Balance;
 
       // Extract the numeric part using parseInt
@@ -453,7 +453,7 @@ function AddDeposit() {
 
       setBankAmount(balanceNumeric);
       setBankID(`${selectedBankData.Id}`);
-    } else if (selectedBankData.Balance == undefined) {
+    } else if (selectedBankData.Balance === undefined) {
       setBankAmount("Rs: 0");
     }
   };

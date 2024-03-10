@@ -206,7 +206,21 @@ const SaleOrder = ({ setPrintContent }) => {
   //   printButton.style.display = "block";
   // };
 
-const openPrintInvoice = () =>{
+const openPrintInvoice = (item) =>{
+
+debugger;
+  localStorage.setItem("ID", item.id);
+  localStorage.setItem("Customer", item.customer);
+  localStorage.setItem("InvoiceDate", item.orderDate);
+  localStorage.setItem("Status", item.status);
+
+  localStorage.setItem("ItemName", item.itemName);
+  localStorage.setItem("Quantity", item.quantity);
+  localStorage.setItem("Price", item.salePrice);
+  localStorage.setItem("Total", item.totalPrice);
+
+  localStorage.setItem("TotalAmount", item.Payment);
+
   const printWindow = window.open("/Invoice", "_blank");
 
   // Ensure the window has loaded before triggering print
@@ -518,7 +532,7 @@ const openPrintInvoice = () =>{
                                       <button
                                         type="button"
                                         className="btn btn-success"
-                                        onClick={() => openPrintInvoice()}
+                                        onClick={() => openPrintInvoice(item)}
                                       >
                                         Print Order
                                       </button>
@@ -531,7 +545,7 @@ const openPrintInvoice = () =>{
                                       <button
                                         type="button"
                                         className="btn btn-success"
-                                        onClick={() => alert("Sale Order")}
+                                        onClick={() => openPrintInvoice(item)}
                                       >
                                         Print Order
                                       </button>

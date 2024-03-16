@@ -34,7 +34,10 @@ import { toast, ToastContainer } from "react-toastify";
 import "../../../assets/Css/Tostify.css";
 // ---------------------------------------------------
 
-function AddSaleOrder() {
+import { connect } from "react-redux";
+import { incrementId } from "./Redux/actions";
+
+function AddSaleOrder({ idCount, incrementId }) {
   const [AddItemSection, setAddItemSection] = useState(true);
 
   const [paymentMethod, setPaymentMethod] = useState("rdoCash");
@@ -49,6 +52,8 @@ function AddSaleOrder() {
   const [selectedCustomer, setSelectedCustomer] = useState("");
 
   const loggedInUID = localStorage.getItem("uid");
+
+  const [CustomerID, setCustomerID] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,6 +80,9 @@ function AddSaleOrder() {
               value: filteredData[key].customerName,
               label: filteredData[key].customerName,
             }));
+
+            setCustomerID(options[0].Id);
+            // console.log(options[0].Id);
 
             // Add the "Select Customer" option to the beginning of the array
             setCustomerName([
@@ -181,6 +189,7 @@ function AddSaleOrder() {
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
           uid: loggedInUID,
+          customerID: CustomerID,
           customer: selectedCustomer.value,
           orderDate: orderDate,
           status: "New",
@@ -207,6 +216,7 @@ function AddSaleOrder() {
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
           uid: loggedInUID,
+          customerID: CustomerID,
           customer: selectedCustomer.value,
           orderDate: orderDate,
           name: Name,
@@ -712,6 +722,9 @@ function AddSaleOrder() {
 
   const [AmountID, setAmountID] = useState("");
 
+  const [SellQty, setSellQty] = useState("");
+  const [SellStock, setSellStock] = useState("");
+
   const ID = localStorage.getItem("ID");
 
   const handleAddItem = async () => {
@@ -731,9 +744,11 @@ function AddSaleOrder() {
 
         setSelectedItem(0);
         setSalePrice("");
+        setSellStock("");
         setMeasurement("");
         setTotalPrice("");
         setTotalStock("");
+        setSellQty("");
         setStock("");
         setCostPrice("");
         setTotalPrice("");
@@ -788,6 +803,8 @@ function AddSaleOrder() {
           update(SaleOrdersRef, newSaleOrder);
 
           setAmountID(newAmountID);
+          setSellQty(Quantity);
+          setSellStock(Stock);
           setQuantity("");
           setMeasurement("");
           setProductID("");
@@ -846,7 +863,8 @@ function AddSaleOrder() {
           update(SaleOrdersRef, newSaleOrder);
 
           setAmountID(newAmountID);
-
+          setSellQty(Quantity);
+          setSellStock(Stock);
           setQuantity("");
           setMeasurement("");
           setSalePrice("");
@@ -905,7 +923,8 @@ function AddSaleOrder() {
           update(SaleOrdersRef, newSaleOrder);
 
           setAmountID(newAmountID);
-
+          setSellQty(Quantity);
+          setSellStock(Stock);
           setQuantity("");
           setMeasurement("");
           setSalePrice("");
@@ -1267,6 +1286,8 @@ function AddSaleOrder() {
         await update(productRef, updatedProduct);
       }
 
+      setSellQty(Quantity);
+      setSellStock(Stock);
       setQuantity("");
       setMeasurement("");
       setSalePrice("");
@@ -1315,30 +1336,90 @@ function AddSaleOrder() {
           uid: loggedInUID,
           status: "Order Delivered",
           Payment: payment,
+          InvoiceID: idCount,
+          quantity: SellQty.toString(),
+          totalStock: SellStock.toString(),
           paymentMethod: "rdoCash",
         };
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
+
+        const SaleInvoiceRef = ref(db, "SaleInvoice");
+        const newSaleInvoice = {
+          InvoiceID: idCount,
+          SaleID: orderId,
+          uid: loggedInUID,
+          customerID: CustomerID,
+          customer: CounterSale,
+          status: "Order Delivered",
+          orderDate: orderDate,
+          name: Name,
+          createdDate: formattedDate,
+          phoneNumber: PhoneNumber,
+          paymentMethod: "rdoCash",
+          Payment: payment,
+        };
+        push(SaleInvoiceRef, newSaleInvoice);
       } else if (paymentMethod === "rdoCredit") {
         const newSaleOrder = {
           uid: loggedInUID,
           status: "Order Delivered",
           Payment: payment,
+          InvoiceID: idCount,
+          quantity: SellQty.toString(),
+          totalStock: SellStock.toString(),
           paymentMethod: "rdoCredit",
         };
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
+
+        const SaleInvoiceRef = ref(db, "SaleInvoice");
+        const newSaleInvoice = {
+          InvoiceID: idCount,
+          SaleID: orderId,
+          uid: loggedInUID,
+          customerID: CustomerID,
+          customer: selectedCustomer.value,
+          orderDate: orderDate,
+          status: "Order Delivered",
+          createdDate: formattedDate,
+          salesMan: SalesMan,
+          paymentMethod: "rdoCredit",
+          Payment: payment,
+        };
+        push(SaleInvoiceRef, newSaleInvoice);
       } else {
         const newSaleOrder = {
           uid: loggedInUID,
           status: "Order Delivered",
           Payment: payment,
+          InvoiceID: idCount,
+          quantity: SellQty.toString(),
+          totalStock: SellStock.toString(),
           paymentMethod: "rdoCashCredit",
         };
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
+
+        const SaleInvoiceRef = ref(db, "SaleInvoice");
+        const newSaleInvoice = {
+          InvoiceID: idCount,
+          uid: loggedInUID,
+          SaleID: orderId,
+          customerID: CustomerID,
+          customer: selectedCustomer.value,
+          orderDate: orderDate,
+          name: Name,
+          status: "Order Delivered",
+          createdDate: formattedDate,
+          paymentMethod: "rdoCashCredit",
+          phoneNumber: PhoneNumber,
+          Payment: payment,
+        };
+        push(SaleInvoiceRef, newSaleInvoice);
       }
 
+      incrementId();
       setIsReadOnly(true);
       setIsDisabled(true);
 
@@ -1410,30 +1491,89 @@ function AddSaleOrder() {
           uid: loggedInUID,
           status: "New",
           Payment: payment,
+          InvoiceID: idCount,
+          quantity: SellQty.toString(),
+          totalStock: SellStock.toString(),
           paymentMethod: "rdoCash",
         };
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
+
+        const SaleInvoiceRef = ref(db, "SaleInvoice");
+        const newSaleInvoice = {
+          InvoiceID: idCount,
+          SaleID: orderId,
+          uid: loggedInUID,
+          customer: CounterSale,
+          status: "New",
+          orderDate: orderDate,
+          name: Name,
+          createdDate: formattedDate,
+          phoneNumber: PhoneNumber,
+          paymentMethod: "rdoCash",
+          Payment: payment,
+        };
+        push(SaleInvoiceRef, newSaleInvoice);
       } else if (paymentMethod === "rdoCredit") {
         const newSaleOrder = {
           uid: loggedInUID,
           status: "New",
           Payment: payment,
+          InvoiceID: idCount,
+          quantity: SellQty.toString(),
+          totalStock: SellStock.toString(),
           paymentMethod: "rdoCredit",
         };
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
+
+        const SaleInvoiceRef = ref(db, "SaleInvoice");
+        const newSaleInvoice = {
+          InvoiceID: idCount,
+          SaleID: orderId,
+          uid: loggedInUID,
+          customerID: CustomerID,
+          customer: selectedCustomer.value,
+          orderDate: orderDate,
+          status: "New",
+          createdDate: formattedDate,
+          salesMan: SalesMan,
+          paymentMethod: "rdoCredit",
+          Payment: payment,
+        };
+        push(SaleInvoiceRef, newSaleInvoice);
       } else {
         const newSaleOrder = {
           uid: loggedInUID,
           status: "New",
           Payment: payment,
+          InvoiceID: idCount,
+          quantity: SellQty.toString(),
+          totalStock: SellStock.toString(),
           paymentMethod: "rdoCashCredit",
         };
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
+
+        const SaleInvoiceRef = ref(db, "SaleInvoice");
+        const newSaleInvoice = {
+          InvoiceID: idCount,
+          SaleID: orderId,
+          uid: loggedInUID,
+          customerID: CustomerID,
+          customer: selectedCustomer.value,
+          orderDate: orderDate,
+          name: Name,
+          status: "New",
+          createdDate: formattedDate,
+          paymentMethod: "rdoCashCredit",
+          phoneNumber: PhoneNumber,
+          Payment: payment,
+        };
+        push(SaleInvoiceRef, newSaleInvoice);
       }
 
+      incrementId();
       setIsReadOnly(true);
       setIsDisabled(true);
 
@@ -1809,7 +1949,7 @@ function AddSaleOrder() {
                             }
                             isSearchable={true}
                           />
-                          
+
                           <AddCustModal />
                         </div>
 
@@ -2918,4 +3058,12 @@ function AddSaleOrder() {
   );
 }
 
-export default AddSaleOrder;
+const mapStateToProps = (state) => ({
+  idCount: state.idCount,
+});
+
+const mapDispatchToProps = {
+  incrementId,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddSaleOrder);

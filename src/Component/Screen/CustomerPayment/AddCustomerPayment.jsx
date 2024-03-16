@@ -26,6 +26,7 @@ import "../../../assets/Css/Model.css";
 
 function AddCustomerPayment() {
   const [show, setShow] = useState(false);
+  const loggedInUID = localStorage.getItem("uid");
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -177,14 +178,87 @@ function AddCustomerPayment() {
   //     }
   //   };
 
-  // Select2 DropDown Brand Code
-  const loggedInUID = localStorage.getItem("uid");
+  // Select2 DropDown Invoice No
+
+  const [SelectedInvoiceNo, setSelectedInvoiceNo] = useState("");
+
+  const [InvoiceNoOptions, setInvoiceNoOptions] = useState([]);
+
+  const [InvoiceNo, setInvoiceNo] = useState([]);
+  const [CustomerID, setCustomerID] = useState("");
+
+  const [CustomerName, setCustomerName] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataRef = ref(db, "SaleInvoice");
+        const snapshot = await get(dataRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          // Convert the data object into an array of options
+          const options = Object.keys(data).map((key) => ({
+            Id: key,
+            value: "InvoiceNo# " + data[key].InvoiceID,
+            label: "InvoiceNo# " + data[key].InvoiceID,
+            customerID: data[key].customerID,
+            uid: data[key].uid,
+          }));
+
+          // console.log("All Banks:", options); // Log all banks before filtering
+
+          // Filter options based on loggedInUID
+          const userBanks = options.filter(
+            (bank) => bank.uid === loggedInUID && bank.customerID === CustomerID
+          );
+          // setInvoiceNo(userBanks);
+
+          setInvoiceNo(userBanks);
+
+          // setInvoiceNo(userBanks);
+
+          // console.log(userBanks[0].customerID);
+          // console.log("User Banks:", userBanks); // Log filtered banks
+
+          if (userBanks.length > 0) {
+            // Add the "Select Bank" option to the beginning of the array
+            setInvoiceNoOptions([
+              {
+                value: "0",
+                label: "Select One",
+                disabled: true,
+                selected: true,
+              },
+              ...userBanks,
+            ]);
+          } else {
+            console.log("No matching Invoice No for loggedInUID:", loggedInUID);
+            // Handle the case where no matching banks are found
+          }
+        } else {
+          console.log("Data doesn't exist in the 'Customer Name' node.");
+        }
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
+    const intervalId = setInterval(fetchData, 2000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId);
+  }, [db, loggedInUID, CustomerID]);
+
+  const handleInvoiceNo = (selectedOption) => {
+    setSelectedInvoiceNo(selectedOption?.value);
+  };
+
+  // Select2 DropDown Customer
 
   const [SelectedCustomer, setSelectedCustomer] = useState("");
 
   const [CustomerOptions, setCustomerOptions] = useState([]);
-
-  const [CustomerName, setCustomerName] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -202,11 +276,14 @@ function AddCustomerPayment() {
             uid: data[key].uid,
           }));
 
+          setCustomerID(options[0].Id);
+          console.log(options[0].Id);
           // console.log("All Banks:", options); // Log all banks before filtering
 
           // Filter options based on loggedInUID
           const userBanks = options.filter((bank) => bank.uid === loggedInUID);
           setCustomerName(userBanks);
+          // console.log(userBanks);
 
           // console.log("User Banks:", userBanks); // Log filtered banks
 
@@ -440,10 +517,23 @@ function AddCustomerPayment() {
                     >
                       Invoice No # <span style={{ color: "red" }}>*</span>
                     </label>
+
                     <Select
                       id="InvoiceNo"
                       isSearchable={true}
+                      options={InvoiceNo}
+                      onChange={handleInvoiceNo}
                       placeholder="Select One"
+                      styles={{
+                        menu: (provided, state) => ({
+                          ...provided,
+                          overflowY: "auto", // Add scrollbar when needed
+                          maxHeight:
+                            state.selectProps.menuIsOpen && InvoiceNo.length > 5
+                              ? "none"
+                              : "150px", // Set a maximum height when the menu is open and items are greater than 5
+                        }),
+                      }}
                     />
                   </div>
                 </div>
@@ -478,7 +568,7 @@ function AddCustomerPayment() {
                           placeholder="Select Bank"
                           onChange={handleBankSelect}
                         />
-                        <h6 style={{ float: "right", paddingTop:'5px' }}>
+                        <h6 style={{ float: "right", paddingTop: "5px" }}>
                           {`Rs: ` + bankAmount.toLocaleString()}
                         </h6>
                       </div>

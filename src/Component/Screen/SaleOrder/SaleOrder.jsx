@@ -282,11 +282,9 @@ debugger;
     setProductID(item.ProductID);
     setShowAlert(true);
 
-    const QTY = localStorage.getItem("Quantity");
-    const Stock = localStorage.getItem("Stock");
 
-    const EditQty = parseInt(QTY);
-    const EditStock = parseInt(Stock);
+    const EditQty = parseInt(item.quantity);
+    const EditStock = parseInt(item.totalStock);
 
     const Final = EditQty + EditStock;
 
@@ -306,11 +304,14 @@ debugger;
       const dataRef = ref(db, `SaleOrder/${id}`);
       await remove(dataRef);
 
+      
       // Update the data state after deletion
       const updatedData = tableData.filter((item) => item.id !== id);
 
+      
       const datasRef = ref(db, `SaleOrderItem/${SaleOrderItemID}`);
       await remove(datasRef);
+      
 
       setTableData(updatedData);
 
@@ -327,7 +328,7 @@ debugger;
       setShowAlert(false);
       setShowOK(true);
     } catch (error) {
-      console.error("Error deleting data:", error);
+      console.log("Error deleting data:", error);
     }
   };
 

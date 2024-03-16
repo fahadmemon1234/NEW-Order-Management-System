@@ -1,7 +1,117 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
+// Bootstrap Modal
+// ---------------------------------------------------
+import Button from "react-bootstrap/Button";
+import SweetAlert from "react-bootstrap-sweetalert";
+// ---------------------------------------------------
+
+// Main Page Connect
+// ---------------------------------------------------
 import Main from "../../NavBar/Navbar";
+// ---------------------------------------------------
+
+//DataBase
+// ---------------------------------------------------
+import { ref, onValue, update, remove } from "firebase/database";
+import { db } from "../../Config/firebase";
+
+import { useNavigate } from "react-router-dom";
+// ---------------------------------------------------
+
+//Modal Css
+// ---------------------------------------------------
+import "../../../assets/Css/Model.css";
+// ----------------------------------------------------
+
+//Notify
+// ---------------------------------------------------
+import { toast, ToastContainer } from "react-toastify";
+import "../../../assets/Css/Tostify.css";
+// ---------------------------------------------------
 
 function SaleInvoice() {
+
+  const [tableData, setTableData] = useState([]);
+
+  const loggedInUID = localStorage.getItem("uid");
+
+  useEffect(() => {
+    debugger;
+    if (loggedInUID) {
+      // Reference to the 'SaleOrder' node in Firebase Realtime Database
+      const productRef = ref(db, "SaleInvoice");
+
+      // Attach an event listener for data changes
+      const fetchData = () => {
+        onValue(productRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            debugger;
+            // Convert the object of products into an array
+            const dataArray = Object.keys(data)
+              .filter((key) => data[key].uid === loggedInUID) // Filter data based on UID
+              .map((key) => ({
+                id: key,
+                ...data[key],
+              }));
+
+            setTableData(dataArray);
+          }
+        });
+      };
+
+      fetchData();
+    } else {
+      console.error("No user is currently logged in.");
+      // Handle the case where no user is logged in, perhaps by redirecting to the login page.
+    }
+  }, [loggedInUID]);
+
+  const sortedTableData = tableData.sort((a, b) => b.id - a.id);
+  const sortedDataDescending = [...sortedTableData].sort((a, b) =>
+    b.id.localeCompare(a.id)
+  );
+
+  //   RowDropDown Selection
+
+  const [rowsToShow, setRowsToShow] = useState(5);
+
+  const handleSelectChange = (event) => {
+    setRowsToShow(parseInt(event.target.value, 10));
+  };
+
+  // Rows count and show
+  // const totalItems = 8; // Replace with the actual total number of items
+  const startIndexs = 1;
+  // const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
+  const rowCount = sortedDataDescending.length; // Add this line to get the row count
+  const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePrevClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const startIndex = (currentPage - 1) * rowsToShow;
+  const endIndex = Math.min(
+    startIndex + rowsToShow,
+    sortedDataDescending.length
+  );
+  const visibleItems = sortedDataDescending.slice(startIndex, endIndex);
+
+  const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
+
   return (
     <>
       <Main>
@@ -83,7 +193,8 @@ function SaleInvoice() {
                         </tr>
                       </thead>
                       <tbody className="list">
-                        <tr>
+                      {visibleItems.slice(0, rowsToShow).map((item) => (
+                        <tr key={item.id}>
                           <td>
                             <div style={{ display: "flex" }}>
                               <button
@@ -103,13 +214,14 @@ function SaleInvoice() {
                               </button>
                             </div>
                           </td>
-                          <td className="tdchild"></td>
-                          <td className="tdchild"></td>
-                          <td className="tdchild"></td>
-                          <td className="tdchild"></td>
-                          <td className="tdchild"></td>
+                          <td className="tdchild">{item.InvoiceID}</td>
+                          <td className="tdchild">{item.createdDate}</td>
+                          <td className="tdchild">{item.customer}</td>
+                          <td className="tdchild">{item.status}</td>
+                          <td className="tdchild">{item.Payment}</td>
                           {/* Add more table data cells as needed */}
                         </tr>
+                      ))}
                       </tbody>
                     </table>
                   </div>
@@ -122,14 +234,14 @@ function SaleInvoice() {
                       >
                         <p className="mb-0">
                           <span className="d-none d-sm-inline-block me-2">
-                            {/* {paginationText} */}
+                            {paginationText}
                           </span>
                         </p>
                         <p className="mb-0 mx-2">Rows per page:</p>
                         <select
                           className="w-auto form-select form-select-sm"
-                          //   defaultValue={rowsToShow}
-                          //   onChange={handleSelectChange}
+                            defaultValue={rowsToShow}
+                            onChange={handleSelectChange}
                         >
                           <option value="5">5</option>
                           <option value="10">10</option>
@@ -142,8 +254,8 @@ function SaleInvoice() {
                         className="btn btn-sm btn-warning"
                         type="button"
                         data-list-pagination="prev"
-                        // onClick={handlePrevClick}
-                        // disabled={currentPage === 1}
+                        onClick={handlePrevClick}
+                        disabled={currentPage === 1}
                       >
                         <span>Previous</span>
                       </button>
@@ -152,8 +264,8 @@ function SaleInvoice() {
                         type="button"
                         style={{ backgroundColor: "#2c7be5", color: "white" }}
                         data-list-pagination="next"
-                        // onClick={handleNextClick}
-                        // disabled={currentPage === totalPages}
+                        onClick={handleNextClick}
+                        disabled={currentPage === totalPages}
                       >
                         <span>Next</span>
                       </button>

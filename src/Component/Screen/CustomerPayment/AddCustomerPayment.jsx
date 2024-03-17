@@ -267,7 +267,7 @@ function AddCustomerPayment() {
         const snapshot = await get(dataRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-          debugger;
+
           // Convert the data object into an array of options
           const options = Object.keys(data).map((key) => ({
             Id: key,
@@ -275,10 +275,6 @@ function AddCustomerPayment() {
             label: data[key].customerName,
             uid: data[key].uid,
           }));
-
-          setCustomerID(options[0].Id);
-          console.log(options[0].Id);
-          // console.log("All Banks:", options); // Log all banks before filtering
 
           // Filter options based on loggedInUID
           const userBanks = options.filter((bank) => bank.uid === loggedInUID);
@@ -322,6 +318,7 @@ function AddCustomerPayment() {
 
   const handleCustomer = (selectedOption) => {
     setSelectedCustomer(selectedOption?.value);
+    setCustomerID(selectedOption.Id);
   };
 
   //  Show DropDown Bank DB
@@ -339,7 +336,7 @@ function AddCustomerPayment() {
         const snapshot = await get(dataRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-          debugger;
+
           // Convert the data object into an array of options
           const options = Object.keys(data).map((key) => ({
             Id: key,
@@ -407,7 +404,7 @@ function AddCustomerPayment() {
 
   const invoiceOptions = SelectedCustomer
     ? InvoiceNo
-    : [{ value: "", label: "Select a customer first" }];
+    : [{ value: 0, label: "Select One", disabled: true, selected: true }];
 
   return (
     <>

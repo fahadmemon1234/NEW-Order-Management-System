@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 // Main Page Connect
 // ---------------------------------------------------
@@ -38,8 +38,6 @@ import { connect } from "react-redux";
 import { incrementId } from "./Redux/actions";
 
 function AddSaleOrder({ idCount, incrementId }) {
-  const customIDRef = useRef(null);
-
   const [AddItemSection, setAddItemSection] = useState(true);
 
   const [paymentMethod, setPaymentMethod] = useState("rdoCash");
@@ -55,7 +53,9 @@ function AddSaleOrder({ idCount, incrementId }) {
 
   const loggedInUID = localStorage.getItem("uid");
 
-  const [CustomerID, setCustomerID] = useState("");
+  const [CustomerID, setCustomerID] = useState(
+    localStorage.getItem("CustomerID")
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -153,7 +153,6 @@ function AddSaleOrder({ idCount, incrementId }) {
 
   const handleSaveOrder = () => {
     try {
-      const CustomID = customIDRef.current.value;
       const loggedInUID = localStorage.getItem("uid");
 
       if (paymentMethod === "rdoCash") {
@@ -190,7 +189,7 @@ function AddSaleOrder({ idCount, incrementId }) {
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
           uid: loggedInUID,
-          customerID: CustomID,
+          customerID: CustomerID,
           customer: selectedCustomer.value,
           orderDate: orderDate,
           status: "New",
@@ -217,7 +216,7 @@ function AddSaleOrder({ idCount, incrementId }) {
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
           uid: loggedInUID,
-          customerID: CustomID,
+          customerID: CustomerID,
           customer: selectedCustomer.value,
           orderDate: orderDate,
           name: Name,
@@ -277,7 +276,6 @@ function AddSaleOrder({ idCount, incrementId }) {
 
   const handleUpdateOrder = () => {
     try {
-      const CustomID = customIDRef.current.value;
       const loggedInUID = localStorage.getItem("uid");
 
       if (paymentMethod === "rdoCash") {
@@ -725,7 +723,6 @@ function AddSaleOrder({ idCount, incrementId }) {
 
   const handleAddItem = async () => {
     try {
-      const CustomID = customIDRef.current.value;
       if (Exists) {
         toast.error("Your product already exists.", {
           position: "top-right",
@@ -1088,6 +1085,8 @@ function AddSaleOrder({ idCount, incrementId }) {
 
   const [EditID, setEditID] = useState("");
 
+  const SaleInvoiceEditID = localStorage.getItem("SaleInvoiceEditID");
+
   const handleEdit = async (item) => {
     localStorage.setItem("EditID", item.id);
     setEditID(item.id);
@@ -1241,7 +1240,6 @@ function AddSaleOrder({ idCount, incrementId }) {
   const handleUpdateItem = async () => {
     // console.log(EditID);
     try {
-      const CustomID = customIDRef.current.value;
       const loggedInUID = localStorage.getItem("uid");
       const SaleOrderItemRef = ref(db, `SaleOrderItem/${EditID}`);
 
@@ -1308,8 +1306,8 @@ function AddSaleOrder({ idCount, incrementId }) {
   const navigate = useNavigate();
 
   const handleSaleOrderTotalAmount = () => {
+    debugger;
     try {
-      const CustomID = customIDRef.current.value;
       const loggedInUID = localStorage.getItem("uid");
       debugger;
       const SaleOrderRef = ref(db, "SaleOrderTotalAmount");
@@ -1339,7 +1337,7 @@ function AddSaleOrder({ idCount, incrementId }) {
           InvoiceID: idCount,
           SaleID: orderId,
           uid: loggedInUID,
-          customerID: CustomID,
+          customerID: CustomerID,
           customer: CounterSale,
           status: "Order Delivered",
           orderDate: orderDate,
@@ -1368,7 +1366,7 @@ function AddSaleOrder({ idCount, incrementId }) {
           InvoiceID: idCount,
           SaleID: orderId,
           uid: loggedInUID,
-          customerID: CustomID,
+          customerID: CustomerID,
           customer: selectedCustomer.value,
           orderDate: orderDate,
           status: "Order Delivered",
@@ -1396,7 +1394,7 @@ function AddSaleOrder({ idCount, incrementId }) {
           InvoiceID: idCount,
           uid: loggedInUID,
           SaleID: orderId,
-          customerID: CustomID,
+          customerID: CustomerID,
           customer: selectedCustomer.value,
           orderDate: orderDate,
           name: Name,
@@ -1462,12 +1460,17 @@ function AddSaleOrder({ idCount, incrementId }) {
 
   // ---------------------------Save----------------------------
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const Edit = searchParams.get("EditID");
+
+  const [InvID, setInvID] = useState("");
+
   const handleSave = () => {
     debugger;
     try {
-      const CustomID = customIDRef.current.value;
       const loggedInUID = localStorage.getItem("uid");
-      debugger;
+
       const SaleOrderRef = ref(db, "SaleOrderTotalAmount");
       const newSaleOrder = {
         uid: loggedInUID,
@@ -1478,90 +1481,166 @@ function AddSaleOrder({ idCount, incrementId }) {
       push(SaleOrderRef, newSaleOrder);
 
       if (paymentMethod === "rdoCash") {
+        if (!Edit) {
+          const SaleInvoiceRef = ref(db, "SaleInvoice");
+          const newSaleInvoice = {
+            InvoiceID: idCount,
+            SaleID: orderId,
+            uid: loggedInUID,
+            customer: CounterSale,
+            status: "New",
+            orderDate: orderDate,
+            name: Name,
+            createdDate: formattedDate,
+            phoneNumber: PhoneNumber,
+            paymentMethod: "rdoCash",
+            Payment: payment,
+          };
+          const SaleInvoiceID = push(SaleInvoiceRef, newSaleInvoice);
+
+          setInvID(SaleInvoiceID.key);
+          localStorage.setItem("SaleInvoiceEditID", SaleInvoiceID.key);
+        } else {
+          const newSaleInvoice = {
+            InvoiceID: idCount,
+            SaleID: orderId,
+            uid: loggedInUID,
+            customer: CounterSale,
+            status: "New",
+            orderDate: orderDate,
+            name: Name,
+            createdDate: formattedDate,
+            phoneNumber: PhoneNumber,
+            paymentMethod: "rdoCash",
+            Payment: payment,
+          };
+
+          const SaleInvoiceRef = ref(db, `SaleInvoice/${SaleInvoiceEditID}`);
+          update(SaleInvoiceRef, newSaleInvoice);
+        }
+
+        const InvIDEditID = localStorage.getItem("SaleInvoiceEditID");
+
         const newSaleOrder = {
           uid: loggedInUID,
           status: "New",
           Payment: payment,
           InvoiceID: idCount,
+          SaleInvoiceID: InvIDEditID,
           quantity: SellQty.toString(),
           totalStock: SellStock.toString(),
           paymentMethod: "rdoCash",
         };
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
-
-        const SaleInvoiceRef = ref(db, "SaleInvoice");
-        const newSaleInvoice = {
-          InvoiceID: idCount,
-          SaleID: orderId,
-          uid: loggedInUID,
-          customer: CounterSale,
-          status: "New",
-          orderDate: orderDate,
-          name: Name,
-          createdDate: formattedDate,
-          phoneNumber: PhoneNumber,
-          paymentMethod: "rdoCash",
-          Payment: payment,
-        };
-        push(SaleInvoiceRef, newSaleInvoice);
       } else if (paymentMethod === "rdoCredit") {
+        if (!Edit) {
+          const SaleInvoiceRef = ref(db, "SaleInvoice");
+          const newSaleInvoice = {
+            InvoiceID: idCount,
+            SaleID: orderId,
+            uid: loggedInUID,
+            customerID: CustomerID,
+            customer: selectedCustomer.value,
+            orderDate: orderDate,
+            status: "New",
+            createdDate: formattedDate,
+            salesMan: SalesMan,
+            paymentMethod: "rdoCredit",
+            Payment: payment,
+          };
+          const SaleInvoiceID = push(SaleInvoiceRef, newSaleInvoice);
+
+          setInvID(SaleInvoiceID.key);
+          localStorage.setItem("SaleInvoiceEditID", SaleInvoiceID.key);
+        } else {
+          const newSaleInvoice = {
+            InvoiceID: idCount,
+            SaleID: orderId,
+            uid: loggedInUID,
+            customerID: CustomerID,
+            customer: selectedCustomer.value,
+            orderDate: orderDate,
+            status: "New",
+            createdDate: formattedDate,
+            salesMan: SalesMan,
+            paymentMethod: "rdoCredit",
+            Payment: payment,
+          };
+
+          const SaleInvoiceRef = ref(db, `SaleInvoice/${SaleInvoiceEditID}`);
+          update(SaleInvoiceRef, newSaleInvoice);
+        }
+
+        const InvIDEditID = localStorage.getItem("SaleInvoiceEditID");
+
         const newSaleOrder = {
           uid: loggedInUID,
           status: "New",
           Payment: payment,
           InvoiceID: idCount,
+          SaleInvoiceID: InvIDEditID,
           quantity: SellQty.toString(),
           totalStock: SellStock.toString(),
           paymentMethod: "rdoCredit",
         };
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
-
-        const SaleInvoiceRef = ref(db, "SaleInvoice");
-        const newSaleInvoice = {
-          InvoiceID: idCount,
-          SaleID: orderId,
-          uid: loggedInUID,
-          customerID: CustomerID,
-          customer: selectedCustomer,
-          orderDate: orderDate,
-          status: "New",
-          createdDate: formattedDate,
-          salesMan: SalesMan,
-          paymentMethod: "rdoCredit",
-          Payment: payment,
-        };
-        push(SaleInvoiceRef, newSaleInvoice);
       } else {
+        if (!Edit) {
+          const SaleInvoiceRef = ref(db, "SaleInvoice");
+          const newSaleInvoice = {
+            InvoiceID: idCount,
+            SaleID: orderId,
+            uid: loggedInUID,
+            customerID: CustomerID,
+            customer: selectedCustomer.value,
+            orderDate: orderDate,
+            name: Name,
+            status: "New",
+            createdDate: formattedDate,
+            paymentMethod: "rdoCashCredit",
+            phoneNumber: PhoneNumber,
+            Payment: payment,
+          };
+          const SaleInvoiceID = push(SaleInvoiceRef, newSaleInvoice);
+
+          setInvID(SaleInvoiceID.key);
+          localStorage.setItem("SaleInvoiceEditID", SaleInvoiceID.key);
+        } else {
+          const newSaleInvoice = {
+            InvoiceID: idCount,
+            SaleID: orderId,
+            uid: loggedInUID,
+            customerID: CustomerID,
+            customer: selectedCustomer.value,
+            orderDate: orderDate,
+            name: Name,
+            status: "New",
+            createdDate: formattedDate,
+            paymentMethod: "rdoCashCredit",
+            phoneNumber: PhoneNumber,
+            Payment: payment,
+          };
+
+          const SaleInvoiceRef = ref(db, `SaleInvoice/${SaleInvoiceEditID}`);
+          update(SaleInvoiceRef, newSaleInvoice);
+        }
+
+        const InvIDEditID = localStorage.getItem("SaleInvoiceEditID");
+
         const newSaleOrder = {
           uid: loggedInUID,
           status: "New",
           Payment: payment,
           InvoiceID: idCount,
+          SaleInvoiceID: InvIDEditID,
           quantity: SellQty.toString(),
           totalStock: SellStock.toString(),
           paymentMethod: "rdoCashCredit",
         };
         const SaleOrderRef = ref(db, `SaleOrder/${orderId}`);
         update(SaleOrderRef, newSaleOrder);
-
-        const SaleInvoiceRef = ref(db, "SaleInvoice");
-        const newSaleInvoice = {
-          InvoiceID: idCount,
-          SaleID: orderId,
-          uid: loggedInUID,
-          customerID: CustomID,
-          customer: selectedCustomer.value,
-          orderDate: orderDate,
-          name: Name,
-          status: "New",
-          createdDate: formattedDate,
-          paymentMethod: "rdoCashCredit",
-          phoneNumber: PhoneNumber,
-          Payment: payment,
-        };
-        push(SaleInvoiceRef, newSaleInvoice);
       }
 
       incrementId();
@@ -1711,9 +1790,9 @@ function AddSaleOrder({ idCount, incrementId }) {
 
   // -------------------Query String popuate--------------
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const Type = searchParams.get("Type");
+  // const location = useLocation();
+  // const searchParams = new URLSearchParams(location.search);
+  // const Type = searchParams.get("Type");
 
   //   useEffect(() => {
   //     debugger;
@@ -1932,7 +2011,10 @@ function AddSaleOrder({ idCount, incrementId }) {
                             onChange={(selectedOption) => {
                               setSelectedCustomer(selectedOption);
                               setCustomerID(selectedOption.Id);
-                              console.log(selectedOption.Id);
+                              localStorage.setItem(
+                                "CustomerID",
+                                selectedOption.Id
+                              );
                             }}
                             isSearchable={true}
                           />
@@ -1940,7 +2022,6 @@ function AddSaleOrder({ idCount, incrementId }) {
                           <input
                             type="hidden"
                             id="CustomID"
-                            ref={customIDRef}
                             value={CustomerID}
                           />
 
@@ -2035,6 +2116,10 @@ function AddSaleOrder({ idCount, incrementId }) {
                             onChange={(selectedOption) => {
                               setSelectedCustomer(selectedOption);
                               setCustomerID(selectedOption.Id);
+                              localStorage.setItem(
+                                "CustomerID",
+                                selectedOption.Id
+                              );
                             }}
                             isSearchable={true}
                           />
@@ -2042,7 +2127,6 @@ function AddSaleOrder({ idCount, incrementId }) {
                           <input
                             type="hidden"
                             id="CustomID"
-                            ref={customIDRef}
                             value={CustomerID}
                           />
 
@@ -2237,6 +2321,10 @@ function AddSaleOrder({ idCount, incrementId }) {
                             onChange={(selectedOption) => {
                               setSelectedCustomer(selectedOption);
                               setCustomerID(selectedOption.Id);
+                              localStorage.setItem(
+                                "CustomerID",
+                                selectedOption.Id
+                              );
                             }}
                             isSearchable={true}
                           />
@@ -2244,7 +2332,6 @@ function AddSaleOrder({ idCount, incrementId }) {
                           <input
                             type="hidden"
                             id="CustomID"
-                            ref={customIDRef}
                             value={CustomerID}
                           />
 
@@ -2346,6 +2433,10 @@ function AddSaleOrder({ idCount, incrementId }) {
                             onChange={(selectedOption) => {
                               setSelectedCustomer(selectedOption);
                               setCustomerID(selectedOption.Id);
+                              localStorage.setItem(
+                                "CustomerID",
+                                selectedOption.Id
+                              );
                             }}
                             isSearchable={true}
                           />
@@ -2353,7 +2444,6 @@ function AddSaleOrder({ idCount, incrementId }) {
                           <input
                             type="hidden"
                             id="CustomID"
-                            ref={customIDRef}
                             value={CustomerID}
                           />
 

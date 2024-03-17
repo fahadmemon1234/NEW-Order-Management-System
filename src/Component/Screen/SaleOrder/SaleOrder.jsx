@@ -238,6 +238,7 @@ debugger;
 
     localStorage.setItem("ID", item.id);
     localStorage.setItem("customer", item.customer);
+    localStorage.setItem("SaleInvoiceEditID", item.SaleInvoiceID);
     localStorage.setItem("orderDate", item.orderDate);
     localStorage.setItem("name", item.name);
     localStorage.setItem("phoneNumber", item.phoneNumber);

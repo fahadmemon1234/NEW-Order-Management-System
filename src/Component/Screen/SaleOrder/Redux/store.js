@@ -4,7 +4,7 @@ import idReducer from "./reducers";
 
 const loadState = () => {
   try {
-    const serializedState = sessionStorage.getItem("reduxState");
+    const serializedState = localStorage.getItem("reduxState");
     if (serializedState === null) {
       return undefined;
     }
@@ -18,7 +18,7 @@ const loadState = () => {
 const saveState = (state) => {
   try {
     const serializedState = JSON.stringify(state);
-    sessionStorage.setItem("reduxState", serializedState);
+    localStorage.setItem("reduxState", serializedState);
   } catch (err) {
     console.log("Error saving state to session storage:", err);
   }

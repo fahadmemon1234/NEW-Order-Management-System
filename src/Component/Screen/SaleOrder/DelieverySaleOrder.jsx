@@ -165,7 +165,7 @@ function Deliever() {
   const handleShipQuantityChange = (newQuantity, itemId) => {
     // Find the item in the visibleItems array
     const item = visibleItems.find((item) => item.id === itemId);
-    debugger;
+
     // Check if the new quantity exceeds the available quantity
     if (parseInt(newQuantity) > item.quantity) {
       // Display error toast if ship quantity exceeds available quantity
@@ -201,7 +201,6 @@ function Deliever() {
   };
 
   const calculateTotalPrice = (item) => {
-    debugger;
     const price = item.totalPrice;
     const itemIndex = visibleItems.findIndex(
       (visibleItem) => visibleItem.id === item.id
@@ -287,8 +286,6 @@ function Deliever() {
 
   const handleDeliver = () => {
     try {
-      debugger;
-
       if (shipQuantities.some((quantity) => quantity === "")) {
         toast.error("Please Enter Ship Quantity!", {
           position: "top-right",
@@ -325,7 +322,6 @@ function Deliever() {
           theme: "colored",
         });
       } else {
-        debugger;
         const loggedInUID = localStorage.getItem("uid");
         const SaleOrderRef = ref(db, "DelieverySaleOrder");
         const newSaleOrder = {

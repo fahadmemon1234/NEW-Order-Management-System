@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 // Main Page Connect
 // ---------------------------------------------------
@@ -38,6 +38,8 @@ import { connect } from "react-redux";
 import { incrementId } from "./Redux/actions";
 
 function AddSaleOrder({ idCount, incrementId }) {
+  const customIDRef = useRef(null);
+
   const [AddItemSection, setAddItemSection] = useState(true);
 
   const [paymentMethod, setPaymentMethod] = useState("rdoCash");
@@ -66,7 +68,7 @@ function AddSaleOrder({ idCount, incrementId }) {
             const data = snapshot.val();
 
             // Filter data based on the loggedInUID
-            debugger;
+
             const filteredData = Object.keys(data)
               .filter((key) => data[key].uid === loggedInUID)
               .reduce((obj, key) => {
@@ -81,8 +83,8 @@ function AddSaleOrder({ idCount, incrementId }) {
               label: filteredData[key].customerName,
             }));
 
-            setCustomerID(options[0].Id);
-            // console.log(options[0].Id);
+            // Assuming you want to set customerID as an array of all IDs
+            // setCustomerID(customerIDs);
 
             // Add the "Select Customer" option to the beginning of the array
             setCustomerName([
@@ -150,12 +152,11 @@ function AddSaleOrder({ idCount, incrementId }) {
     .padStart(2, "0")}/${year}`;
 
   const handleSaveOrder = () => {
-    debugger;
     try {
+      const CustomID = customIDRef.current.value;
       const loggedInUID = localStorage.getItem("uid");
 
       if (paymentMethod === "rdoCash") {
-        debugger;
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
           uid: loggedInUID,
@@ -189,7 +190,7 @@ function AddSaleOrder({ idCount, incrementId }) {
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
           uid: loggedInUID,
-          customerID: CustomerID,
+          customerID: CustomID,
           customer: selectedCustomer.value,
           orderDate: orderDate,
           status: "New",
@@ -216,7 +217,7 @@ function AddSaleOrder({ idCount, incrementId }) {
         const SaleOrderRef = ref(db, "SaleOrder");
         const newSaleOrder = {
           uid: loggedInUID,
-          customerID: CustomerID,
+          customerID: CustomID,
           customer: selectedCustomer.value,
           orderDate: orderDate,
           name: Name,
@@ -275,8 +276,8 @@ function AddSaleOrder({ idCount, incrementId }) {
   };
 
   const handleUpdateOrder = () => {
-    debugger;
     try {
+      const CustomID = customIDRef.current.value;
       const loggedInUID = localStorage.getItem("uid");
 
       if (paymentMethod === "rdoCash") {
@@ -375,7 +376,6 @@ function AddSaleOrder({ idCount, incrementId }) {
   };
 
   useEffect(() => {
-    debugger;
     // When the component mounts, check local storage for the saved state
     const savedState = localStorage.getItem("isSaveOrderVisible");
 
@@ -439,7 +439,7 @@ function AddSaleOrder({ idCount, incrementId }) {
         const snapshot = await get(dataRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-          debugger;
+
           // Convert the data object into an array of options
           const options = Object.keys(data).map((key) => ({
             Id: key,
@@ -528,8 +528,6 @@ function AddSaleOrder({ idCount, incrementId }) {
   const [ProductID, setProductID] = useState("");
 
   const handleItemSelect = (selectedOption) => {
-    debugger;
-
     const ItemSection = localStorage.getItem("AddItemSection");
     if (ItemSection === "true") {
       const itemExists = tableData.some(
@@ -668,7 +666,6 @@ function AddSaleOrder({ idCount, incrementId }) {
   };
 
   const handleTotalStockChange = (e) => {
-    debugger;
     setTotalStock(e.target.value);
     updateStock(Quantity, e.target.value);
   };
@@ -684,7 +681,6 @@ function AddSaleOrder({ idCount, incrementId }) {
   };
 
   const updateStock = (quantity, totalStock) => {
-    debugger;
     if (parseFloat(quantity) > totalStock) {
       // Quantity cannot be greater than totalStock, show an error or handle it accordingly
       toast.error("Quantity cannot be greater than TotalStock.", {
@@ -728,8 +724,8 @@ function AddSaleOrder({ idCount, incrementId }) {
   const ID = localStorage.getItem("ID");
 
   const handleAddItem = async () => {
-    debugger;
     try {
+      const CustomID = customIDRef.current.value;
       if (Exists) {
         toast.error("Your product already exists.", {
           position: "top-right",
@@ -754,7 +750,6 @@ function AddSaleOrder({ idCount, incrementId }) {
         setTotalPrice("");
       } else {
         if (paymentMethod === "rdoCash") {
-          debugger;
           localStorage.setItem("ItemName", SelectedItem);
 
           const SaleOrderRef = ref(db, "SaleOrderItem");
@@ -774,7 +769,6 @@ function AddSaleOrder({ idCount, incrementId }) {
           const AmountsId = push(SaleOrderRef, NewSaleOrder);
 
           if (Stock !== "" && SalePrice !== "") {
-            debugger;
             const updatedProduct = {
               uid: loggedInUID,
               itemQty: Stock,
@@ -1063,7 +1057,6 @@ function AddSaleOrder({ idCount, incrementId }) {
   }, [FinalPrice]);
 
   const handleDiscountChange = (e) => {
-    debugger;
     const discountValue = e.target.value;
     setDiscount(discountValue);
 
@@ -1096,7 +1089,6 @@ function AddSaleOrder({ idCount, incrementId }) {
   const [EditID, setEditID] = useState("");
 
   const handleEdit = async (item) => {
-    debugger;
     localStorage.setItem("EditID", item.id);
     setEditID(item.id);
     localStorage.setItem("ProductID", item.ProductID);
@@ -1127,7 +1119,6 @@ function AddSaleOrder({ idCount, incrementId }) {
   };
 
   useEffect(() => {
-    debugger;
     const AddItemSec = localStorage.getItem("AddItemSection");
     const EditIDs = localStorage.getItem("EditID");
     const ProductID = localStorage.getItem("ProductID");
@@ -1189,7 +1180,6 @@ function AddSaleOrder({ idCount, incrementId }) {
   };
 
   const handleTotalStockUpdate = (e) => {
-    debugger;
     setTotalStock(e.target.value);
     NewStocks(Quantity, e.target.value);
   };
@@ -1205,7 +1195,6 @@ function AddSaleOrder({ idCount, incrementId }) {
   };
 
   const NewStocks = (quantity, LastStock) => {
-    debugger;
     if (parseFloat(quantity) > LastStock) {
       // Quantity cannot be greater than totalStock, show an error or handle it accordingly
       toast.error("Quantity cannot be greater than TotalStock.", {
@@ -1251,8 +1240,8 @@ function AddSaleOrder({ idCount, incrementId }) {
 
   const handleUpdateItem = async () => {
     // console.log(EditID);
-    debugger;
     try {
+      const CustomID = customIDRef.current.value;
       const loggedInUID = localStorage.getItem("uid");
       const SaleOrderItemRef = ref(db, `SaleOrderItem/${EditID}`);
 
@@ -1320,6 +1309,7 @@ function AddSaleOrder({ idCount, incrementId }) {
 
   const handleSaleOrderTotalAmount = () => {
     try {
+      const CustomID = customIDRef.current.value;
       const loggedInUID = localStorage.getItem("uid");
       debugger;
       const SaleOrderRef = ref(db, "SaleOrderTotalAmount");
@@ -1349,7 +1339,7 @@ function AddSaleOrder({ idCount, incrementId }) {
           InvoiceID: idCount,
           SaleID: orderId,
           uid: loggedInUID,
-          customerID: CustomerID,
+          customerID: CustomID,
           customer: CounterSale,
           status: "Order Delivered",
           orderDate: orderDate,
@@ -1378,7 +1368,7 @@ function AddSaleOrder({ idCount, incrementId }) {
           InvoiceID: idCount,
           SaleID: orderId,
           uid: loggedInUID,
-          customerID: CustomerID,
+          customerID: CustomID,
           customer: selectedCustomer.value,
           orderDate: orderDate,
           status: "Order Delivered",
@@ -1406,7 +1396,7 @@ function AddSaleOrder({ idCount, incrementId }) {
           InvoiceID: idCount,
           uid: loggedInUID,
           SaleID: orderId,
-          customerID: CustomerID,
+          customerID: CustomID,
           customer: selectedCustomer.value,
           orderDate: orderDate,
           name: Name,
@@ -1475,6 +1465,7 @@ function AddSaleOrder({ idCount, incrementId }) {
   const handleSave = () => {
     debugger;
     try {
+      const CustomID = customIDRef.current.value;
       const loggedInUID = localStorage.getItem("uid");
       debugger;
       const SaleOrderRef = ref(db, "SaleOrderTotalAmount");
@@ -1533,7 +1524,7 @@ function AddSaleOrder({ idCount, incrementId }) {
           SaleID: orderId,
           uid: loggedInUID,
           customerID: CustomerID,
-          customer: selectedCustomer.value,
+          customer: selectedCustomer,
           orderDate: orderDate,
           status: "New",
           createdDate: formattedDate,
@@ -1560,7 +1551,7 @@ function AddSaleOrder({ idCount, incrementId }) {
           InvoiceID: idCount,
           SaleID: orderId,
           uid: loggedInUID,
-          customerID: CustomerID,
+          customerID: CustomID,
           customer: selectedCustomer.value,
           orderDate: orderDate,
           name: Name,
@@ -1635,7 +1626,6 @@ function AddSaleOrder({ idCount, incrementId }) {
   const [EditQuantityTotal, setEditQuantityTotal] = useState("");
 
   const handleDelete = async (item) => {
-    debugger;
     localStorage.setItem("EditID", item.id);
     localStorage.setItem("ProductID", item.ProductID);
     localStorage.setItem("EdititemName", item.itemName);
@@ -1935,19 +1925,23 @@ function AddSaleOrder({ idCount, incrementId }) {
                               }),
                             }}
                             options={customerName}
-                            value={
-                              Array.isArray(customerName)
-                                ? customerName.find(
-                                    (option) =>
-                                      option.value === selectedCustomer
-                                  )
-                                : null
-                            }
+                            value={customerName.find(
+                              (option) => option.value === CustomerID
+                            )}
                             placeholder="Select Customer"
-                            onChange={(selectedOption) =>
-                              setSelectedCustomer(selectedOption)
-                            }
+                            onChange={(selectedOption) => {
+                              setSelectedCustomer(selectedOption);
+                              setCustomerID(selectedOption.Id);
+                              console.log(selectedOption.Id);
+                            }}
                             isSearchable={true}
+                          />
+
+                          <input
+                            type="hidden"
+                            id="CustomID"
+                            ref={customIDRef}
+                            value={CustomerID}
                           />
 
                           <AddCustModal />
@@ -2231,10 +2225,18 @@ function AddSaleOrder({ idCount, incrementId }) {
                                 : null
                             }
                             placeholder="Select Customer"
-                            onChange={(selectedOption) =>
-                              setSelectedCustomer(selectedOption)
-                            }
+                            onChange={(selectedOption) => {
+                              setSelectedCustomer(selectedOption);
+                              setCustomerID(selectedOption.Id);
+                            }}
                             isSearchable={true}
+                          />
+
+                          <input
+                            type="hidden"
+                            id="CustomID"
+                            ref={customIDRef}
+                            value={CustomerID}
                           />
 
                           {/* <a

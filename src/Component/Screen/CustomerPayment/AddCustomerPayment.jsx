@@ -405,6 +405,10 @@ function AddCustomerPayment() {
     }
   };
 
+  const invoiceOptions = SelectedCustomer
+    ? InvoiceNo
+    : [{ value: "", label: "Select a customer first" }];
+
   return (
     <>
       <ToastContainer
@@ -521,7 +525,7 @@ function AddCustomerPayment() {
                     <Select
                       id="InvoiceNo"
                       isSearchable={true}
-                      options={InvoiceNo}
+                      options={invoiceOptions}
                       onChange={handleInvoiceNo}
                       placeholder="Select One"
                       styles={{
@@ -529,7 +533,8 @@ function AddCustomerPayment() {
                           ...provided,
                           overflowY: "auto", // Add scrollbar when needed
                           maxHeight:
-                            state.selectProps.menuIsOpen && InvoiceNo.length > 5
+                            state.selectProps.menuIsOpen &&
+                            invoiceOptions.length > 5
                               ? "none"
                               : "150px", // Set a maximum height when the menu is open and items are greater than 5
                         }),

@@ -251,7 +251,7 @@ function AddProductModal() {
         const snapshot = await get(dataRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-          debugger;
+          
           // Convert the data object into an array of options
           const options = Object.keys(data).map((key) => ({
             Id: key,
@@ -321,7 +321,7 @@ function AddProductModal() {
         const snapshot = await get(dataRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-          debugger;
+          
           // Convert the data object into an array of options
           const options = Object.keys(data).map((key) => ({
             Id: key,

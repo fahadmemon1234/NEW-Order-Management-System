@@ -2032,11 +2032,20 @@ function AddSaleOrder({ idCount, incrementId }) {
                                 : null
                             }
                             placeholder="Select Customer"
-                            onChange={(selectedOption) =>
-                              setSelectedCustomer(selectedOption)
-                            }
+                            onChange={(selectedOption) => {
+                              setSelectedCustomer(selectedOption);
+                              setCustomerID(selectedOption.Id);
+                            }}
                             isSearchable={true}
                           />
+
+                          <input
+                            type="hidden"
+                            id="CustomID"
+                            ref={customIDRef}
+                            value={CustomerID}
+                          />
+
                           {/* <a
                         href="#"
                         style={{ float: "right", fontSize: 13 + "px" }}
@@ -2334,10 +2343,18 @@ function AddSaleOrder({ idCount, incrementId }) {
                                 : null
                             }
                             placeholder="Select Customer"
-                            onChange={(selectedOption) =>
-                              setSelectedCustomer(selectedOption)
-                            }
+                            onChange={(selectedOption) => {
+                              setSelectedCustomer(selectedOption);
+                              setCustomerID(selectedOption.Id);
+                            }}
                             isSearchable={true}
+                          />
+
+                          <input
+                            type="hidden"
+                            id="CustomID"
+                            ref={customIDRef}
+                            value={CustomerID}
                           />
 
                           {/* <a

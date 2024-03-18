@@ -6,6 +6,7 @@ const initialState = {
 };
 
 const idReducer = (state = initialState, action) => {
+  debugger;
   switch (action.type) {
     case INCREMENT_ID:
       // Increment the ID count by 1

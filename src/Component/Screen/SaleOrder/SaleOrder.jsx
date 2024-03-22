@@ -237,6 +237,7 @@ debugger;
     navigate(`/AddSaleOrder?EditID=${item.id}&Type=${item.paymentMethod}`);
 
     localStorage.setItem("ID", item.id);
+    localStorage.setItem("InvoiceID", item.InvoiceID);
     localStorage.setItem("customer", item.customer);
     localStorage.setItem("SaleInvoiceEditID", item.SaleInvoiceID);
     localStorage.setItem("orderDate", item.orderDate);

@@ -199,18 +199,11 @@ function SaleInvoice() {
                             <div style={{ display: "flex" }}>
                               <button
                                 type="button"
-                                className="btn btn-primary"
+                                className="btn btn-warning"
                                 style={{ marginRight: "10px" }}
-                                //   onClick={() => handleShow(item)}
+                                  // onClick={() => handleReturn(item)}
                               >
-                                Edit
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-danger"
-                                //   onClick={() => handleDelete(item.id)}
-                              >
-                                Delete
+                                Return
                               </button>
                             </div>
                           </td>

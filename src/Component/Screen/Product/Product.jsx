@@ -29,7 +29,6 @@ import { db } from "../../Config/firebase";
 import "../../../assets/Css/Model.css";
 // ----------------------------------------------------
 
-
 //Notify
 // ---------------------------------------------------
 import { toast, ToastContainer } from "react-toastify";
@@ -39,11 +38,9 @@ import "../../../assets/Css/Tostify.css";
 import AddMeasurment from "./AddMeasurment";
 import AddBrandCode from "./AddBrandCode";
 
-import DataTable from 'datatables.net-dt';
+import DataTable from "datatables.net-dt";
 
 function Product() {
-
-
   // useEffect(() => {
   //   // Initialize DataTable
   //   const table = new DataTable('#Mytable', {
@@ -63,7 +60,6 @@ function Product() {
   //     table.destroy();
   //   };
   // }, []);
-
 
   const [tableData, setTableData] = useState([]);
 
@@ -493,26 +489,23 @@ function Product() {
 
   // Search
 
-  const [searchQuery, setSearchQuery] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearch = (event) => {
-    setSearchQuery(event.target.value);
-  };
+  // const handleSearch = (event) => {
+  //   setSearchQuery(event.target.value);
+  // };
 
-  // Filter items based on search query
-  const filteredItems = visibleItems.filter(
-    (item) =>
-      item.itemName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.itemQty.toString().includes(searchQuery) ||
-      item.brandCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.measurement.toString().includes(searchQuery.toLowerCase())
-  );
+  // const filteredItems = visibleItems.filter(
+  //   (item) =>
+  //     item.itemName.toString().includes(searchQuery.toLowerCase()) ||
+  //     item.itemQty.toString().includes(searchQuery) ||
+  //     item.brandCode.toString().includes(searchQuery.toLowerCase()) ||
+  //     item.measurement.toString().includes(searchQuery.toLowerCase())
+  // );
 
-  
   return (
     <>
       <Main>
-
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -561,8 +554,6 @@ function Product() {
                       placeholder="Search"
                       aria-label="Search"
                       aria-describedby="search-addon"
-                      value={searchQuery}
-                      onChange={handleSearch}
                     />
                   </div>
                 </div>
@@ -579,8 +570,11 @@ function Product() {
                   data-list='{"valueNames":["name","email","age"],"page":5,"pagination":true}'
                 >
                   <div className="table-responsive scrollbar">
-                    <table className="table table-bordered table-striped fs-10 mb-0" id="Mytable" >
-                    <thead className="bg-200">
+                    <table
+                      className="table table-bordered table-striped fs-10 mb-0"
+                      id="Mytable"
+                    >
+                      <thead className="bg-200">
                         <tr>
                           <th className="text-900 sort" data-sort="Action">
                             Action
@@ -614,8 +608,8 @@ function Product() {
                           </th>
                         </tr>
                       </thead>
-                       <tbody className="list">
-                        {filteredItems.slice(0, rowsToShow).map((item) => (
+                      <tbody className="list">
+                        {tableData.map((item) => (
                           <tr key={item.id}>
                             <td>
                               <div style={{ display: "flex" }}>

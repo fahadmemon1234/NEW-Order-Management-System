@@ -31,7 +31,6 @@ import "../../../assets/Css/Tostify.css";
 // ---------------------------------------------------
 
 function SaleInvoice() {
-
   const [tableData, setTableData] = useState([]);
 
   const loggedInUID = localStorage.getItem("uid");
@@ -77,7 +76,6 @@ function SaleInvoice() {
     setRowsToShow(parseInt(event.target.value, 10));
   };
 
-
   const startIndexs = 1;
   const rowCount = sortedDataDescending.length; // Add this line to get the row count
   const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
@@ -106,21 +104,21 @@ function SaleInvoice() {
 
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
 
-
-
   // ----------------Handle Return-------------------
 
-  const [data, setData] = useState('');
-  const [saleOrderItemData, setSaleOrderItemData] = useState('');
-  
+  const [data, setData] = useState("");
+  const [saleOrderItemData, setSaleOrderItemData] = useState("");
+  const [ProductData, setProductData] = useState("");
+
   useEffect(() => {
     debugger;
     if (loggedInUID) {
-      const productRef = ref(db, "SaleOrder");
+      const SaleOrderRef = ref(db, "SaleOrder");
       const SaleOrderItemRef = ref(db, "SaleOrderItem");
-  
+      const ProductRef = ref(db, "Product");
+
       const fetchSaleOrderData = () => {
-        onValue(productRef, (snapshot) => {
+        onValue(SaleOrderRef, (snapshot) => {
           const data = snapshot.val();
           if (data) {
             debugger;
@@ -134,7 +132,7 @@ function SaleInvoice() {
           }
         });
       };
-  
+
       const fetchSaleOrderItemData = () => {
         onValue(SaleOrderItemRef, (snapshot) => {
           const data = snapshot.val();
@@ -150,39 +148,74 @@ function SaleInvoice() {
           }
         });
       };
-  
+
+      const fetchProduct = () => {
+        onValue(ProductRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            debugger;
+            const dataArray = Object.keys(data)
+              .filter((key) => data[key].uid === loggedInUID)
+              .map((key) => ({
+                id: key,
+                ...data[key],
+              }));
+            setProductData(dataArray);
+          }
+        });
+      };
+
+      fetchProduct();
       fetchSaleOrderData();
       fetchSaleOrderItemData();
     } else {
       console.error("No user is currently logged in.");
     }
   }, [loggedInUID]);
+
+  // const handleReturn = async item => {
+  //   const saleIds = data.map((item) => item.id);
+
+  //   if (saleIds.includes(item.SaleID)) {
+  //     const index = saleIds.indexOf(item.SaleID);
+  //     const matchingItem = data[index];
+  //     const saleOrderItemID = matchingItem.SaleOrderItemID;
+
+  //     const saleOrderItem = saleOrderItemData.map((item) => item.id);
+
+  //     if (saleOrderItem.includes(saleOrderItemID)) {
+  //       const indexQuantity = saleOrderItem.indexOf(saleOrderItemID);
+  //       const matchingItem = saleOrderItemData[indexQuantity];
+  //       const Quantity = matchingItem.quantity;
+  //       const ProductID = matchingItem.ProductID;
+
+  //       const ID = ProductData.map((item) => item.id);
+
+  //       if (ID.includes(ProductID)) {
+  //         const index = ID.indexOf(ProductID);
+  //         const itemQty = ProductData[index].itemQty;
+
+  //         var qty = parseInt(Quantity);
+  //         var totalQty = itemQty + qty;
+
+  //         const updatedProduct = {
+  //           uid: loggedInUID,
+  //           itemQty: totalQty,
+  //         };
   
+  //         const productRef = ref(db, `Product/${ProductID}`);
+  //         await update(productRef, updatedProduct);
+  //       }
+  //     }
 
-  const handleReturn = (item) =>{
+  //   } else {
+  //     console.log("No matching SaleID found in the data.");
+  //   }
+  // };
 
-    const saleIds = data.map(item => item.id);
 
-    if (saleIds.includes(item.SaleID)) {
-
-      const index = saleIds.indexOf(item.SaleID);
-    const matchingItem = data[index];
-    const saleOrderItemID = matchingItem.SaleOrderItemID;
-
-    const saleOrderItem = saleOrderItemData.map(item => item.id);
-
-    if(saleOrderItem.includes(saleOrderItemID)){
-
-      const indexQuantity = saleOrderItem.indexOf(saleOrderItemID);
-      const matchingItem = saleOrderItemData[indexQuantity];
-      const Quantity = matchingItem.quantity;
-      console.log("Quantity:", Quantity);
-    }
-
-      // console.log(saleOrderItem);
-    } else {
-      console.log("No matching SaleID found in the data.");
-    }
+  const handleReturn = async item => {
+    
   }
 
   return (
@@ -266,28 +299,28 @@ function SaleInvoice() {
                         </tr>
                       </thead>
                       <tbody className="list">
-                      {visibleItems.slice(0, rowsToShow).map((item) => (
-                        <tr key={item.id}>
-                          <td>
-                            <div style={{ display: "flex" }}>
-                              <button
-                                type="button"
-                                className="btn btn-warning"
-                                style={{ marginRight: "10px" }}
+                        {visibleItems.slice(0, rowsToShow).map((item) => (
+                          <tr key={item.id}>
+                            <td>
+                              <div style={{ display: "flex" }}>
+                                <button
+                                  type="button"
+                                  className="btn btn-warning"
+                                  style={{ marginRight: "10px" }}
                                   onClick={() => handleReturn(item)}
-                              >
-                                Return
-                              </button>
-                            </div>
-                          </td>
-                          <td className="tdchild">{item.InvoiceID}</td>
-                          <td className="tdchild">{item.createdDate}</td>
-                          <td className="tdchild">{item.customer}</td>
-                          <td className="tdchild">{item.status}</td>
-                          <td className="tdchild">{item.Payment}</td>
-                          {/* Add more table data cells as needed */}
-                        </tr>
-                      ))}
+                                >
+                                  Return
+                                </button>
+                              </div>
+                            </td>
+                            <td className="tdchild">{item.InvoiceID}</td>
+                            <td className="tdchild">{item.createdDate}</td>
+                            <td className="tdchild">{item.customer}</td>
+                            <td className="tdchild">{item.status}</td>
+                            <td className="tdchild">{item.Payment}</td>
+                            {/* Add more table data cells as needed */}
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -306,8 +339,8 @@ function SaleInvoice() {
                         <p className="mb-0 mx-2">Rows per page:</p>
                         <select
                           className="w-auto form-select form-select-sm"
-                            defaultValue={rowsToShow}
-                            onChange={handleSelectChange}
+                          defaultValue={rowsToShow}
+                          onChange={handleSelectChange}
                         >
                           <option value="5">5</option>
                           <option value="10">10</option>

@@ -527,8 +527,7 @@ function AddSaleOrder() {
 
     fetchData();
 
-    const intervalId = setInterval(fetchData, 2000); // Fetch data every 60 seconds
-
+    const intervalId = setInterval(fetchData, 2000);
     return () => clearInterval(intervalId);
   }, [db, loggedInUID]);
 
@@ -974,20 +973,17 @@ function AddSaleOrder() {
 
   useEffect(() => {
     if (loggedInUID) {
-      // Reference to the 'Product' node in Firebase Realtime Database
       const DepositRef = ref(db, "SaleOrderItem");
 
-      // Attach an event listener for data changes
       const fetchData = async () => {
         onValue(DepositRef, (snapshot) => {
           const data = snapshot.val();
           if (data) {
-            // Convert the object of products into an array
             const dataArray = Object.keys(data)
               .filter(
                 (key) =>
                   data[key].uid === loggedInUID && data[key].saleOrderID === ID
-              ) // Filter data based on UID
+              ) 
               .map((key) => ({
                 id: key,
                 ...data[key],
@@ -1001,7 +997,6 @@ function AddSaleOrder() {
       fetchData();
     } else {
       console.error("No user is currently logged in.");
-      // Handle the case where no user is logged in, perhaps by redirecting to the login page.
     }
   }, [loggedInUID, ID]);
 
@@ -1018,11 +1013,10 @@ function AddSaleOrder() {
     setRowsToShow(parseInt(event.target.value, 10));
   };
 
-  // Rows count and show
-  // const totalItems = 8; // Replace with the actual total number of items
+  
   const startIndexs = 1;
-  // const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
-  const rowCount = sortedDataDescending.length; // Add this line to get the row count
+  
+  const rowCount = sortedDataDescending.length; 
   const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -1060,7 +1054,7 @@ function AddSaleOrder() {
   const [payment, setPayment] = useState("");
 
   useEffect(() => {
-    // Update payment whenever finalPrice changes
+   
     setPayment(FinalPrice);
   }, [FinalPrice]);
 
@@ -1142,7 +1136,7 @@ function AddSaleOrder() {
     const stock = localStorage.getItem("EditStock");
     const totalStock = localStorage.getItem("EditTotalStock");
     const costPrice = localStorage.getItem("EditCostPrice");
-    // Use the stored value if it exists, otherwise, use the default (false)
+  
     if (AddItemSec === "false") {
       setAddItemSection(false);
 
@@ -1206,7 +1200,7 @@ function AddSaleOrder() {
 
   const NewStocks = (quantity, LastStock) => {
     if (parseFloat(quantity) > LastStock) {
-      // Quantity cannot be greater than totalStock, show an error or handle it accordingly
+  
       toast.error("Quantity cannot be greater than TotalStock.", {
         position: "top-right",
         autoClose: 1000,
@@ -1500,7 +1494,7 @@ function AddSaleOrder() {
             SaleID: orderId,
             uid: loggedInUID,
             customer: CounterSale,
-            status: "New",
+            status: "Paid",
             orderDate: orderDate,
             name: Name,
             createdDate: formattedDate,
@@ -1518,7 +1512,7 @@ function AddSaleOrder() {
             SaleID: orderId,
             uid: loggedInUID,
             customer: CounterSale,
-            status: "New",
+            status: "Paid",
             orderDate: orderDate,
             name: Name,
             createdDate: formattedDate,
@@ -1535,9 +1529,11 @@ function AddSaleOrder() {
 
         const newSaleOrder = {
           uid: loggedInUID,
+          InvoiceID: EditInvoiceID,
           status: "New",
           Payment: payment,
           InvoiceID: InvoiceID,
+          SaleID: orderId,
           SaleInvoiceID: InvIDEditID,
           quantity: SellQty.toString(),
           totalStock: SellStock.toString(),
@@ -1558,7 +1554,7 @@ function AddSaleOrder() {
             customerID: CustomerID,
             customer: selectedCustomer.value,
             orderDate: orderDate,
-            status: "New",
+            status: "Paid",
             createdDate: formattedDate,
             salesMan: SalesMan,
             paymentMethod: "rdoCredit",
@@ -1576,7 +1572,7 @@ function AddSaleOrder() {
             customerID: CustomerID,
             customer: selectedCustomer,
             orderDate: orderDate,
-            status: "New",
+            status: "Paid",
             createdDate: formattedDate,
             salesMan: SalesMan,
             paymentMethod: "rdoCredit",
@@ -1591,7 +1587,7 @@ function AddSaleOrder() {
 
         const newSaleOrder = {
           uid: loggedInUID,
-          status: "New",
+          status: "Paid",
           Payment: payment,
           InvoiceID: InvoiceID,
           SaleInvoiceID: InvIDEditID,
@@ -1612,7 +1608,7 @@ function AddSaleOrder() {
             customer: selectedCustomer.value,
             orderDate: orderDate,
             name: Name,
-            status: "New",
+            status: "Paid",
             createdDate: formattedDate,
             paymentMethod: "rdoCashCredit",
             phoneNumber: PhoneNumber,
@@ -1631,7 +1627,7 @@ function AddSaleOrder() {
             customer: selectedCustomer,
             orderDate: orderDate,
             name: Name,
-            status: "New",
+            status: "Paid",
             createdDate: formattedDate,
             paymentMethod: "rdoCashCredit",
             phoneNumber: PhoneNumber,

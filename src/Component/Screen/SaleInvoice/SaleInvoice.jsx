@@ -39,18 +39,15 @@ function SaleInvoice() {
   useEffect(() => {
     debugger;
     if (loggedInUID) {
-      // Reference to the 'SaleOrder' node in Firebase Realtime Database
       const productRef = ref(db, "SaleInvoice");
 
-      // Attach an event listener for data changes
       const fetchData = () => {
         onValue(productRef, (snapshot) => {
           const data = snapshot.val();
           if (data) {
             debugger;
-            // Convert the object of products into an array
             const dataArray = Object.keys(data)
-              .filter((key) => data[key].uid === loggedInUID) // Filter data based on UID
+              .filter((key) => data[key].uid === loggedInUID)
               .map((key) => ({
                 id: key,
                 ...data[key],
@@ -64,7 +61,6 @@ function SaleInvoice() {
       fetchData();
     } else {
       console.error("No user is currently logged in.");
-      // Handle the case where no user is logged in, perhaps by redirecting to the login page.
     }
   }, [loggedInUID]);
 
@@ -81,10 +77,8 @@ function SaleInvoice() {
     setRowsToShow(parseInt(event.target.value, 10));
   };
 
-  // Rows count and show
-  // const totalItems = 8; // Replace with the actual total number of items
+
   const startIndexs = 1;
-  // const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
   const rowCount = sortedDataDescending.length; // Add this line to get the row count
   const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
 
@@ -111,6 +105,85 @@ function SaleInvoice() {
   const visibleItems = sortedDataDescending.slice(startIndex, endIndex);
 
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
+
+
+
+  // ----------------Handle Return-------------------
+
+  const [data, setData] = useState('');
+  const [saleOrderItemData, setSaleOrderItemData] = useState('');
+  
+  useEffect(() => {
+    debugger;
+    if (loggedInUID) {
+      const productRef = ref(db, "SaleOrder");
+      const SaleOrderItemRef = ref(db, "SaleOrderItem");
+  
+      const fetchSaleOrderData = () => {
+        onValue(productRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            debugger;
+            const dataArray = Object.keys(data)
+              .filter((key) => data[key].uid === loggedInUID)
+              .map((key) => ({
+                id: key,
+                ...data[key],
+              }));
+            setData(dataArray);
+          }
+        });
+      };
+  
+      const fetchSaleOrderItemData = () => {
+        onValue(SaleOrderItemRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            debugger;
+            const dataArray = Object.keys(data)
+              .filter((key) => data[key].uid === loggedInUID)
+              .map((key) => ({
+                id: key,
+                ...data[key],
+              }));
+            setSaleOrderItemData(dataArray);
+          }
+        });
+      };
+  
+      fetchSaleOrderData();
+      fetchSaleOrderItemData();
+    } else {
+      console.error("No user is currently logged in.");
+    }
+  }, [loggedInUID]);
+  
+
+  const handleReturn = (item) =>{
+
+    const saleIds = data.map(item => item.id);
+
+    if (saleIds.includes(item.SaleID)) {
+
+      const index = saleIds.indexOf(item.SaleID);
+    const matchingItem = data[index];
+    const saleOrderItemID = matchingItem.SaleOrderItemID;
+
+    const saleOrderItem = saleOrderItemData.map(item => item.id);
+
+    if(saleOrderItem.includes(saleOrderItemID)){
+
+      const indexQuantity = saleOrderItem.indexOf(saleOrderItemID);
+      const matchingItem = saleOrderItemData[indexQuantity];
+      const Quantity = matchingItem.quantity;
+      console.log("Quantity:", Quantity);
+    }
+
+      // console.log(saleOrderItem);
+    } else {
+      console.log("No matching SaleID found in the data.");
+    }
+  }
 
   return (
     <>
@@ -201,7 +274,7 @@ function SaleInvoice() {
                                 type="button"
                                 className="btn btn-warning"
                                 style={{ marginRight: "10px" }}
-                                  // onClick={() => handleReturn(item)}
+                                  onClick={() => handleReturn(item)}
                               >
                                 Return
                               </button>

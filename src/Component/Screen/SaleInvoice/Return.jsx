@@ -29,9 +29,96 @@ import "../../../assets/Css/Tostify.css";
 // ---------------------------------------------------
 
 function Return() {
+  const loggedInUID = localStorage.getItem("uid");
+
+  // ----------------Handle Return-------------------
+
+  const [data, setData] = useState("");
+  const [saleOrderItemData, setSaleOrderItemData] = useState("");
+  const [ProductData, setProductData] = useState("");
+
+  useEffect(() => {
+    debugger;
+    if (loggedInUID) {
+      const SaleOrderRef = ref(db, "SaleOrder");
+      const SaleOrderItemRef = ref(db, "SaleOrderItem");
+      const ProductRef = ref(db, "Product");
+
+      const fetchSaleOrderData = () => {
+        onValue(SaleOrderRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            debugger;
+            const dataArray = Object.keys(data)
+              .filter((key) => data[key].uid === loggedInUID)
+              .map((key) => ({
+                id: key,
+                ...data[key],
+              }));
+            setData(dataArray);
+          }
+        });
+      };
+
+      const fetchSaleOrderItemData = () => {
+        onValue(SaleOrderItemRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            debugger;
+            const dataArray = Object.keys(data)
+              .filter((key) => data[key].uid === loggedInUID)
+              .map((key) => ({
+                id: key,
+                ...data[key],
+              }));
+            setSaleOrderItemData(dataArray);
+          }
+        });
+      };
+
+      const fetchProduct = () => {
+        onValue(ProductRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            debugger;
+            const dataArray = Object.keys(data)
+              .filter((key) => data[key].uid === loggedInUID)
+              .map((key) => ({
+                id: key,
+                ...data[key],
+              }));
+            setProductData(dataArray);
+          }
+        });
+      };
+
+      fetchProduct();
+      fetchSaleOrderData();
+      fetchSaleOrderItemData();
+    } else {
+      console.error("No user is currently logged in.");
+    }
+  }, [loggedInUID]);
+
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const ID = searchParams.get("ID");
+
+  const [CustomerNames, setCustomerName] = useState("");
+  const [SaleOrderDate, setSaleOrderDate] = useState("");
+
+  useEffect(() => {
+    if (Array.isArray(data)) {
+      const saleIds = data.map((item) => item.id);
+
+      if (saleIds.includes(ID)) {
+        const indexCustomerName = saleIds.indexOf(ID);
+        const matchingItem = data[indexCustomerName];
+        setCustomerName(matchingItem.customer);
+        setSaleOrderDate(matchingItem.orderDate);
+      }
+    }
+  }, [ID, data]);
 
   return (
     <>
@@ -67,6 +154,7 @@ function Return() {
                     type="text"
                     id="txtID"
                     className="form-control"
+                    value={ID}
                     readOnly
                   ></input>
                 </div>
@@ -80,6 +168,8 @@ function Return() {
                     id="txtCustomerName"
                     className="form-control"
                     placeholder="Enter Name"
+                    value={CustomerNames}
+                    readOnly
                   ></input>
                 </div>
 
@@ -92,6 +182,8 @@ function Return() {
                     id="txtSaleOrderDate"
                     className="form-control"
                     placeholder="Enter Name"
+                    value={SaleOrderDate}
+                    readOnly
                   ></input>
                 </div>
               </div>

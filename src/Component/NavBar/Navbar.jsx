@@ -359,6 +359,7 @@ const Main = ({ children }) => {
                         location.pathname === "/SaleOrder" ||
                         location.pathname === "/AddSaleOrder" ||
                         location.pathname === "/SaleInvoice" ||
+                        location.pathname === "/Return" ||
                         location.pathname === "/SaleReturn" ||
                         location.pathname === "/CustomerPayment" ||
                         location.pathname === "/CustomerChequeDetail"
@@ -403,7 +404,10 @@ const Main = ({ children }) => {
                       <li className="nav-item">
                         <Link
                           className={`nav-link ${
-                            location.pathname === "/SaleInvoice" ? "active" : ""
+                            location.pathname === "/SaleInvoice" ||
+                            location.pathname === "/Return"
+                              ? "active"
+                              : ""
                           }`}
                           to="/SaleInvoice"
                         >
@@ -430,38 +434,40 @@ const Main = ({ children }) => {
                         </Link>{" "}
                       </li>
                       <li className="nav-item">
-                      <Link
+                        <Link
                           className={`nav-link ${
-                            location.pathname === "/CustomerPayment" ? "active" : ""
+                            location.pathname === "/CustomerPayment"
+                              ? "active"
+                              : ""
                           }`}
                           to="/CustomerPayment"
                         >
                           <div className="d-flex align-items-center">
                             <span className="nav-link-text ps-1">
-                            Customer Payment
+                              Customer Payment
                             </span>
                           </div>
                         </Link>{" "}
-                        
                       </li>
 
                       <li className="nav-item">
-                      <Link
+                        <Link
                           className={`nav-link ${
-                            location.pathname === "/CustomerChequeDetail" ? "active" : ""
+                            location.pathname === "/CustomerChequeDetail"
+                              ? "active"
+                              : ""
                           }`}
                           to="/CustomerChequeDetail"
                         >
                           <div className="d-flex align-items-center">
                             <span className="nav-link-text ps-1">
-                            Customer Cheque Detail
+                              Customer Cheque Detail
                             </span>
                           </div>
                         </Link>{" "}
-                        
                       </li>
                     </ul>
-                    
+
                     {/* ---------------------------Manage----------------- */}
 
                     <a

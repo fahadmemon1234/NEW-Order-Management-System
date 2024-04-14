@@ -108,6 +108,10 @@ function Return() {
   const [SaleOrderDate, setSaleOrderDate] = useState("");
   const [PaymentMethod, setpaymentMethod] = useState("");
 
+  const [saleItemID, setsaleItemID] = useState("");
+
+  const [tableData, setTableData] = useState([]);
+
   useEffect(() => {
     if (Array.isArray(data)) {
       const saleIds = data.map((item) => item.id);
@@ -119,9 +123,19 @@ function Return() {
         setCustomerName(matchingItem.customer);
         setSaleOrderDate(matchingItem.orderDate);
         setpaymentMethod(matchingItem.paymentMethod);
+        setsaleItemID(matchingItem.SaleOrderItemID);
+
+        const saleItemIds = saleOrderItemData.map((item) => item.id);
+
+        if (saleItemIds.includes(saleItemID)) {
+          const filteredItems = saleOrderItemData.filter(
+            (item) => item.id === saleItemID
+          );
+          setTableData(filteredItems);
+        }
       }
     }
-  }, [ID, data]);
+  }, [ID, data, saleOrderItemData, saleItemID]);
 
   return (
     <>
@@ -193,7 +207,11 @@ function Return() {
 
               <div
                 className="row"
-                style={{ paddingTop: "10px", alignItems: "center" }}
+                style={{
+                  paddingTop: "10px",
+                  alignItems: "center",
+                  paddingBottom: "20px",
+                }}
               >
                 <div className="col-lg-4 col-md-4 col-sm-4">
                   <div className="form-check form-check-inline">
@@ -239,6 +257,126 @@ function Return() {
                     id="txtReturnDate"
                     className="form-control"
                   ></input>
+                </div>
+              </div>
+
+              <hr />
+
+              <div className="row" style={{ paddingTop: "30px" }}>
+                <div className="col-lg-12 col-md-12 col-sm-12">
+                  <div id="tableExample">
+                    <div className="table-responsive scrollbar">
+                      <table className="table table-bordered table-striped fs-10 mb-0">
+                        <thead className="bg-200">
+                          <tr>
+                            <th className="text-900 sort" data-sort="ItemName">
+                              Item Name
+                            </th>
+                            <th className="text-900 sort" data-sort="Quantity">
+                              Quantity
+                            </th>
+                            <th
+                              className="text-900 sort"
+                              data-sort="ReturnQuantity"
+                            >
+                              Return Quantity
+                            </th>
+                            <th className="text-900 sort" data-sort="Price">
+                              Price
+                            </th>
+                            <th className="text-900 sort" data-sort="Total">
+                              Total
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="list">
+                          {tableData.map((item, index) => (
+                            <tr key={index}>
+                              <td className="tdchild">{item.itemName}</td>
+                              <td className="tdchild">{item.quantity}</td>
+                              <td className="tdchild">0</td>
+                              <td className="tdchild">{item.salePrice}</td>
+                              <td className="tdchild">0</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    {/* <div className="row mt-3">
+                      <div className="pagination d-none"></div>
+                      <div className="col-md-9 col-sm-9 col-lg-9">
+                        <div
+                          className="d-flex align-items-center fs--1"
+                          style={{ fontSize: "14px" }}
+                        >
+                          <p className="mb-0">
+                            <span className="d-none d-sm-inline-block me-2">
+                              {paginationText}
+                            </span>
+                          </p>
+                          <p className="mb-0 mx-2">Rows per page:</p>
+                          <select
+                            className="w-auto form-select form-select-sm"
+                            defaultValue={rowsToShow}
+                            onChange={handleSelectChange}
+                          >
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                          </select>
+                        </div>
+                        <div style={{ paddingTop: "10px" }}>
+                          <button
+                            className="btn btn-sm btn-warning"
+                            type="button"
+                            data-list-pagination="prev"
+                            onClick={handlePrevClick}
+                            disabled={currentPage === 1}
+                          >
+                            <span>Previous</span>
+                          </button>
+                          <button
+                            className="btn btn-sm btn-primary px-4 ms-2"
+                            type="button"
+                            style={{
+                              backgroundColor: "#2c7be5",
+                              color: "white",
+                            }}
+                            data-list-pagination="next"
+                            onClick={handleNextClick}
+                            disabled={currentPage === totalPages}
+                          >
+                            <span>Next</span>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="col-md-3 col-sm-3 col-lg-3">
+                        <>
+                          <div
+                            className="mb-3"
+                            style={{ paddingTop: "10px" }}
+                            id="txtPayment"
+                          >
+                            <label
+                              htmlFor="Payment"
+                              className="form-label"
+                              style={{ color: "black" }}
+                            >
+                              Purchase Return Amount
+                            </label>
+                            <input
+                              type="number"
+                              className="form-control"
+                              name="PurchaseReturnAmount"
+                              readOnly
+                              id="txtPurchaseReturnAmount"
+                              placeholder="Enter Purchase Return Amount"
+                            />
+                          </div>
+                        </>
+                      </div>
+                    </div> */}
+                  </div>
                 </div>
               </div>
             </div>

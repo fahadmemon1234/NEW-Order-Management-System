@@ -106,6 +106,7 @@ function Return() {
 
   const [CustomerNames, setCustomerName] = useState("");
   const [SaleOrderDate, setSaleOrderDate] = useState("");
+  const [PaymentMethod, setpaymentMethod] = useState("");
 
   useEffect(() => {
     if (Array.isArray(data)) {
@@ -114,8 +115,10 @@ function Return() {
       if (saleIds.includes(ID)) {
         const indexCustomerName = saleIds.indexOf(ID);
         const matchingItem = data[indexCustomerName];
+        debugger;
         setCustomerName(matchingItem.customer);
         setSaleOrderDate(matchingItem.orderDate);
+        setpaymentMethod(matchingItem.paymentMethod);
       }
     }
   }, [ID, data]);
@@ -145,7 +148,7 @@ function Return() {
                 </div>
               </div>
 
-              <div className="row">
+              <div className="row" style={{ paddingTop: "10px" }}>
                 <div className="col-lg-4 col-md-4 col-sm-4">
                   <label className="form-label" htmlFor="ID">
                     Sale Order ID
@@ -184,6 +187,57 @@ function Return() {
                     placeholder="Enter Name"
                     value={SaleOrderDate}
                     readOnly
+                  ></input>
+                </div>
+              </div>
+
+              <div
+                className="row"
+                style={{ paddingTop: "10px", alignItems: "center" }}
+              >
+                <div className="col-lg-4 col-md-4 col-sm-4">
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      id="rdoCash"
+                      type="radio"
+                      name="paymentMethod"
+                      value="rdoCash"
+                      checked={
+                        PaymentMethod === "rdoCash" ||
+                        PaymentMethod === "rdoCashCredit"
+                      }
+                      onChange={(e) => setpaymentMethod(e.target.value)}
+                    />
+                    <label className="form-check-label" htmlFor="rdoCash">
+                      Cash
+                    </label>
+                  </div>
+
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      id="rdoCredit"
+                      type="radio"
+                      name="paymentMethod"
+                      value="rdoCredit"
+                      checked={PaymentMethod === "rdoCredit"}
+                      onChange={(e) => setpaymentMethod(e.target.value)}
+                    />
+                    <label className="form-check-label" htmlFor="rdoCredit">
+                      Credit
+                    </label>
+                  </div>
+                </div>
+
+                <div className="col-lg-4 col-md-4 col-sm-4">
+                  <label className="form-label" htmlFor="ReturnDate">
+                    Return Date
+                  </label>
+                  <input
+                    type="date"
+                    id="txtReturnDate"
+                    className="form-control"
                   ></input>
                 </div>
               </div>

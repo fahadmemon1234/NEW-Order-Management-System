@@ -18,6 +18,7 @@ import SaleReturn from "./Component/Screen/SaleReturn/SaleReturn";
 import Invoice from "./Component/Screen/SaleOrder/Invoice";
 import CustomerPayment from "./Component/Screen/CustomerPayment/CustomerPayment";
 import CustomerChequeDetail from "./Component/Screen/CustomerChequeDetail/CustomerChequeDetail";
+import Return from "./Component/Screen/SaleInvoice/Return";
 
 function App() {
   const userLoggedIn = localStorage.getItem("userlogin") === "true";
@@ -108,6 +109,11 @@ function App() {
         <Route
           path="/SaleInvoice"
           element={userLoggedIn ? <SaleInvoice /> : <Navigate to="/" />}
+        />
+
+        <Route
+          path="/Return"
+          element={userLoggedIn ? <Return /> : <Navigate to="/" />}
         />
 
         <Route

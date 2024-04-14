@@ -202,7 +202,7 @@ function SaleInvoice() {
   //           uid: loggedInUID,
   //           itemQty: totalQty,
   //         };
-  
+
   //         const productRef = ref(db, `Product/${ProductID}`);
   //         await update(productRef, updatedProduct);
   //       }
@@ -213,10 +213,11 @@ function SaleInvoice() {
   //   }
   // };
 
+  const navigate = useNavigate();
 
-  const handleReturn = async item => {
-    
-  }
+  const handleReturn = async (item) => {
+    navigate(`/Return?ID=${item.id}`);
+  };
 
   return (
     <>

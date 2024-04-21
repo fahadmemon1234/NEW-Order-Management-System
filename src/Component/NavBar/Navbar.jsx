@@ -468,6 +468,114 @@ const Main = ({ children }) => {
                       </li>
                     </ul>
 
+                    {/* ---------------------------Purchase----------------- */}
+
+                    <a
+                      className="nav-link dropdown-indicator"
+                      href="#Purchase"
+                      role="button"
+                      data-bs-toggle="collapse"
+                      aria-expanded="false"
+                      aria-controls="Purchase"
+                    >
+                      <div className="d-flex align-items-center">
+                        <span className="nav-link-icon">
+                          <svg
+                            className="svg-inline--fa fa-solid fa-shop fa-w-18 fa"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="fa-solid fa-shop"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 576 512"
+                            data-fa-i2svg=""
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M128 160h320v192H128V160zm400 96c0 26.51 21.49 48 48 48v96c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48v-96c26.51 0 48-21.49 48-48s-21.49-48-48-48v-96c0-26.51 21.49-48 48-48h480c26.51 0 48 21.49 48 48v96c-26.51 0-48 21.49-48 48zm-48-104c0-13.255-10.745-24-24-24H120c-13.255 0-24 10.745-24 24v208c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24V152z"
+                            ></path>
+                          </svg>{" "}
+                          <span className="fa-solid fa-shop"></span>{" "}
+                        </span>
+                        <span className="nav-link-text ps-1">Purchase</span>
+                      </div>
+                    </a>
+
+                    <ul
+                      className={`nav ${
+                        location.pathname === "/Vendors" ||
+                        location.pathname === "/PurchaseOrders" ||
+                        location.pathname === "/PurchaseInvoices" ||
+                        location.pathname === "/PurchaseReturn"
+                          ? ""
+                          : "collapse"
+                      }`}
+                      id="Purchase"
+                    >
+                      <li className="nav-item">
+                        <Link
+                          className={`nav-link ${
+                            location.pathname === "/Vendors" ? "active" : ""
+                          }`}
+                          to="/Vendors"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                            Vendors
+                            </span>
+                          </div>
+                        </Link>{" "}
+                      </li>
+
+                      <li className="nav-item">
+                        <Link
+                          className={`nav-link ${
+                            location.pathname === "/PurchaseOrders" ? "active" : ""
+                          }`}
+                          to="/PurchaseOrders"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                            Purchase Orders
+                            </span>
+                          </div>
+                        </Link>{" "}
+                      </li>
+
+                      <li className="nav-item">
+                        <Link
+                          className={`nav-link ${
+                            location.pathname === "/PurchaseInvoices" ? "active" : ""
+                          }`}
+                          to="/PurchaseInvoices"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                            Purchase Invoices
+                            </span>
+                          </div>
+                        </Link>{" "}
+                      </li>
+
+                      <li className="nav-item">
+                        <Link
+                          className={`nav-link ${
+                            location.pathname === "/PurchaseReturn" ? "active" : ""
+                          }`}
+                          to="/PurchaseReturn"
+                        >
+                          <div className="d-flex align-items-center">
+                            <span className="nav-link-text ps-1">
+                            Purchase Return
+                            </span>
+                          </div>
+                        </Link>{" "}
+                      </li>
+
+                     
+                    </ul>
+
                     {/* ---------------------------Manage----------------- */}
 
                     <a

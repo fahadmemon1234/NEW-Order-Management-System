@@ -1,3 +1,7 @@
 .fa {
   display: none !important;
 }
+
+svg.svg-inline--fa.fa-shop.fa-w-16{
+  display: none !important;
+}

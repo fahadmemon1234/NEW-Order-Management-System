@@ -37,6 +37,8 @@ function Return() {
   const [saleOrderItemData, setSaleOrderItemData] = useState("");
   const [ProductData, setProductData] = useState("");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     debugger;
     if (loggedInUID) {
@@ -286,6 +288,8 @@ function Return() {
 
                 const dataRef = ref(db, `SaleInvoice/${invID}`);
                 await remove(dataRef);
+
+                navigate('/SaleInvoice')
               }
             }
           }

@@ -38,29 +38,7 @@ import "../../../assets/Css/Tostify.css";
 import AddMeasurment from "./AddMeasurment";
 import AddBrandCode from "./AddBrandCode";
 
-import DataTable from "datatables.net-dt";
-
 function Product() {
-  // useEffect(() => {
-  //   // Initialize DataTable
-  //   const table = new DataTable('#Mytable', {
-  //     "paging": true, // Enable pagination
-  //   "ordering": true, // Enable sorting
-  //   "searching": true, // Enable searching/filtering
-  //   "info": true, // Show table information (e.g., "Showing 1 to 10 of 100 entries")
-  //   "lengthChange": true, // Enable the ability to change number of items per page
-  //   "responsive": true, // Enable responsive mode for the table
-  //   "scrollX": true, // Enable horizontal scrolling if table content overflows
-  //   "scrollY": "200px", // Set fixed height with vertical scrolling
-  //   // Add more options as needed...
-  //   });
-
-  //   // Cleanup function to destroy DataTable instance when component unmounts
-  //   return () => {
-  //     table.destroy();
-  //   };
-  // }, []);
-
   const [tableData, setTableData] = useState([]);
 
   const loggedInUID = localStorage.getItem("uid");

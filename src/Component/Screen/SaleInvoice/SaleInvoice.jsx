@@ -173,46 +173,6 @@ function SaleInvoice() {
     }
   }, [loggedInUID]);
 
-  // const handleReturn = async item => {
-  //   const saleIds = data.map((item) => item.id);
-
-  //   if (saleIds.includes(item.SaleID)) {
-  //     const index = saleIds.indexOf(item.SaleID);
-  //     const matchingItem = data[index];
-  //     const saleOrderItemID = matchingItem.SaleOrderItemID;
-
-  //     const saleOrderItem = saleOrderItemData.map((item) => item.id);
-
-  //     if (saleOrderItem.includes(saleOrderItemID)) {
-  //       const indexQuantity = saleOrderItem.indexOf(saleOrderItemID);
-  //       const matchingItem = saleOrderItemData[indexQuantity];
-  //       const Quantity = matchingItem.quantity;
-  //       const ProductID = matchingItem.ProductID;
-
-  //       const ID = ProductData.map((item) => item.id);
-
-  //       if (ID.includes(ProductID)) {
-  //         const index = ID.indexOf(ProductID);
-  //         const itemQty = ProductData[index].itemQty;
-
-  //         var qty = parseInt(Quantity);
-  //         var totalQty = itemQty + qty;
-
-  //         const updatedProduct = {
-  //           uid: loggedInUID,
-  //           itemQty: totalQty,
-  //         };
-
-  //         const productRef = ref(db, `Product/${ProductID}`);
-  //         await update(productRef, updatedProduct);
-  //       }
-  //     }
-
-  //   } else {
-  //     console.log("No matching SaleID found in the data.");
-  //   }
-  // };
-
   const navigate = useNavigate();
 
   const handleReturn = async (item) => {

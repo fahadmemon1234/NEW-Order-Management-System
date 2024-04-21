@@ -103,6 +103,7 @@ function Return() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const ID = searchParams.get("ID");
+  const ids = ID;
 
   const [CustomerNames, setCustomerName] = useState("");
   const [SaleOrderDate, setSaleOrderDate] = useState("");
@@ -136,6 +137,194 @@ function Return() {
       }
     }
   }, [ID, data, saleOrderItemData, saleItemID]);
+
+  const [rowsToShow, setRowsToShow] = useState(5);
+
+  const handleSelectChange = (event) => {
+    setRowsToShow(parseInt(event.target.value, 10));
+  };
+
+  const startIndexs = 1;
+  // const endIndexs = Math.min(startIndexs + rowsToShow - 1, totalItems);
+  const rowCount = tableData.length; // Add this line to get the row count
+  const paginationText = `${startIndexs} to ${rowsToShow} of ${rowCount}`;
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePrevClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    const totalPages = Math.ceil(tableData.length / rowsToShow);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const startIndex = (currentPage - 1) * rowsToShow;
+  const endIndex = Math.min(startIndex + rowsToShow, tableData.length);
+  const visibleItems = tableData.slice(startIndex, endIndex);
+
+  const totalPages = Math.ceil(tableData.length / rowsToShow);
+
+  // ---------------------------------------------------------
+
+  const [quantity, setQuantity] = useState("");
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  const handleInputChange = (event) => {
+    const newQuantity = event.target.value;
+    setQuantity(newQuantity);
+
+    const lblQuantity = parseInt(
+      document.getElementById("lblquantity").innerText
+    ); // Parse lblquantity to integer
+    if (newQuantity > lblQuantity) {
+      // console.log("");
+
+      toast.error("Quantity cannot be greater than available quantity.", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setQuantity("");
+      setTotalPrice(0);
+      return;
+    } else {
+      const salePrice = document.getElementById("lblsaleprice").innerText;
+      const newTotalPrice = salePrice * newQuantity;
+      setTotalPrice(newTotalPrice);
+    }
+
+    const salePrice = document.getElementById("lblsaleprice").innerText;
+    const newTotalPrice = salePrice * newQuantity;
+    setTotalPrice(newTotalPrice);
+  };
+
+  const [ReturnDate, setReturnDate] = useState("");
+  const items = location.state.item;
+
+  const handleReturn = async (items) => {
+    debugger;
+    if (ReturnDate) {
+      const currentDate = new Date();
+      const returnDate = new Date(ReturnDate);
+      if (returnDate < currentDate) {
+        if (quantity) {
+          const saleIds = data.map((items) => items.id);
+          if (saleIds.includes(ID)) {
+            const index = saleIds.indexOf(ID);
+            const matchingItem = data[index];
+            const saleOrderItemID = matchingItem.SaleOrderItemID;
+
+            const saleOrderItem = saleOrderItemData.map((items) => items.id);
+
+            if (saleOrderItem.includes(saleOrderItemID)) {
+              const indexQuantity = saleOrderItem.indexOf(saleOrderItemID);
+              const matchingItem = saleOrderItemData[indexQuantity];
+              const Quantity = matchingItem.quantity;
+              const ProductID = matchingItem.ProductID;
+
+              const ID = ProductData.map((items) => items.id);
+
+              if (ID.includes(ProductID)) {
+                const index = ID.indexOf(ProductID);
+                const itemQty = ProductData[index].itemQty;
+
+                var qty = parseInt(Quantity);
+                var totalQty = itemQty + qty;
+
+                const updatedProduct = {
+                  uid: loggedInUID,
+                  itemQty: totalQty,
+                };
+
+                const productRef = ref(db, `Product/${ProductID}`);
+                await update(productRef, updatedProduct);
+
+                const currentDate = new Date();
+                const shortMonthNames = [
+                  "Jan",
+                  "Feb",
+                  "Mar",
+                  "Apr",
+                  "May",
+                  "Jun",
+                  "Jul",
+                  "Aug",
+                  "Sep",
+                  "Oct",
+                  "Nov",
+                  "Dec",
+                ];
+                const formattedDate = ` ${currentDate.getDate()} ${
+                  shortMonthNames[currentDate.getMonth()]
+                } ${currentDate.getFullYear()}`;
+
+                const returnRef = ref(db, "SaleReturn");
+                const newReturn = {
+                  uid: loggedInUID,
+                  date: formattedDate,
+                  customerName: CustomerNames,
+                  invoiceID: ids,
+                  returnAmount: totalPrice,
+                  returnDate: ReturnDate,
+                };
+                push(returnRef, newReturn);
+
+
+                
+              }
+            }
+          }
+        } else {
+          toast.error("Quantity is required", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
+      } else {
+        toast.error(
+          "Return date is equal to or greater than the current date.",
+          {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          }
+        );
+      }
+    } else {
+      toast.error("Quantity && Return Date is required!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
 
   return (
     <>
@@ -256,6 +445,8 @@ function Return() {
                     type="date"
                     id="txtReturnDate"
                     className="form-control"
+                    value={ReturnDate}
+                    onChange={(e) => setReturnDate(e.target.value)}
                   ></input>
                 </div>
               </div>
@@ -278,6 +469,7 @@ function Return() {
                             <th
                               className="text-900 sort"
                               data-sort="ReturnQuantity"
+                              style={{ width: "25%" }}
                             >
                               Return Quantity
                             </th>
@@ -293,16 +485,28 @@ function Return() {
                           {tableData.map((item, index) => (
                             <tr key={index}>
                               <td className="tdchild">{item.itemName}</td>
-                              <td className="tdchild">{item.quantity}</td>
-                              <td className="tdchild">0</td>
-                              <td className="tdchild">{item.salePrice}</td>
-                              <td className="tdchild">0</td>
+                              <td className="tdchild" id="lblquantity">
+                                {item.quantity}
+                              </td>
+                              <td className="tdchild">
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  placeholder="Enter Return Quantity"
+                                  value={quantity} // Set input value from state
+                                  onChange={handleInputChange} // Handle input change
+                                />
+                              </td>
+                              <td className="tdchild" id="lblsaleprice">
+                                {item.salePrice}
+                              </td>
+                              <td className="tdchild">{totalPrice}</td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     </div>
-                    {/* <div className="row mt-3">
+                    <div className="row mt-3">
                       <div className="pagination d-none"></div>
                       <div className="col-md-9 col-sm-9 col-lg-9">
                         <div
@@ -370,12 +574,22 @@ function Return() {
                               name="PurchaseReturnAmount"
                               readOnly
                               id="txtPurchaseReturnAmount"
+                              value={totalPrice}
                               placeholder="Enter Purchase Return Amount"
                             />
                           </div>
+
+                          <Button
+                            variant="primary"
+                            style={{ float: "right", marginTop: 10 + "px" }}
+                            id="btnSaveClose"
+                            onClick={handleReturn}
+                          >
+                            Return
+                          </Button>
                         </>
                       </div>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>

@@ -216,7 +216,9 @@ function SaleInvoice() {
   const navigate = useNavigate();
 
   const handleReturn = async (item) => {
-    navigate(`/Return?ID=${item.SaleID}`);
+    navigate(`/Return?ID=${item.SaleID}`, {
+      state: { item: item },
+    });
   };
 
   return (

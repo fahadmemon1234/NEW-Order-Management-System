@@ -211,6 +211,7 @@ function Return() {
 
   const [ReturnDate, setReturnDate] = useState("");
   const items = location.state.item;
+  const invID = items.id;
 
   const handleReturn = async (items) => {
     debugger;
@@ -281,7 +282,10 @@ function Return() {
                 push(returnRef, newReturn);
 
 
-                
+
+
+                const dataRef = ref(db, `SaleInvoice/${invID}`);
+                await remove(dataRef);
               }
             }
           }

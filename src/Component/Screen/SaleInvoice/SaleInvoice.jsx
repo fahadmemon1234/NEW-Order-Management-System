@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-// Bootstrap Modal
-// ---------------------------------------------------
-import Button from "react-bootstrap/Button";
-import SweetAlert from "react-bootstrap-sweetalert";
-// ---------------------------------------------------
 
 // Main Page Connect
 // ---------------------------------------------------
@@ -13,7 +8,7 @@ import Main from "../../NavBar/Navbar";
 
 //DataBase
 // ---------------------------------------------------
-import { ref, onValue, update, remove } from "firebase/database";
+import { ref, onValue} from "firebase/database";
 import { db } from "../../Config/firebase";
 
 import { useNavigate } from "react-router-dom";
@@ -24,11 +19,6 @@ import { useNavigate } from "react-router-dom";
 import "../../../assets/Css/Model.css";
 // ----------------------------------------------------
 
-//Notify
-// ---------------------------------------------------
-import { toast, ToastContainer } from "react-toastify";
-import "../../../assets/Css/Tostify.css";
-// ---------------------------------------------------
 
 function SaleInvoice() {
   const [tableData, setTableData] = useState([]);

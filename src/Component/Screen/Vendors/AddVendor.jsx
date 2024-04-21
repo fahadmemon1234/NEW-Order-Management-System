@@ -416,7 +416,7 @@ const AddVendor = () => {
                       Postal Code
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
                       id="txtPostalCode"
                       value={PostalCode}

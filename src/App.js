@@ -20,6 +20,7 @@ import CustomerPayment from "./Component/Screen/CustomerPayment/CustomerPayment"
 import CustomerChequeDetail from "./Component/Screen/CustomerChequeDetail/CustomerChequeDetail";
 import Return from "./Component/Screen/SaleInvoice/Return";
 import Vendors from "./Component/Screen/Vendors/Vendors";
+import PurchaseOrder from "./Component/Screen/PurchaseOrder/PurchaseOrder";
 
 function App() {
   const userLoggedIn = localStorage.getItem("userlogin") === "true";
@@ -138,9 +139,12 @@ function App() {
 
         <Route
           path="/Vendors"
-          element={
-            userLoggedIn ? <Vendors /> : <Navigate to="/" />
-          }
+          element={userLoggedIn ? <Vendors /> : <Navigate to="/" />}
+        />
+
+        <Route
+          path="/PurchaseOrders"
+          element={userLoggedIn ? <PurchaseOrder /> : <Navigate to="/" />}
         />
 
         {/* ----------Manage--------------------------- */}

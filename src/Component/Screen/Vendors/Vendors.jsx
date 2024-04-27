@@ -20,7 +20,7 @@ import AddVendor from "./AddVendor";
 
 //DataBase
 // ---------------------------------------------------
-import { ref, onValue, update, remove, get } from "firebase/database";
+import { ref, onValue, update, remove } from "firebase/database";
 import { db } from "../../Config/firebase";
 // ---------------------------------------------------
 
@@ -105,12 +105,12 @@ const Vendors = () => {
     }
   };
 
-  const startIndex = (currentPage - 1) * rowsToShow;
-  const endIndex = Math.min(
-    startIndex + rowsToShow,
-    sortedDataDescending.length
-  );
-  const visibleItems = sortedDataDescending.slice(startIndex, endIndex);
+  // const startIndex = (currentPage - 1) * rowsToShow;
+  // const endIndex = Math.min(
+  //   startIndex + rowsToShow,
+  //   sortedDataDescending.length
+  // );
+  // const visibleItems = sortedDataDescending.slice(startIndex, endIndex);
 
   const totalPages = Math.ceil(sortedDataDescending.length / rowsToShow);
 

@@ -11,6 +11,8 @@ import Select from "react-select";
 // Main Page Connect
 // ---------------------------------------------------
 import Main from "../../NavBar/Navbar";
+
+import { useNavigate } from "react-router-dom";
 // ---------------------------------------------------
 
 // Add Modal
@@ -40,6 +42,17 @@ import "../../../assets/Css/Tostify.css";
 
 
 const PurchaseOrder = () => {
+
+
+  const navigate = useNavigate();
+
+  const NextPage = () => {
+    // Navigate to the new page
+    navigate("/AddEditPurchaseOrder");
+  };
+
+
+
     return(
         <>
         <Main>
@@ -73,7 +86,7 @@ const PurchaseOrder = () => {
 
                   <Button
                     variant="primary"
-                    // onClick={NextPage}
+                    onClick={NextPage}
                     style={{ float: "right" }}
                   >
                     Add Purchase Order

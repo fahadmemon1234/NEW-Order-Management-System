@@ -1979,12 +1979,7 @@ function AddSaleOrder() {
                             onChange={(e) => setPhoneNumber(e.target.value)}
                           />
 
-                          {/* <Button
-                      variant="primary"
-                      style={{ float: 'right', marginTop: 20 + 'px' }}
-                    >
-                      Save Order
-                    </Button> */}
+                          
                         </div>
                       </div>
                     </div>
@@ -2058,12 +2053,7 @@ function AddSaleOrder() {
                           <label className="form-label" htmlFor="SalesMan">
                             SalesMan
                           </label>
-                          {/* <input
-                  type="text"
-                  id="txtName"
-                  className="form-control"
-                  placeholder="Enter Name"
-                ></input> */}
+                          
 
                           <Select
                             id="txtSalesMan"
@@ -2140,12 +2130,7 @@ function AddSaleOrder() {
                             value={CustomerID}
                           />
 
-                          {/* <a
-                        href="#"
-                        style={{ float: "right", fontSize: 13 + "px" }}
-                      >
-                        Add Customer
-                      </a> */}
+                          
                           <AddCustModal />
                         </div>
 
